@@ -1,0 +1,2363 @@
+profile: apertus
+path: apertus format
+synonyms:
+- apertus-format
+- chat template
+- tool call parser
+labelled_at: '2026-08-28'
+labeller: 'cursor-agent: format/library/chat-template/tool parser vs thinking-mode, GGUF, license, model-load,
+  generic Apertus support. Assigner frozen (profile synonyms + apertus anchor); not fit on these labels.'
+draw_method: 'All Hub discussions on swiss-ai/Apertus-v1.5-8B, Apertus-8B-Instruct-2509, Apertus-v1.5-70B.
+  GitHub: swiss-ai/apertus-format plus title-scoped Apertus hits in transformers, vllm, llama.cpp (body
+  must mention Apertus except the format repo). Adjacent mass is Hub off-topic threads plus model-load
+  PRs.'
+items:
+- repo: swiss-ai/Apertus-v1.5-8B
+  number: 7
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-8B/discussions/7
+  topic: null
+  title: Base model request
+  body: Would it be possible to also release the base model for 1.5 just like it was done for 1.0?
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-8B
+  number: 6
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-8B/discussions/6
+  topic: null
+  title: Experimental Apertus v1.5 support for llama.cpp
+  body: "Hi,\r\n\r\nI’ve been working on an experimental Apertus v1.5 integration for llama.cpp, currently\
+    \ available on my fork: https://github.com/MichelRosselli/llama.cpp/tree/model/apertus-v1.5\r\n\r\n\
+    The branch covers text inference and chat support, together with vision and audio input through llama.cpp’s\
+    \ multimodal infrastructure. I have tested the 8B model locally with GGUF weights; 70B support is\
+    \ implemented structurally but has not been validated by running the full 70B weights.\r\n\r\nI’m\
+    \ currently coordinating the overlapping output-vocabulary work with the existing upstream llama.cpp\
+    \ effort before opening a draft PR: https://github.com/ggml-org/llama.cpp/pull/26226\r\n\r\nIf anyone\
+    \ with more experience in llama.cpp would like to take a look, suggest improvements, or help with\
+    \ any part of the integration, feedback and contributions would be very welcome."
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-8B
+  number: 5
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-8B/discussions/5
+  topic: null
+  title: Changes For Upstreaming to transformers
+  body: "Checkpoint-side changes needed by the in-progress upstreaming of Apertus 1.5 to `huggingface/transformers`.\n\
+    \nFirst change: rename the sub-config keys `vision_tokenizer_config` -> `vision_config` and `audio_tokenizer_config`\
+    \ -> `audio_config` to match the Transformers naming convention for composite models. Nested contents\
+    \ are unchanged.\n\nThanks @rkreft \n\nFYI: this is an intermediate checkpoint, which will be merged\
+    \ and a final one will follow after upstream changes are complete."
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-8B
+  number: 4
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-8B/discussions/4
+  topic: null
+  title: Experimental Ollama MLX source preview for Apertus 1.5 on Apple Silicon
+  body: "# Experimental Ollama MLX source preview for Apertus 1.5 on Apple Silicon\n\nI’ve been experimenting\
+    \ with Ollama improvements for Apple Silicon / MLX and prepared an experimental source preview that\
+    \ includes Apertus 1.5 support, including text, image, and audio inputs.\n\nThe main reason I’m sharing\
+    \ this here is that the branch makes it possible to experiment with Apertus 1.5 multimodal capabilities\
+    \ through Ollama on Apple Silicon. In my local testing, Apertus 1.5 can process image inputs and long\
+    \ audio inputs, including audio clips up to around 600 seconds. The same branch also includes Gemma\
+    \ 4 image support, which has been useful for image-reading experiments.\n\nSome local measurements\
+    \ from my M5 Max test machine:\n\n| Model | Disk size | Resident model size | Cold load | Prompt eval\
+    \ | Hot decode |\n| --- | ---: | ---: | ---: | ---: | ---: |\n| Apertus 1.5 8B BF16 media | 18.18\
+    \ GB | 18.19 GB | 1.054 s | 502.7 tok/s | 30.94 tok/s |\n| Apertus 1.5 8B NVFP4 media | 7.37 GB |\
+    \ 7.40 GB | 0.753 s | 524.1 tok/s | 104.35 tok/s |\n\nFor a screenshot-scale image test, the current\
+    \ adaptive image sizing path measured about 19.67 GiB MLX peak / 28.4 GiB physical high-water for\
+    \ NVFP4. BF16 measured about 29.74 GiB MLX peak / 38.5 GiB physical high-water on the same kind of\
+    \ test. Treat these as local experimental numbers, not as a general performance guarantee.\n\nImportant\
+    \ caveats:\n\nThis is not an official Ollama release, and I’m not an Ollama contributor. I’m a hobbyist\
+    \ experimenting with AI and Apple Silicon support. None of my related commits have been integrated\
+    \ into upstream Ollama so far.\n\nThe current preview is source-only. I do not have a signed macOS\
+    \ DMG for this one yet because notarization upload is blocked while I’m on holiday with a slow network\
+    \ upload :-)\n\nI also cannot publish ready-made Ollama model artifacts for Apertus 1.5, as I understand\
+    \ the Apertus 1.5 license does not allow redistribution in that form. Users need to obtain the model\
+    \ from the official Apertus 1.5 Hugging Face repository and create their local Ollama model themselves.\n\
+    \nPreview page:\n\nhttps://www.doapp.ch/Ollama/index.html\n\nSource branch:\n\nhttps://github.com/pd95/ollama/tree/integration/mlx-preview-v0.31.2-gemma4-apertus15\n\
+    \nStable source tag:\n\nhttps://github.com/pd95/ollama/tree/integration/mlx-preview-v0.31.2-gemma4-apertus15\n\
+    \nSource archive:\n\nhttps://github.com/pd95/ollama/archive/refs/tags/preview/mlx-0.31.2-apertus15-20260801.tar.gz\n\
+    \nBuild dependencies on macOS / Apple Silicon:\n\n- Xcode\n- Metal toolchain:\n\n```bash\nxcodebuild\
+    \ -downloadComponent MetalToolchain\n```\n\n- Go\n- CMake 3.24 or newer\n- Ninja is recommended\n\n\
+    Build locally:\n\n```bash\ngit clone --branch preview/mlx-0.31.2-apertus15-20260801 https://github.com/pd95/ollama.git\n\
+    cd ollama\ncmake -B build .\ncmake --build build --parallel 8\n./ollama serve\n```\n\nI wrote separate\
+    \ notes for creating local Ollama models from the official Apertus 1.5 Hugging Face snapshot, including\
+    \ the `ollama create --experimental` and quantization commands:\n\nhttps://www.doapp.ch/Ollama/models.html\n\
+    \nThis is meant for people who want to experiment with Apertus 1.5 locally through Ollama on Apple\
+    \ Silicon before any such support exists in a regular Ollama release.\n----\nEDIT 03.08.2026: Removed\
+    \ full-app build instructions  as it does not reliably work without code signing.\n\nthanks a lot!\
+    \ is this based on the MLX-PR https://github.com/ml-explore/mlx-lm/pull/1615 or another codebase?\
+    \ would you mind making a PR for the code also?\n\nNo, the implementation is “Go native” based on\
+    \ the Swiss-AI transformers library enhancement. \nIt was completely written by Codex 5.6. I was just\
+    \ prompting and verifying, testing it myself.\nThe various features I developed are available for\
+    \ inspection as individual PR to forked main branch here: https://github.com/pd95/ollama/pulls\n\n\
+    It is quite difficult to get anything merged upstream into Ollama if you are not an existing contributor…\
+    \ which I somehow understand in times where everyone (including myself) uses AI for ev"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-8B
+  number: 3
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-8B/discussions/3
+  topic: null
+  title: '[gh-mirror] Sync `apertus_1.5` from GitHub PR #10'
+  body: 'Automated mirror of `apertus_1.5` from GitHub PR https://github.com/swiss-ai/model-cards/pull/10.
+
+
+    This PR reflects every file in the model-card folder. It is created, updated, merged, and closed automatically
+    to track the source GitHub PR.
+
+
+    > Managed by the `hf-mirror` GitHub Actions workflow — do not edit manually.
+
+
+    Merging the GitHub mirror sync (swiss-ai/model-cards#10, already merged) manually — the mirror CI
+    token lacks merge permission on the Hub.'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-8B
+  number: 2
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-8B/discussions/2
+  topic: null
+  title: Update visual benchmark list to cover all 33 image benchmarks
+  body: 'Expands the image-benchmark list under the Visual Performance plot to match the refreshed plot
+    (33 benchmarks). Adds a **spatial intelligence** category (MMSI, ViewSpatial, MindCube, EmbSpatial)
+    plus V\*Bench, CountBench (general VQA), InfoVQA, OmniDocBench (docs), MathVista (visual math), and
+    MMMU-Pro, ScienceQA (STEM). Removes the broken VRSBench referring split (keeps VRSBench-VQA).
+
+
+    Pairs with the plot refresh in swiss-ai/model-cards-assets#1.
+
+
+    Superseded. This model card is generated from the `swiss-ai/model-cards` GitHub repo and mirrored
+    here automatically, so the edit belongs there rather than as a direct change on the Hub. Moved to
+    https://github.com/swiss-ai/model-cards/pull/10. Closing to avoid drift.'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-8B
+  number: 1
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-8B/discussions/1
+  topic: null
+  title: '[gh-mirror] Sync `apertus_1.5` from GitHub PR #9'
+  body: 'Automated mirror of `apertus_1.5` from GitHub PR https://github.com/swiss-ai/model-cards/pull/9.
+
+
+    This PR reflects every file in the model-card folder. It is created, updated, merged, and closed automatically
+    to track the source GitHub PR.
+
+
+    > Managed by the `hf-mirror` GitHub Actions workflow — do not edit manually.'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 33
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/33
+  topic: null
+  title: Environmental Impact / Similar Ethical-concerned models
+  body: '1. My own concerns and other''s thoughts on data centers leads me to ask what are your thoughts
+    on Apertus or Swiss AI''s thoughts on environmental impact regarding data center usage?
+
+
+    2. This leads me to also ask, are there other models that also care about ethical data sourcing or
+    is Swiss AI''s Apertus the only one out there?
+
+
+    The big reason to ask both of these questions is that using the tool can be genuinely beneficial and
+    these questions tend to come up if using the tool becomes a daily occurrence.
+
+
+    Edit: will Apertus or Swiss AI have a presence on Mastodon?
+
+
+
+    Thanks for sharing your questions here. We are working on these topics, and will share findings with
+    the community soon.
+
+
+    There are other models out there, such as [Olmo](https://allenai.org/olmo), [EuroLLM](https://eurollm.io/),
+    [SEA-LION](https://sea-lion.ai/), all run by non-profit organizations.
+
+
+    Please use the #Apertus hashtag on the social media of your choice: we hope you will soon connect
+    with our active community!'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 32
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/32
+  topic: null
+  title: Add LEXam evaluation results
+  body: 'Adds LEXam (Benchmarking Legal Reasoning on 340 Law Exams) evaluation results from the official
+    leaderboard at https://lexam-benchmark.github.io/.
+
+
+    See https://huggingface.co/datasets/LEXam-Benchmark/LEXam for the benchmark and https://arxiv.org/abs/2505.12864
+    for the paper.'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 31
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/31
+  topic: null
+  title: My approach to calling tools over a web socket connection
+  body: "To begin, if you haven't had a chance to read my blog post where I introduced Jessie, I had included\
+    \ a demo video. Its relevance centers on how Jessie uses an audio channel for interaction. My setup\
+    \ incorporates a remote node that performs voice transcription, then that is fed to my Apertus server\
+    \ (in a separate room) over a web socket connection.\r\n\r\nFor interactive requests, Jessie streams\
+    \ her response back to the remote node, which is then sent to the synthesis service as a socket stream.\
+    \ The synthesis service assembles sentence-based chunks so that I can convert the entire output faster\
+    \ than waiting for a full response.\r\n\r\nBut what about that command to turn on the lights at the\
+    \ beginning of the video? That is where I employ a small little trick I have labeled a \"peek.\" In\
+    \ my experiments, the tokenization and inference time of my prompt is blazing fast. If I recall, it's\
+    \ around 300ms. The full response time is consumed through token generation, which is why a streaming\
+    \ connection is so crucial: it creates an impression for us humans that it is fast because we can\
+    \ see characters rendering on the screen (assuming that the web UI has this implemented, of course).\r\
+    \n\r\nWhen an endpoint is connected via a web socket connection, the API handler first calls vLLM's\
+    \ standard HTTP endpoint. I include the tools available to Apertus and make the call with a very small\
+    \ max token limit -- about 50 max tokens. Even though the response is severely truncated, it is enough\
+    \ to check whether Apertus would have responded with a tool call or a regular text response. That\
+    \ allows me to fork the function.\r\n\r\nIf the response is not a tool, I allow the endpoint to continue\
+    \ as a normal streaming call.\r\n\r\nHowever, if the response is a tool then I make a full call to\
+    \ the HTTP endpoint to get the tool action. The system performs the action (like turning the lights\
+    \ on) and the results are fed back to Apertus to generate a user-friendly response. That is what returns\
+    \ to the originating client.\r\n\r\nThe obvious downside is that this creates multiple calls to the\
+    \ model. To be fair, though, I did stress testing and saw barely a budge in increased thermal activity.\
+    \ This was with 2 concurrent requests every second, a 5 min interval loop simulating an agentic job,\
+    \ and then a tool call thread executing every 30-90 seconds, all over a two-hour time span.\r\n\r\n\
+    Hopefully this inspires you with your Apertus implementation.\r\n\r\n_***This article was written\
+    \ by me, but Jessie did the editing!***_\r\n\r\n**Here is the video I mention**\r\n[![Meet Jessie!](https://cdn-uploads.huggingface.co/production/uploads/686dcb8ece8f66dc0a587ecf/am2-X4jWUNgbnsrnclb1C.png)](https://youtu.be/geX3Q9Wi81Y)"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 30
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/30
+  topic: null
+  title: What I am building with Apertus
+  body: "Here is a blog entry about what I have been doing with Apertus.\r\n\r\nMeet Jessie: my home’s\
+    \ ambient intelligence, a 100% private, locally run AI agent that works with no internet connection.\
+    \ Jessie handles smart-home control (lights, garage) and general Q&A and storytelling for my kids,\
+    \ entirely offline.\r\n\r\nWhy: a decade ago, our Alexa blurted out at dinner, “I’ve put frozen pakakastuffnickles\
+    \ on your shopping list.” Nobody spoke to it, it could not explain itself, and it was the moment I\
+    \ knew the home is too intimate to be a SaaS endpoint.\r\n\r\nWrite-up + demo video: https://danielkonopacki.com/2026/05/12/meet-jessie/\r\
+    \n\r\nI'll keep sharing deployment notes as I continue my effort!"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 29
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/29
+  topic: null
+  title: 'Apertus + vLLM: My Configuration Guide'
+  body: "**Hardware**: ASUS TUF Gaming RTX 3090 (24 GB VRAM)\r\n**vLLM**: v0.19.1 (v0.19.0 was the first\
+    \ release with native Apertus model support; v0.19.1 adds LoRA)\r\n**Deployment**: vLLM served via\
+    \ the official `vllm/vllm-openai` container image, fronted by a FastAPI application server. Coqui\
+    \ TTS also runs on the same GPU for voice synthesis.\r\n\r\n---\r\n\r\n### Quantization\r\n\r\n```\r\
+    \n--quantization bitsandbytes\r\n--dtype auto\r\n```\r\n\r\n4-bit bitsandbytes (QLoRA-compatible)\
+    \ quantization brings the model from ~16 GB down to approximately 6 GB of VRAM, essential on a 24\
+    \ GB card that has to share with other processes. `--dtype auto` lets vLLM pick the right compute\
+    \ dtype to complement the quantization without manual tuning.\r\n\r\n**Gotcha**: `--quantization bitsandbytes`\
+    \ requires using `--load-format safetensors` together with `--safetensors-load-strategy eager`. Without\
+    \ the eager load strategy, bitsandbytes can fail to quantize correctly on load.\r\n\r\n---\r\n\r\n\
+    ### KV Cache\r\n\r\n```\r\n--kv-cache-dtype fp8\r\n```\r\n\r\nfp8 KV cache halves the memory footprint\
+    \ of the attention cache compared to fp16/bf16. This matters more than it might seem: KV cache scales\
+    \ non-linearly with context length and sequence count. With a 20K context window and another process\
+    \ (TTS) competing for VRAM, fp16 KV cache consistently caused OOM. fp8 resolved it.\r\n\r\n---\r\n\
+    \r\n### GPU Memory Utilization\r\n\r\n```\r\n--gpu-memory-utilization 0.73\r\n```\r\n\r\nThis is the\
+    \ fraction of GPU VRAM that vLLM is allowed to claim for its memory pool (model weights + KV cache).\
+    \ The default is 0.90, which would starve Coqui TTS. I landed on 0.73 empirically: low enough that\
+    \ TTS synthesis doesn't OOM, high enough to keep a useful KV cache. If you're running vLLM alone on\
+    \ this card, you can push this to 0.90.\r\n\r\n---\r\n\r\n### Context Window\r\n\r\n```\r\n--max-model-len\
+    \ 20480\r\n```\r\n\r\nThe model supports up to 65K tokens, but allocating the full KV cache for 65K\
+    \ on a shared 24 GB card isn't feasible. 20,480 covers real-world use (conversation history, tool\
+    \ definitions, system prompt, response) without exhausting VRAM.\r\n\r\n---\r\n\r\n### Concurrency\r\
+    \n\r\n```\r\n--max-num-seqs 4\r\n```\r\n\r\nMaximum parallel in-flight requests. 4 is a practical\
+    \ ceiling given the VRAM budget — a higher value increases KV cache demand and risks OOM under load.\
+    \ For a home/personal server with occasional concurrent users, 4 is comfortable.\r\n\r\nHere is a\
+    \ theoretical breakdown of GPU VRAM needed to support the full 65k token limit of Apertus at FP8 and\
+    \ 0.90 GPU memory utilization.\r\n\r\n| Concurrency | KV cache | Weights + overhead Total | VRAM needed\
+    \ |\r\n| --- | --- | --- | --- |\r\n| 1 sequence | 4.0 GB | ~6.0 GB | ~10 GB |\r\n| 2 sequences |\
+    \ 8.0 GB | ~6.0 GB | ~14 GB |\r\n| 4 sequences | 16.0 GB | ~6.0 GB | ~22 GB |\r\n| 8 sequences | 32.0\
+    \ GB | ~6.0 GB | ~38 GB |\r\n\r\n---\r\n\r\n### Prefix Caching\r\n\r\n```\r\n--enable-prefix-caching\r\
+    \n--no-enable-chunked-prefill\r\n```\r\n\r\nPrefix caching reuses KV cache entries for common prompt\
+    \ prefixes (system prompt, tool definitions, repeated context). In practice I am seeing ~35% cache\
+    \ hit rate on conversational workloads, which meaningfully reduces prompt processing time on repeat\
+    \ calls.\r\n\r\nChunked prefill is disabled because it conflicts with prefix caching in vLLM v0.19.x\
+    \ when bitsandbytes quantization is active.\r\n\r\n---\r\n\r\n### CUDAGraphs\r\n\r\nBy default, vLLM\
+    \ uses CUDA graph capture to optimize GPU kernel execution. An older workaround flag — `--enforce-eager`\
+    \ — disables this and falls back to eager execution.\r\n\r\n**Gotcha (and important lesson)**: I had\
+    \ originally added `--enforce-eager` to work around segfaults during container startup. It turned\
+    \ out this was a **red herring** as the real cause was using a generic base container image rather\
+    \ than the official `vllm/vllm-openai` image. The official image includes the correct CUDA/PyTorch\
+    \ runtime that vLLM expects. Switching to it resolved all segfault issues, including a separate LoRA-related\
+    \ segfault. Removing `--enforce-eager` then came for free, and the result was significant: **tool\
+    \ call response tim"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 28
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/28
+  topic: null
+  title: 'RCA: vLLM SEGFAULT when loading Apertus model (RESOLVED)'
+  body: "Below is a Root Cause Analysis on the SEGFAULT failure I was having with Apertus. In the end,\
+    \ I think I may have just been using the wrong CUDA base image, even before the upgrade. Either way,\
+    \ I am happy to state that with @loleg ‘s recommendation I was able to get tuned module loaded and\
+    \ working. Great news!\r\n—\r\n# vLLM 0.19.1 Segfault Investigation — Apertus-8B-Instruct-2509\r\n\
+    \r\n**Environment:** RTX 3090 (SM86, 24GB) · Ubuntu 25.04 · NVIDIA driver 580.95.05  \r\n**vLLM:**\
+    \ 0.19.1 · **PyTorch:** 2.10.0+cu128  \r\n**Model:** `swiss-ai/Apertus-8B-Instruct-2509`\r\n\r\n>\
+    \ **RESOLVED** — Use the official `docker.io/vllm/vllm-openai:latest` pre-built image.\r\n> Custom-built\
+    \ containers segfault regardless of flags or driver version.\r\n> See [Resolution](#resolution) section\
+    \ below.\r\n\r\n---\r\n\r\n## Symptom\r\n\r\nvLLM 0.19.1 starts, loads model weights cleanly (15.02\
+    \ GiB, ~3.5s), then crashes\r\nevery time during the profiling/warmup forward pass:\r\n\r\n```\r\n\
+    (EngineCore pid=168) INFO [gpu_model_runner.py:4820] Model loading took 15.02 GiB memory and 3.452513\
+    \ seconds\r\n!!!!!!! Segfault encountered !!!!!!!\r\n  ...\r\n  File \"<unknown>\", line 0, in 0xffffffffffffffff\r\
+    \n\r\nRuntimeError: Engine core initialization failed.\r\n```\r\n\r\nThe `0xffffffffffffffff` at the\
+    \ bottom of the Python stack trace indicates C-level stack\r\ncorruption, not a Python exception.\r\
+    \n\r\n---\r\n\r\n## Variables Eliminated (All Failed — Crash Identical)\r\n\r\n| What we tried | Rationale\
+    \ | Result |\r\n|---|---|---|\r\n| Remove bitsandbytes quantization | Avoid quantization-related kernel\
+    \ bugs | Still crashes |\r\n| Remove LoRA | Avoid adapter loading issues | Still crashes |\r\n| Remove\
+    \ fp8 KV cache | Avoid non-standard cache dtype | Still crashes |\r\n| `--attention-backend TRITON_ATTN`\
+    \ | Swap out FlashAttention 2 entirely | Still crashes |\r\n| `--compilation-config '{\"pass_config\"\
+    :{\"fuse_norm_quant\":false,\"fuse_act_quant\":false}}'` | Disable custom Apertus CUDA fusion ops\
+    \ | Still crashes |\r\n| `--enforce-eager` (disable torch.compile) | Remove Inductor/Dynamo from the\
+    \ picture | Still crashes (even earlier — no Dynamo) |\r\n| Strip all flags (bare minimum run) | Rule\
+    \ out interaction between our custom flags | Still crashes |\r\n| Ran `Qwen/Qwen2.5-7B-Instruct` through\
+    \ same container | Rule out Apertus-specific model bug | **Still crashes — engine-level bug** |\r\n\
+    | Verified basic CUDA matmul works in container | Rule out broken GPU passthrough | Passes — CUDA\
+    \ is functional |\r\n\r\n### Key observations\r\n\r\n- With `--enforce-eager`: crash happens immediately\
+    \ after weight loading (no compilation)\r\n- Without `--enforce-eager`: crash happens after `Dynamo\
+    \ bytecode transform time: ~3s` (during first compiled kernel launch)\r\n- Both paths crash — the\
+    \ bug is not in compilation, it's in **kernel execution**\r\n- Qwen2.5-7B crashes identically — **not\
+    \ model-specific**, it's the engine on this machine\r\n\r\n---\r\n\r\n## Initial Hypothesis (Incorrect)\r\
+    \n\r\n**Initial theory: NVIDIA driver 570 was incompatible with torch 2.10.0 + vLLM 0.19.1.**\r\n\r\
+    \nThe `0xffffffffffffffff` stack corruption looked consistent with a driver/runtime ABI\r\nmismatch\
+    \ — a bad function pointer or null kernel handle. Driver was upgraded from\r\n570 → 580 during the\
+    \ investigation.\r\n\r\n**This was wrong.** The crash persisted on driver 580 when using a custom-built\r\
+    \ncontainer. The driver upgrade was a red herring (or at best a necessary-but-not-sufficient\r\ncondition\
+    \ that couldn't be isolated). See [Actual Root Cause](#actual-root-cause) below.\r\n\r\n### Note on\
+    \ PyTorch pinning\r\n\r\n`uv pip install vllm==0.19.1 --torch-backend=cu128` pulls `torch==2.10.0`\
+    \ (vLLM's hard\r\ndependency). Downgrading PyTorch is not an option:\r\n\r\n```\r\nBecause vllm==0.19.1\
+    \ depends on torch==2.10.0 and you require vllm==0.19.1,\r\nwe can conclude that you require torch==2.10.0.\r\
+    \nAnd because you require torch==2.7.0, we can conclude that your requirements\r\nare unsatisfiable.\r\
+    \n```\r\n\r\n---\r\n\r\n## Actual Root Cause\r\n\r\n**Custom `FROM nvidia/cuda:*` container builds\
+    \ produce CUDA kernel/library mismatches.**\r\n\r\nWhen vLLM is built in"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 27
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/27
+  topic: null
+  title: Correcting the link for the report. The previous one is obsolete.
+  body: ''
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 26
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/26
+  topic: apertus format
+  title: 'Apertus Tool Calling: Practical Notes'
+  body: "It has been two months since I last posted about my Apertus-based project. I have made a lot\
+    \ of advancements since then, most importantly with regards to tools. I wanted to give the community\
+    \ some insights into my learnings; hopefully it can help someone else.\r\n\r\n## Background\r\nI came\
+    \ across the `swiss-ai/apertus-format` GitHub repo and this helped with improving model output quality\
+    \ and consistency. To get more information about the `ApertusFormatter`, head over to the [GitHub\
+    \ format specification page](https://github.com/swiss-ai/apertus-format/blob/main/docs/format.md).\
+    \ Though this post is not a tutorial, I will attempt to explain practical behavior I observed that\
+    \ isn't obvious from the documentation.\r\n\r\n---\r\n\r\n## The `add_generation_prompt` Parameter\r\
+    \nThis parameter on `format_conversation()` had the most impact on whether tool calls were generated\
+    \ correctly, and its behavior wasn't immediately obvious to me.\r\n\r\n**In tool-calling mode** (`intent\
+    \ == tool call`), you need:\r\n\r\n```python\r\nformatter = ApertusFormatter(enable_thinking=True,\
+    \ tools=tool_functions)\r\nformatted = formatter.format_conversation(conversation, add_generation_prompt=False)\r\
+    \n```\r\n\r\nSetting `add_generation_prompt=True` with a tool-capable prompt caused the model to consistently\
+    \ ignore the tools and generate a plain text response instead. My interpretation is that the generation\
+    \ prompt suffix signals \"start producing a human-readable assistant turn,\" which is in tension with\
+    \ the structured `<|tools_prefix|>...<|tools_suffix|>` output the tool path requires. Omitting it\
+    \ leaves the model in a state where it correctly emits the tool call JSON.\r\n\r\n**In streaming/text\
+    \ mode**, `add_generation_prompt=True` is required — without it, the streamed response produces no\
+    \ tokens.\r\n\r\nSo the rule I landed on:\r\n- Tool call path: `add_generation_prompt=False`\r\n-\
+    \ Text response path: `add_generation_prompt=True`\r\n\r\n---\r\n\r\n## Streaming and Tool Calls Are\
+    \ Mutually Exclusive\r\nThe format supports tool calls via `<|tools_prefix|>[...]<|tools_suffix|>`\
+    \ in the assistant turn. This works correctly in a single HTTP completion call. It does not work in\
+    \ a streaming context.\r\n\r\nWhen the model is streaming, it emits tokens one at a time and the client\
+    \ is consuming them as they arrive. There's no point at which you can intercept a partial JSON array,\
+    \ parse a tool call, execute it, and inject the result back into the conversation before the generation\
+    \ is already half-finished. The model doesn't wait.\r\n\r\nBesides, the `add_generation_prompt=True`\
+    \ ignores the tools anyway.\r\n\r\nWhat I ended up implementing is a **two-call pattern**:\r\n\r\n\
+    1. A short classification call (`max_tokens=5`, `add_generation_prompt=False`) that determines whether\
+    \ the model intends to call a tool or produce a text response. I use a dedicated `tag_extraction`\
+    \ tool for this with a constrained output schema.\r\n2. Based on the result: either a full tool-calling\
+    \ HTTP call (synchronous), or a full streaming text generation.\r\n\r\nThe classification call adds\
+    \ approximately 200ms. The benefit is that the two paths — tool execution and streaming text — stay\
+    \ cleanly separated, and neither interferes with the other.\r\n\r\n---\r\n\r\n## Few-Shot Examples\
+    \ with `AssistantBlock`\r\nThe format supports structured assistant messages via `Message.assistant_with_blocks()`\
+    \ with `AssistantBlock` objects. I used this to provide a few-shot example in the prompt demonstrating\
+    \ the expected tool call output format.\r\n\r\nA couple of observations:\r\n\r\n**One or two examples\
+    \ is sufficient.** I experimented with adding more, expecting improved reliability. The opposite happened\
+    \ — beyond two examples, output quality dropped. The model appeared to over-fit to the example pattern\
+    \ and produced less flexible responses. Two examples, regardless of how many tools are in the schema,\
+    \ was the consistent sweet spot.\r\n\r\n**The `tool_calls` block structure matters.** Tool call arguments\
+    \ must be valid JSON strings. Malformed arguments in a few-shot example reliably produced malformed "
+  bucket: assigner_positive
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 25
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/25
+  topic: null
+  title: iPhone App?
+  body: "Hello there, I am a non-programmer but am interested in using Apertus since I really appreciate\
+    \ the quality and ethics of the model.\r\nI would like to ask what would it take to get Apertus running\
+    \ on an iPhone so that I can use it on the go?\r\nThank you from a big fan.\n\nApertus is an R&D project,\
+    \ currently there are no plans to develop an app - but I know that such projects exist in our community.\
+    \ And even non-programmers can sketch / vibe code an app these days, so give it a go, and let us know\
+    \ if you do!\n\nAs a quick lifehack, I have a \"home screen icon\" bookmark to https://chat.publicai.co\
+    \ -- a quick and easy to way to interact with Apertus. If you want to use the model offline, stay\
+    \ tuned: smaller quantizations should become available soon. \n\nThank you so much for this update,\
+    \ I had no idea about PublicAI.co- and I might give a go at a vibe app.\n\nEdit: I decided not to\
+    \ use vibe app because of the ethical concerns with vibe coding."
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 24
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/24
+  topic: null
+  title: My private, local home assistant tells my son a story
+  body: "Ten years ago I had this vision of making Jarvis real, but I really didn't want to give Jeff\
+    \ Bezos the keys to my life. And so it was put on hold... until last year. I'd like to share what\
+    \ I've been doing.\r\n\r\nHello, my name is Daniel. I used to be a user experience engineer for Walt\
+    \ Disney. I then led a small engineering team who created the web video player for NBC News. Today\
+    \ I am part of the group that is involved in Oracle's data center expansion.\r\n\r\nBut in my spare\
+    \ time, I have been designing and building my own private AI service to give my home sovereign intelligence.\
+    \ \r\n\r\nIt started about two years ago when I discovered Home Assistant, then later as I began playing\
+    \ with commercial AI agents, poking at what they could and couldn't do. Somewhere along the way I\
+    \ came to realize that Home Assistant could be attached to ChatGPT, and that got me to think... what\
+    \ if! And there began the experiments.\r\n\r\nNot knowing about deployment of AI models, I started\
+    \ with a small, open sourced version on an 8GB Jetson Nano. It took a little time before I realized\
+    \ that the hardware and the model just were not going to help me reach my goals. Simultaneously, I\
+    \ was feeling unsettled about both the way that commercial models were created and how the data they\
+    \ consumed from everyday users were sucked up.\r\n\r\nI set off to build my own AI server mid-summer\
+    \ last year, but I wasn't happy with my model choices. As my parts were en route to me, though, Swiss\
+    \ AI announced Apertus, and I knew it was the model I wanted to use: it aligned with my own values,\
+    \ and I felt that even the small one would be powerful enough to do what I'd long dreamed about.\r\
+    \n\r\nI'd love to tell you that getting everything up and running was cupcakes and puppy dogs, but\
+    \ if that were true, where would the adventure stories be! \r\n\r\nOh no, I have had my share of challenges.\
+    \ First was getting it loaded into my GPU: a NVIDIA RTX 3090. After getting that successfully accomplished,\
+    \ my first interaction with the model will go down in my personal lore:\r\n\r\nMe: \"Who are you?\"\
+    \ (I expected to get some form of Apertus returned)\r\nApertus: \"I am the goddess of Earth. I am\
+    \ also the god of the sky.\"\r\n\r\nAt least it's humble.\r\n\r\nFast forward to December & January\
+    \ and there were several documents I found from Swiss AI that were critical in getting to the milestone\
+    \ demonstrated in the video.\r\n1. Discovering SwissAI's GitHub repo, particularly the Apertus formatter\r\
+    \n2. Finding (at least to me) vLLM and deploying Apertus on it\r\n3. Some other performance tweaks/tunes\
+    \ that some of the researchers from SwissAi commented on in various bug reports\r\n\r\nSo here are\
+    \ the achievements I am really excited to share:\r\n* Completely private neuro-symbolic AI intelligence\
+    \ service designed for my home\r\n* Runs in 16GB of VRAM on RTX 3090\r\n* Max tokens set to 16,384\
+    \ (because above 17,000 and I don't have enough free RAM for KV Cache!)\r\n  * I should note that\
+    \ setting the token limit higher gave me no model performance degradation: it was as fast with a high\
+    \ max as with a low one!\r\n* Web UI chat client that tailors itself to my family members - text is\
+    \ stream and I am getting an average of 32 tokens/sec response with an initial latency between prompt\
+    \ request and response of around 400ms.\r\n* STT-TTS voice interface with streaming responses + streaming\
+    \ TTS\r\n\r\nAbout the neuro-symbolic service: I built a symbolism server that is designed to generate\
+    \ and cache common actions rather than going back to the AI server regularly. It's created so that\
+    \ the first time a potential rule comes through--please turn on the lights--it will ask the model\
+    \ if that's really what the user wanted. After a certain level of affirmation, the symbolic server\
+    \ learns the action and simply runs it without needing agent confirmation.\r\n\r\nWhat's next: Only\
+    \ yesterday I think I finally figured out how to use the Apertus ToolCalls/ToolOutputs format. I'll\
+    \ start experimenting with that so I can have Apertus begin controlling devices in my home.\r\n\r\n\
+    *But there is O"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 23
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/23
+  topic: null
+  title: Unexpected response with Llama.cpp +  Mrader's quant
+  body: "Hi, I am trying to use the model for EN to French translation. I can only use quants, so I use\
+    \ Mrader's `Apertus-8B-2509.Q4_K_M.gguf`. When I host it with llama-server and use the curl request\r\
+    \n```console\r\n\r\ncurl -s \\\r\n    --request POST --url http://127.0.0.1:8080/v1/chat/completions\
+    \ \\\r\n    --header \"Content-Type: application/json\" \\\r\n    --data '{\"messages\": [ { \"role\"\
+    : \"user\", \"content\": \"Translate this to French: A dog eats.\" }]}'\r\n```\r\n\r\nI get unexpected\
+    \ response\r\n```console\r\n{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"\
+    role\":\"assistant\",\"content\":\"Translate this to French: Il y a des hommes qui ont fait un travail\
+    \ de recherche scientifique, a trouvé une théorie scientifique et fait un travail pratique pour créer\
+    \ un appareil, qui est en fait un appareil.<|im_end|>\"}}],\"created\":1767784620,\"model\":\"Apertus-8B-2509.Q4_K_M.gguf\"\
+    ,\"system_fingerprint\":\"b7524-5ee4e43f2\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\"\
+    :47,\"prompt_tokens\":33,\"total_tokens\":80},\"id\":\"chatcmpl-T4W0b4dKf13yODTKwLpVxq3ekcXTfJD5\"\
+    ,\"timings\":{\"cache_n\":9,\"prompt_n\":24,\"prompt_ms\":4.488,\"prompt_per_token_ms\":0.18700000000000003,\"\
+    prompt_per_second\":5347.5935828877,\"predicted_n\":47,\"predicted_ms\":543.31,\"predicted_per_token_ms\"\
+    :11.559787234042552,\"predicted_per_second\":86.50678249986197}}\r\n```\r\n\r\nThough it seems to\
+    \ give normal responses with other general queries like \"What is a dog?\"\n\nPlease try to use the\
+    \ \"Instruct\" versions of the model for assistants. I.e. [this version](https://huggingface.co/mradermacher/Apertus-8B-Instruct-2509-GGUF)\
+    \ should work better in your case. I could not reproduce this issue on my version, running in Ollama."
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 22
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/22
+  topic: null
+  title: Add support for images and fix end of assistant issue
+  body: ''
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 21
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/21
+  topic: null
+  title: Turing (7.5) support
+  body: "Grüezi!\r\n\r\nLove the models, the datasets and the tools. Very helpful. Unfortunately I'm currently\
+    \ unable to infer the models on my RTX Titans using vLLM.\r\n\r\nThe Turing parallel computing architecture\
+    \ is old but reliable and more than capable providing you optimize for it (sometimes you have to do\
+    \ 2 ops instead of 1 but any computation can be done even if it comes at a slight cost in performance).\
+    \ Given how common the hardware is and its affordability, I feel it would be beneficial for the accessibility\
+    \ of this to model to support this platform. \r\n\r\nI've tried different ways to serve `Apertus-8B-Instruct-2509`\
+    \ with vLLM (tried both `v0.11.0`and `v0.10.2`) but they all failed to produce a coherent output.\r\
+    \n\r\n```shell\r\ndocker run --runtime nvidia --gpus=all -v ~/.cache/huggingface:/root/.cache/huggingface\
+    \ -p 8000:8000 vllm/vllm-openai:v0.11.0 --model swiss-ai/Apertus-8B-Instruct-2509\r\n...\r\n(APIServer\
+    \ pid=1) WARNING 10-14 03:27:58 [model.py:1682] Your device 'NVIDIA TITAN RTX' (with compute capability\
+    \ 7.5) doesn't support torch.bfloat16. Falling back to torch.float16 for compatibility.\r\n...\r\n\
+    (EngineCore_DP0 pid=110) INFO 10-14 03:28:10 [cuda.py:372] Using FlexAttention backend on V1 engine.\r\
+    \n...\r\n(EngineCore_DP0 pid=110) ERROR 10-14 03:28:33 [core.py:708] ValueError: not enough values\
+    \ to unpack (expected 9, got 3)\r\n...\r\n(APIServer pid=1) RuntimeError: Engine core initialization\
+    \ failed. See root cause above. Failed core proc(s): {}\r\n```\r\n[Detailed logs for this error](https://gist.github.com/wasertech/fd579f5b09b2e9e0206dc5dac092791b#file-vllm-err-graph-txt)\r\
+    \n\r\nTo solve this error during the graph init., I tried to use the `--enforce-eager` flag but got\
+    \ a dtype mismatch that I cannot solve by passing any sort of `--dtype` flag (tried `float16` and\
+    \ `half`; results in the same issue).\r\n```shell\r\n❯ docker run --runtime nvidia --gpus=all -v ~/.cache/huggingface:/root/.cache/huggingface\
+    \ -p 8000:8000 vllm/vllm-openai:v0.11.0 --model swiss-ai/Apertus-8B-Instruct-2509 --enforce-eager\r\
+    \n...\r\n(EngineCore_DP0 pid=110) ERROR 10-14 03:35:08 [core.py:708] RuntimeError: expected mat1 and\
+    \ mat2 to have the same dtype, but got: float != c10::Half\r\n...\r\n```\r\n[Detailed logs for this\
+    \ error](https://gist.github.com/wasertech/fd579f5b09b2e9e0206dc5dac092791b#file-vllm-err-dtype-txt)\r\
+    \n\r\nAny piece of info that drives those models closer to the edge is appreciated.\n\nLooks like\
+    \ a [Transformers](https://github.com/huggingface/transformers/issues/30914) error, but the root cause\
+    \ is probably in the PyTorch version. There was an accepted PR at vLLM Project to address Turing issues\
+    \ last month, [vllm#24022](https://github.com/vllm-project/vllm/pull/24022) - however, this patch\
+    \ did not make it into the v0.11.0 release. Try the nightly builds to see you have more luck with\
+    \ that issue. In [my blog post](https://log.alets.ch/110/#using-vllm) there's a [Docker Compose script](https://gist.github.com/loleg/33ab522bdf46fee4e58338628ffacc15?ref=log.alets.ch)\
+    \ to do just that.\n\nHey @loleg thanks for your reply, sorry it took me so long to come back to this.\
+    \ I've tried vllm v0.11.2 and the latest nightly image build but I still have an issue about the new\
+    \ pytorch API for FP32. I created a ticket under both [`vllm#29349`](https://github.com/vllm-project/vllm/issues/29349)\
+    \ and [`transformers#42371`](https://github.com/huggingface/transformers/issues/42371).\nHope it gets\
+    \ addressed soon."
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 20
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/20
+  topic: null
+  title: not compatible to newest LM-Studio eg llama.cpp 1.52
+  body: "not compatible with newest LM-Studio and llama.cpp 1.52\r\n\r\ndownloaded today: \r\nbartowski/swiss-ai_Apertus-8B-Instruct-2509-GGUF\r\
+    \nbit shame , why you have to create a new kind of architecture? \"apertus\" ? \r\n\r\n\r\n```\r\n\
+    2025-10-05 11:23:17 [DEBUG]\r\n [LM Studio] GPU Configuration:\r\n  Strategy: evenly\r\n  Priority:\
+    \ []\r\n  Disabled GPUs: []\r\n  Limit weight offload to dedicated GPU Memory: ON\r\n  Offload KV\
+    \ Cache to GPU: ON\r\n2025-10-05 11:23:17 [DEBUG]\r\n [LM Studio] Live GPU memory info (source 'LMS\
+    \ Core'):\r\n  GPU 0: NVIDIA GeForce RTX 4060 Ti (Used: 774.70 MB, Total: 17.18 GB, Free: 16.40 GB)\r\
+    \n2025-10-05 11:23:17 [DEBUG]\r\n [LM Studio] Model load size estimate with raw num offload layers\
+    \ 'max' and context length '8096':\r\n  Model: 8.82 GB\r\n  Context: 1.67 GB\r\n  Total: 10.49 GB\r\
+    \n2025-10-05 11:23:17 [DEBUG]\r\n [LM Studio] Resolved GPU config options:\r\n  Num Offload Layers:\
+    \ max\r\n  Num CPU Expert Layers: 0\r\n  Main GPU: 0\r\n  Tensor Split: [0]\r\n  Disabled GPUs: []\r\
+    \n2025-10-05 11:23:17 [DEBUG]\r\n ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no\r\nggml_cuda_init: GGML_CUDA_FORCE_CUBLAS:\
+    \ no\r\nggml_cuda_init: found 1 CUDA devices:\r\n  Device 0: NVIDIA GeForce RTX 4060 Ti, compute capability\
+    \ 8.9, VMM: yes\r\n2025-10-05 11:23:17 [DEBUG]\r\n CUDA : ARCHS = 750,800,890,900,1000,1200 | USE_GRAPHS\
+    \ = 1 | PEER_MAX_BATCH_SIZE = 128 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX2 = 1 | F16C = 1 | FMA\
+    \ = 1 | BMI2 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 |\r\n2025-10-05 11:23:17 [DEBUG]\r\n llama_model_load_from_file_impl:\
+    \ using device CUDA0 (NVIDIA GeForce RTX 4060 Ti) (0000:01:00.0) - 15225 MiB free\r\n2025-10-05 11:23:17\
+    \ [DEBUG]\r\n llama_model_loader: loaded meta data with 48 key-value pairs and 324 tensors from F:\\\
+    ...\\swiss-ai_Apertus-8B-Instruct-2509-Q8_0.gguf (version GGUF V3 (latest))\r\nllama_model_loader:\
+    \ Dumping metadata keys/values. Note: KV overrides do not apply in this output.\r\nllama_model_loader:\
+    \ - kv   0:                       general.architecture str              = apertus\r\n2025-10-05 11:23:17\
+    \ [DEBUG]\r\n llama_model_loader: - kv   1:                              xielu.alpha_n arr[f32,32]\
+    \      = [40.750000, 31.625000, 22.875000, 16....\r\nllama_model_loader: - kv   2:               \
+    \               xielu.alpha_p arr[f32,32]      = [166.000000, 174.000000, 128.000000, ...\r\nllama_model_loader:\
+    \ - kv   3:                                 xielu.beta arr[f32,32]      = [0.500000, 0.500000, 0.500000,\
+    \ 0.5000...\r\nllama_model_loader: - kv   4:                                  xielu.eps arr[f32,32]\
+    \      = [-0.000001, -0.000001, -0.000001, -0....\r\nllama_model_loader: - kv   5:               \
+    \                general.type str              = model\r\nllama_model_loader: - kv   6:          \
+    \                     general.name str              = Apertus 8B Instruct 2509\r\nllama_model_loader:\
+    \ - kv   7:                            general.version str              = 2509\r\nllama_model_loader:\
+    \ - kv   8:                           general.finetune str              = Instruct\r\nllama_model_loader:\
+    \ - kv   9:                           general.basename str              = Apertus\r\nllama_model_loader:\
+    \ - kv  10:                         general.size_label str              = 8B\r\nllama_model_loader:\
+    \ - kv  11:                            general.license str              = apache-2.0\r\nllama_model_loader:\
+    \ - kv  12:                   general.base_model.count u32              = 1\r\nllama_model_loader:\
+    \ - kv  13:                  general.base_model.0.name str              = Apertus 8B 2509\r\nllama_model_loader:\
+    \ - kv  14:               general.base_model.0.version str              = 2509\r\nllama_model_loader:\
+    \ - kv  15:          general.base_model.0.organization str              = Swiss Ai\r\nllama_model_loader:\
+    \ - kv  16:              general.base_model.0.repo_url str              = https://huggingface.co/swiss-ai/Apert...\r\
+    \nllama_model_loader: - kv  17:                               general.tags arr[str,5]       = [\"\
+    multilingual\", \"compliant\", \"swiss-...\r\nllama_model_loader: - kv  18:                      \
+    \  apertus.block_count u3"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 19
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/19
+  topic: null
+  title: My blog post on experiences here
+  body: "A fresh blog post about deploying Apertus, with a special section on using Hugging Face. \nThanks\
+    \ to the support of this Community \U0001F917 the learning process is overall highly enjoyable. \n\
+    Please let me know if you have any corrections or suggestions: https://log.alets.ch/110/"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 18
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/18
+  topic: apertus format
+  title: Apertus tool parser
+  body: "In the description you said Apertus supports tools and that supports vLLM.\r\n\r\nIf you would\
+    \ like to enable tools in vLLM you need to provide the following 3 parameters:\r\n\r\n--enable-auto-tool-choice\r\
+    \n--tool-call-parser\r\n--chat-template \r\n\r\nHere it is the example for Llama from vLLM\r\n\r\n\
+    https://docs.vllm.ai/en/latest/features/tool_calling.html\r\n\r\nchat-template seems to be here: https://github.com/swiss-ai/apertus-format/blob/main/src/templates/chat_template.jinja\
+    \ (please correct me if wrong)\r\n\r\nBut what about the tool-call-parser?\r\n\r\nAny help here?\r\
+    \n\r\nThanks!\n\n@frsodano hey, tool use isn't fully supported, the model has been trained on initial\
+    \ data so it has capabilities but we haven't integrated into inference engines yet as we're still\
+    \ training for e.g. tooling\n\nThanks for the info! we were able to modify the chat_template and created\
+    \ our own Apertus tool parser. it's working good.. We are able to use it with Semantic Kernel (Python).\
+    \ Apertus is calling the tools correctly! great job! :) "
+  bucket: assigner_positive
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 17
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/17
+  topic: null
+  title: Why is the model repository gated if the model is licensed under apache-2.0
+  body: 'Isn''t this a self-contradiction?
+
+
+    good news, it''s not gated anymore'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 16
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/16
+  topic: null
+  title: Legal Aspects
+  body: "Your statement that “Apertus was developed with due consideration to Swiss data protection laws,\
+    \ Swiss copyright laws, and the transparency obligations under the EU AI Act” is appreciated.  For\
+    \ transparent verification of the legal arguments and the technical measures, could you please point\
+    \ me to the publicly available publications or pages with in‑depth information?\r\n\r\nI have already\
+    \ read the tech report; unfortunately the information there is insufficient. Apertus_EU_Public_Summary.pdf\
+    \ and Apertus_EU_Code_of_Practice.pdf are not publicly accessible. \n\ni uploaded it on a new public\
+    \ repository here. does this work for you?\nhttps://github.com/swiss-ai/apertus-legal\n"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 15
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/15
+  topic: null
+  title: 'Request: Weights for SFT Checkpoint'
+  body: "Hi all! \r\n\r\nThank you so much for this contribution to the LLM community! This is simply\
+    \ great and adds to the variety! :-) \r\n\r\nWe have seen you have released accompanying recipes to\
+    \ your models. It would be really awesome if you could release the SFT checkpoints as well! \r\n\r\
+    \nThis would make it another valuable addition, particularly to the open-source research community\
+    \ to test out many things such as alignment from an official SFT checkpoint. Researchers would greatly\
+    \ appreciate this!\r\n\r\nThanks guys!    \n\nHi! Thanks for the message! We have now uploaded the\
+    \ SFT checkpoints here:\n\nhttps://huggingface.co/swiss-ai/Apertus-70B-Instruct-2509/tree/sft\nhttps://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/tree/sft"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 14
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/14
+  topic: null
+  title: 'Suggestion: Sentence Transformer based on Apertus-8B-Instruct for Swiss GLAM, Memobase & Research'
+  body: "Dear swiss-ai team,\r\n\r\nThank you very much for your impressive work and for making Apertus-8B-Instruct\
+    \ available to the community. This model is a valuable contribution to the Swiss AI ecosystem.\r\n\
+    \r\nFor many use cases in the swiss GLAM sector, in research, and specifically for Memobase, a dedicated\
+    \ Sentence Transformer based on your LLM would be extremely beneficial. Our goal is to enable robust\
+    \ semantic search in multilingual cultural heritage databases, which would directly support institutions\
+    \ like Memobase and similar projects.\r\n\r\nMemobase is the Swiss aggregation platform for searching\
+    \ and accessing digitized cultural AV heritage operated by Memoriav, the association for the preservation\
+    \ of AV heritage in Switzerland.\r\n\r\nWould you consider training and releasing a (compact) Sentence\
+    \ Transformer derived from Apertus-8B-Instruct as a community resource? This would greatly support\
+    \ Swiss GLAM organizations, Memobase, and the research community.\r\n\r\nThank you for your consideration\
+    \ and for your outstanding work!\r\n\r\nBest regards,\r\nDaniel\n\nyes it would be great if the community\
+    \ would help creating embedding models from apertus. this can be done for example by distillation\
+    \ and finetuning on an adjusted embedding objective. \n\nhere is some example by another contributor:\
+    \ https://huggingface.co/speakdatawith/Apertus-8B-2509-Encoder\n"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 13
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/13
+  topic: null
+  title: FastAPI space
+  body: "I've started an open source Python app to expose a basic completions interface, uptime and potentially\
+    \ other ways of interacting with Apertus in a REST API here: \nhttps://huggingface.co/spaces/loleg/fastapi-apertus\n\
+    \nThere is a mirror with open issues on Codeberg: \nhttps://codeberg.org/loleg/fastapi-apertus/ \n\
+    \nFor hosting on Hugging Face, a minimum of 1xL4 (30GB RAM, 24GB VRAM) is suggested, even though I've\
+    \ put in some memory-saving measures and 16GB VRAM should be enough. The same applies to running the\
+    \ model directly in an Inference Endpoint, where I am still struggling to get Apertus working (but\
+    \ am getting helpful support from HF - stay tuned).\n\nFeedback and pull requests very much appreciated!"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 12
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/12
+  topic: null
+  title: Thank you
+  body: 'Thank you for producing this model and especially the ethics used in it creation. Bravo.
+
+
+    I second this: it''s clear the relatively small team was/is under a lot of pressure, was dealing with
+    a lot of constraints (it''s one thing having time grants on a supercomputer, it''s a whole other to
+    design and run a massive multi-month process on it), and is now bravely facing the expected barrage
+    of doubt and ignorance that such a "flagship initiative" entails. Greetings from the Open Source AI
+    workshop at BFH where we are discussing the details of your model right now:
+
+
+    *merci beaucoup, danke vielmals, grazia fitg, grazie mille per il tuo lavoro!*'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 11
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/11
+  topic: null
+  title: Trying out Apertus 8B in Colab.
+  body: 'I''m trying out Apertus 8B Instruct in Colab for inference using vLLM with no success. The following
+    code works *perfectly* with LLaMA and Qwen. I''m using an A100 GPU. Any help will be highly appreciated!:
+
+
+    CODE:
+
+    !sudo apt-get install git-lfs
+
+    !pip install transformers seqeval[gpu]
+
+    !pip install datasets
+
+    !pip install --upgrade --force-reinstall --no-cache-dir triton vllm protobuf==3.20.3
+
+
+    import numpy as np
+
+    import pandas as pd
+
+    import torch
+
+    import json
+
+    import os
+
+    from vllm import LLM, SamplingParams
+
+
+    os.environ[''CUDA_VISIBLE_DEVICES'']="0"
+
+    base_model_name= "swiss-ai/Apertus-8B-Instruct-2509" #"meta-llama/Llama-3.1-8B-Instruct"
+
+    merged_peft_model_name= "swiss-ai/Apertus-8B-Instruct-2509" #"meta-llama/Llama-3.1-8B-Instruct" #
+
+    llm = LLM(model=merged_peft_model_name, tokenizer=base_model_name , gpu_memory_utilization = 0.65,
+    max_model_len = 3000).
+
+
+    ERROR:
+
+
+    INFO 09-03 15:45:24 [utils.py:326] non-default args: {''model'': ''swiss-ai/Apertus-8B-Instruct-2509'',
+    ''max_model_len'': 3000, ''gpu_memory_utilization'': 0.5, ''disable_log_stats'': True}
+
+    INFO 09-03 15:45:25 [init.py:711] Resolved architecture: TransformersForCausalLM
+
+    INFO 09-03 15:45:25 [init.py:1750] Using max model len 3000
+
+    INFO 09-03 15:45:25 [scheduler.py:222] Chunked prefill is enabled with max_num_batched_tokens=8192.
+
+    RuntimeError Traceback (most recent call last)
+
+    /tmp/ipython-input-503133736.py in <cell line: 0>()
+
+    2 base_model_name= "swiss-ai/Apertus-8B-Instruct-2509" #"meta-llama/Llama-3.1-8B-Instruct"
+
+    3 merged_peft_model_name= "swiss-ai/Apertus-8B-Instruct-2509" #"meta-llama/Llama-3.1-8B-Instruct"
+    #
+
+    ----> 4 llm = LLM(model=merged_peft_model_name, gpu_memory_utilization = 0.5, max_model_len = 3000)
+    #, tokenizer=base_model_name , gpu_memory_utilization = 0.65, max_model_len = 3000
+
+
+    9 frames
+
+    /usr/local/lib/python3.12/dist-packages/vllm/entrypoints/llm.py in init(self, model, runner, convert,
+    tokenizer, tokenizer_mode, skip_tokenizer_init, trust_remote_code, allowed_local_media_path, tensor_parallel_size,
+    dtype, quantization, revision, tokenizer_revision, seed, gpu_memory_utilization, swap_space, cpu_offload_gb,
+    enforce_eager, max_seq_len_to_capture, disable_custom_all_reduce, disable_async_output_proc, hf_token,
+    hf_overrides, mm_processor_kwargs, override_pooler_config, compilation_config, logits_processors,
+    **kwargs)
+
+    283
+
+    284 # Create the Engine (autoselects V0 vs V1)
+
+    --> 285 self.llm_engine = LLMEngine.from_engine_args(
+
+    286 engine_args=engine_args, usage_context=UsageContext.LLM_CLASS)
+
+    287 self.engine_class = type(self.llm_engine)
+
+
+    /usr/local/lib/python3.12/dist-packages/vllm/engine/llm_engine.py in from_engine_args(cls, engine_args,
+    usage_context, stat_loggers)
+
+    488 engine_cls = V1LLMEngine
+
+    489
+
+    --> 490 return engine_cls.from_vllm_config(
+
+    491 vllm_config=vllm_config,
+
+    492 usage_context=usage_context,
+
+
+    /usr/local/lib/python3.12/dist-packages/vllm/v1/engine/llm_engine.py in from_vllm_config(cls, vllm_config,
+    usage_context, stat_loggers, disable_log_stats)
+
+    125 disable_log_stats: bool = False,
+
+    126 ) -> "LLMEngine":
+
+    --> 127 return cls(vllm_config=vllm_config,
+
+    128 executor_class=Executor.get_class(vllm_config),
+
+    129 log_stats=(not disable_log_stats),
+
+
+    /usr/local/lib/python3.12/dist-packages/vllm/v1/engine/llm_engine.py in init(self, vllm_config, executor_class,
+    log_stats, usage_context, stat_loggers, mm_registry, use_cached_outputs, multiprocess_mode)
+
+    102
+
+    103 # EngineCore (gets EngineCoreRequests and gives EngineCoreOutputs)
+
+    --> 104 self.engine_core = EngineCoreClient.make_client(
+
+    105 multiprocess_mode=multiprocess_mode,
+
+    106 asyncio_mode=False,
+
+
+    /usr/local/lib/python3.12/dist-packages/vllm/v1/engine/core_client.py in make_client(multiprocess_mode,
+    asyncio_mode, vllm_config, executor_class, log_stats)
+
+    78
+
+    79 if multiprocess_mode and not asyncio_mode:
+
+    ---> 80 return SyncMPClient(vllm_config, executor_class, log_stats)
+
+    81
+
+    82 return InprocClient(vllm_config, executor_class, log_stats)
+
+
+    /usr/local/lib/python3.12/dist-packages/vllm/v1/engine/core_client.py in init(self, vllm_config, executor_class,
+    l'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 10
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/10
+  topic: apertus format
+  title: Potentially wrong tokenization of conversations
+  body: "Hello. This is your example from the readme:\r\n\r\n```\r\nprompt = \"Give me a brief explanation\
+    \ of gravity in simple terms.\"\r\nmessages_think = [\r\n    {\"role\": \"user\", \"content\": prompt}\r\
+    \n]\r\n\r\ntext = tokenizer.apply_chat_template(\r\n    messages_think,\r\n    tokenize=False,\r\n\
+    \    add_generation_prompt=True,\r\n)\r\nmodel_inputs = tokenizer([text], return_tensors=\"pt\").to(model.device)\r\
+    \n```\r\n\r\n`tokenizer.apply_chat_template` adds a BOS token at the beginning of the string. Further\
+    \ tokenization with `tokenizer([text], return_tensors=\"pt\")` adds a second BOS token. I suppose\
+    \ it is not desired behaviour.\n\nHi, thanks for your comment. You are right, it's not the desired\
+    \ behavior. We will update the README accordingly. You should disable the special tokens when tokenizing\
+    \ the text: `model_inputs = tokenizer([text], return_tensors=\"pt\", add_special_tokens=False)`.\n\
+    \nHello, I updated the README. I will close this issue."
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 9
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/9
+  topic: null
+  title: bug in `tokenizer.json`
+  body: '`"<SPECIAL_10": 10,` shall be `"<SPECIAL_10>": 10,`
+
+
+    thanks for reporting, we''ll take a look
+
+
+    thanks again for the report, the issue has been resolved now.'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 8
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/8
+  topic: null
+  title: Unable to host model with vllm
+  body: "When trying to serve the model with VLLM using pip, I get the following error:\r\n\r\nValueError:\
+    \ There is no module or parameter named 'model.layers.10.mlp.act_fn.beta' in TransformersForCausalLM\r\
+    \n\r\nCommand used: vllm serve \"swiss-ai/Apertus-8B-Instruct-2509\"\r\n\r\nIs there a way to fix\
+    \ this?\n\nYou should install https://github.com/rubber-duck-debug/xielu on your gpu machine. \npip\
+    \ install git+https://github.com/nickjbrowning/XIELU\n\nthough at the moment we'd rather recommend\
+    \ not to use the CUDA xIELU option yet. \neven without it, perf is almost the same."
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 7
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/7
+  topic: null
+  title: traduction
+  body: "Bonjour Madame Kalkounia,\r\n\r\nJe vous remercie pour votre message.\r\nOui nous avons eu le\
+    \ temps de nous reposer un peu et de recharger les batteries pour une nouvelles saison passionnante\
+    \ qui arrive.\r\n\r\nOui nous pourrons mettre un chef a disposition pour cette évènement à Athènes\
+    \ le 14 Octobre prochain.\r\n\r\nDans un premier temps merci de nous dire la durée de l’évènement\
+    \ exactement et le nombre de jour que le chef doit être présent sur place à Athènes.\r\nPour le bon\
+    \ déroulement du programme merci de nous transmettre les attentes que vous avez en terme de recette\
+    \ a faire sur place ou démonstration a exécuté au-devant de vos clients.\r\nPour ce faire il nous\
+    \ faudra établir une liste des matières premières que nous aurons besoin pour cette évènement, que\
+    \ vous devrez nous fournir sur place pour la bonne réalisation des recettes.\r\n\r\nPour la bonne\
+    \ compréhension réciproque des choses nous vous proposons de prendre en charge la venue du chef pour\
+    \ la démonstration ainsi que les produits Coffola® à la Dégustation.\r\nNous aimerions savoir si vous\
+    \ aller prendre en charge l’hébergement, la nourriture et le transport de notre chef durant son séjour\
+    \ chez vous.\r\n\r\nSi vous êtes d’accord avec ses conditions nous sommes partant pour vous soutenir\
+    \ dans la réalisation de votre projet pour le 14 Octobre prochain pour la mise en avant du Coffola\
+    \ sur le marché grecque.\r\n\r\nAu plaisir de vous lire, je vous souhaite une excellente journée.\r\
+    \n\r\nMeilleures salutations. \r\ncorriger le texte et le traduire en anglais.\r\n\r\n\n\ncorriger\
+    \ le texte et le traduire en anglais.\n\n\nHello Madame Kalkounia,\n\nThank you for your message.\
+    \ \n\nYes, we've had the opportunity to rest and recharge for the new upcoming exciting season. \n\
+    \nYes, we will be able to provide a chef for your event in Athens on the 14th of October. \n\nInitially,\
+    \ we would appreciate if you could provide us with the exact duration of the event and the number\
+    \ of days the chef will be required to be present in Athens. \n\nFor the smooth execution of the program,\
+    \ could you please share your expectations regarding the dishes or demonstrations that need to be\
+    \ performed for your clients? \n\nTo ensure we have everything we need. Please provide us with a list\
+    \ of the necessary raw materials that will be required on-site for this event. These will need to\
+    \ be provided by you for the successful execution of the recipes. \n\nFor mutual understanding, we\
+    \ propose taking charge of the chef's travel for the demonstration and the Coffola products for tasting.\
+    \ \n\nWe would like to know if you will be providing accommodation, food, and transportation for our\
+    \ chef during their stay in Athens. \n\nIf you agree with these conditions, we are ready to support\
+    \ you in realizing your project on October 14th to showcase Coffola in the Greek market.\n\nLooking\
+    \ forward to your response and wishing you a great day.\n\nBest regards. \n\n(Translation into English\
+    \ with any necessary corrections)"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 6
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/6
+  topic: null
+  title: MLX Model?
+  body: "Hi,\r\nDo you plan to publish a MLX version of your model?\n\nOn it's way -> [PR](https://github.com/ml-explore/mlx-lm/pull/421)\n\
+    \nit's merged into MLX main now \nhttps://github.com/ml-explore/mlx-lm/releases/tag/v0.27.1"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 5
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/5
+  topic: null
+  title: Local Installation Video and Testing - Step by Step
+  body: "Hi,\r\nKudos on producing such a sublime model. I did a local installation and testing video\
+    \ :\r\n\r\nhttps://youtu.be/XoYJL6XMwDo?si=IY2u4x6mb151MckE\r\n\r\nThanks and regards,\r\nFahd"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 4
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/4
+  topic: null
+  title: Support for xIELU on Windows?
+  body: "Hi everyone,\r\n\r\nI’d like to know if there is support for the xIELU activation function on\
+    \ Windows.\r\nI tried installing it from this [repo](https://github.com/rubber-duck-debug/xielu),\
+    \ but I’m running into some issues during the setup.\r\n\r\nHas anyone managed to get it working on\
+    \ Windows, or is there an alternative way to enable it?\r\nAny help or guidance would be greatly appreciated!"
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 3
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/3
+  topic: null
+  title: GGUF for Ollama
+  body: 'I would like to use this with ollama. How can i make the GGUF from this repo?
+
+
+    This is a new architecture and support hasn''t been merged into Llama.cpp yet.
+
+
+    how can this be achieved? can i somehow make a GGUF myself and upload?'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 2
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/2
+  topic: null
+  title: documentation missing
+  body: 'hi, the link to your technical report is resulting in a 404
+
+
+    it''s been corrected, it''s now on github for easier access'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-8B-Instruct-2509
+  number: 1
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/1
+  topic: null
+  title: Changed model name to Apertus-8B-Instruct-2509
+  body: The model name was Apertus-70B-Instruct-2509
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-70B
+  number: 5
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-70B/discussions/5
+  topic: null
+  title: it is not an apache2.0
+  body: "Well we have TOS hear, so it is not really apache 2.0 \nPlease change license to \"RAIL\", apache\
+    \ 2.0 in header confuses."
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-70B
+  number: 4
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-70B/discussions/4
+  topic: apertus format
+  title: Ollama renderer and parser support for Apertus v1.5
+  body: "I opened an upstream Ollama draft PR for native Apertus v1.5 renderer and parser support:\r\n\
+    \r\nhttps://github.com/ollama/ollama/pull/17555\r\n\r\nThe implementation targets the shared 8B and\
+    \ 70B Jinja chat template and covers thinking, tool calls and results, image placeholders, and automatic\
+    \ handler selection. This is chat-layer support only; no 70B inference support or runtime validation\
+    \ is claimed, and the llama.cpp inference backend is still in progress.\r\n\r\n  Related 8B discussion:\r\
+    \n\r\n  https://huggingface.co/swiss-ai/Apertus-v1.5-8B/discussions/4\r\n"
+  bucket: assigner_positive
+- repo: swiss-ai/Apertus-v1.5-70B
+  number: 3
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-70B/discussions/3
+  topic: null
+  title: '[gh-mirror] Sync `apertus_1.5` from GitHub PR #10'
+  body: 'Automated mirror of `apertus_1.5` from GitHub PR https://github.com/swiss-ai/model-cards/pull/10.
+
+
+    This PR reflects every file in the model-card folder. It is created, updated, merged, and closed automatically
+    to track the source GitHub PR.
+
+
+    > Managed by the `hf-mirror` GitHub Actions workflow — do not edit manually.
+
+
+    Merging the GitHub mirror sync (swiss-ai/model-cards#10, already merged) manually — the mirror CI
+    token lacks merge permission on the Hub.'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-70B
+  number: 2
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-70B/discussions/2
+  topic: null
+  title: Update visual benchmark list to cover all 33 image benchmarks
+  body: 'Expands the image-benchmark list under the Visual Performance plot to match the refreshed plot
+    (33 benchmarks). Adds a **spatial intelligence** category (MMSI, ViewSpatial, MindCube, EmbSpatial)
+    plus V\*Bench, CountBench (general VQA), InfoVQA, OmniDocBench (docs), MathVista (visual math), and
+    MMMU-Pro, ScienceQA (STEM). Removes the broken VRSBench referring split (keeps VRSBench-VQA).
+
+
+    Pairs with the plot refresh in swiss-ai/model-cards-assets#1.
+
+
+    Superseded. This model card is generated from the `swiss-ai/model-cards` GitHub repo and mirrored
+    here automatically, so the edit belongs there rather than as a direct change on the Hub. Moved to
+    https://github.com/swiss-ai/model-cards/pull/10. Closing to avoid drift.'
+  bucket: assigner_false
+- repo: swiss-ai/Apertus-v1.5-70B
+  number: 1
+  source: hub
+  url: https://huggingface.co/swiss-ai/Apertus-v1.5-70B/discussions/1
+  topic: null
+  title: '[gh-mirror] Sync `apertus_1.5` from GitHub PR #9'
+  body: 'Automated mirror of `apertus_1.5` from GitHub PR https://github.com/swiss-ai/model-cards/pull/9.
+
+
+    This PR reflects every file in the model-card folder. It is created, updated, merged, and closed automatically
+    to track the source GitHub PR.
+
+
+    > Managed by the `hf-mirror` GitHub Actions workflow — do not edit manually.'
+  bucket: assigner_false
+- repo: swiss-ai/apertus-format
+  number: 1
+  source: github
+  url: https://github.com/swiss-ai/apertus-format/issues/1
+  topic: apertus format
+  title: EOS token
+  body: "Hi, thanks for the useful repository.\n\nI'm fine-tuning Apertus and I'm getting confused at\
+    \ what end-of-sequence token I should use. I found out that [a commit](https://huggingface.co/swiss-ai/Apertus-70B-2509/commit/95b8d8732d7a67def61dd1774b222101fd9f40b1#d2h-457069)\
+    \ in the model repository manually changed the token ID from `<|assistant_end|>` to `</s>`. However\
+    \ `</s>` doesn't seem to be used anywhere in this repository. \nDo you know why the config has been\
+    \ updated and which one we should use?"
+  bucket: assigner_positive
+- repo: SKaiNET-developers/SKaiNET-transformers
+  number: 93
+  source: github
+  url: https://github.com/SKaiNET-developers/SKaiNET-transformers/pull/93
+  topic: apertus format
+  title: 'docs(apertus): document chat-template format'
+  body: '## Summary
+
+
+    PR 2 of the Apertus rollout (see [APERTUS_ROLLOUT.md](APERTUS_ROLLOUT.md)). Researches the actual
+    chat-template format Apertus models expect, before PR 3 implements `ApertusChatTemplate` against it.
+    Sources fetched from HuggingFace `swiss-ai/Apertus-8B-Instruct-2509` 2026-05-01.
+
+
+    ## Headline finding
+
+
+    **Apertus is NOT chatml-compatible.** The previous `ModelRegistry.kt:66` setting `chatTemplateFamily="chatml"`
+    was a fallback guess; this PR corrects it to `"apertus"`.
+
+
+    Apertus has its own role tokens (`<|system_start|>`, `<|developer_start|>`, `<|user_start|>`, `<|assistant_start|>`,
+    `<|inner_prefix|>`, `<|tools_prefix|>` — no overlap with chatml / llama3 / gemma), renders tools as
+    **TypeScript-style type declarations** (not JSON Schema), emits a default system message + a developer
+    block unconditionally, and uses a JSON-array tool-call format wrapped in `<|tools_prefix|>...<|tools_suffix|>`.
+
+
+    Full spec at `docs/specs/apertus-chat-template.md` (mirrors the existing markdown convention from
+    `docs/specs/spring-ai-adapter.md`):
+
+    - Per-role token table
+
+    - Turn structure with examples
+
+    - Tool-capability rendering (TypeScript types macro behavior)
+
+    - Tool-call output format from the model
+
+    - Parser strategy outline for `ApertusToolCallParserStrategy` (PR 3)
+
+    - Comparison table vs chatml / llama3 / gemma2
+
+    - Four canonical parity test cases for `ApertusChatTemplateHfParityTest` (PR 3)
+
+    - Implementation notes (the Jinja macro complexity → "use Jinja runtime, don''t port to hand-coded
+    Kotlin" recommendation for PR 3)
+
+
+    ## Changes
+
+
+    - **`docs/specs/apertus-chat-template.md`** (new) — the spec.
+
+    - **`llm-core/.../ModelRegistry.kt:66`** — `chatTemplateFamily` `"chatml"` → `"apertus"`. `supportsToolCalling=false`
+    stays; PR 3 flips it once the chat template + parser ship.
+
+    - **`APERTUS_ROLLOUT.md`** — PR 2 checkbox ticked, status header advanced.
+
+
+    ## Test plan
+
+
+    - [x] `:llm-core:jvmTest` green (chatTemplateFamily change has no behavior impact today — `ToolCallingSupportResolver`
+    has no `"apertus"` branch yet, so the fallback path is unchanged).
+
+    - [ ] CI green
+
+    - [ ] Reviewer reads the spec, the four canonical parity cases, and the "use Jinja runtime not hand-coded
+    Kotlin" recommendation make sense before PR 3 starts.
+
+
+    ## Out of scope
+
+
+    - `ApertusChatTemplate.kt`, `ApertusToolCallingSupport.kt`, registration in `ToolCallingSupportResolver.kt`,
+    flipping `supportsToolCalling=true` — all PR 3.
+
+    - Verifying against a real Apertus GGUF — done via HuggingFace `swiss-ai/Apertus-8B-Instruct-2509`
+    source files (`chat_template.jinja`, `tokenizer_config.json`, `special_tokens_map.json`), the canonical
+    authority for the format.
+
+
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)'
+  bucket: assigner_positive
+- repo: opendatahub-io/model-metadata-collection
+  number: 114
+  source: github
+  url: https://github.com/opendatahub-io/model-metadata-collection/pull/114
+  topic: null
+  title: 'fix(catalog): update tool-calling template formatting and remove Apertus tool-calling task'
+  body: "## Description\r\nAdd newline separator between chat template file and template path in tool-calling\
+    \ template. Remove tool-calling task from Apertus-8B-Instruct -2509-FP8-dynamic per product management\
+    \ feedback.\r\n\r\n## How Has This Been Tested?\r\nValidated output file\r\n\r\n## Merge criteria:\r\
+    \n<!--- This PR will be merged by any repository approver when it meets all the points in the checklist\
+    \ -->\r\n<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->\r\
+    \n\r\n- [ ] The commits have meaningful messages; the author will squash them [after approval](https://github.com/opendatahub-io/opendatahub-community/blob/main/contributor-cheatsheet.md#:~:text=Usually%20this%20is%20done%20in%20last%20phase%20of%20a%20PR%20revision)\
+    \ or will ask to merge with squash.\r\n- [ ] Testing instructions have been added in the PR body (for\
+    \ PRs involving changes that are not immediately obvious).\r\n- [ ] The developer has manually tested\
+    \ the changes and verified that the changes work\n\n<!-- This is an auto-generated comment: release\
+    \ notes by coderabbit.ai -->\n\n## Summary by CodeRabbit\n\n* **Style**\n  * Improved formatting of\
+    \ template output with better line breaks for readability.\n\n* **Chores**\n  * Reorganized model\
+    \ catalog entries for improved structure.\n\n<!-- end of auto-generated comment: release notes by\
+    \ coderabbit.ai -->"
+  bucket: assigner_positive
+- repo: ochafik/minja
+  number: 18
+  source: github
+  url: https://github.com/ochafik/minja/issues/18
+  topic: apertus format
+  title: 'Feature: Auto-convert reasoning_content to content.blocks format for Apertus template'
+  body: "## Feature Request\n\nThe Apertus template uses a unique format for reasoning content:\n\n- Standard\
+    \ format: message.reasoning_content = \"text\"\n- Apertus format: message.content = {\"blocks\": [{\"\
+    type\": \"thoughts\", \"text\": \"...\"}]}\n\n## Models Using Blocks Format\n\nBased on research of\
+    \ templates in llama.cpp, there are multiple variants:\n\n1. Apertus - Uses content.blocks format\
+    \ with types: thoughts, tool_calls, tool_outputs, response\n2. Ministral 14B Reasoning - Uses message\
+    \ content as array of blocks (text, thinking, image, image_url)\n3. Mistral-Small 3.2-24B - Similar\
+    \ array-based blocks\n4. unsloth-mistral-Devstral-Small - Similar array-based blocks\n\n## OpenAI\
+    \ Standard\n\nOpenAI uses a different approach - they keep content as string and add reasoning_content\
+    \ field:\n{\n  \"role\": \"assistant\",\n  \"content\": \"This is the actual response text\",\n  \"\
+    reasoning_content\": \"This is the reasoning/thinking process\"\n}\n\nThis is different from blocks\
+    \ format. Also see o1 reasoning format, DeepSeek V3, Qwen thinking, GLM-4.6"
+  bucket: assigner_positive
+- repo: swiss-ai/posttraining
+  number: 35
+  source: github
+  url: https://github.com/swiss-ai/posttraining/pull/35
+  topic: null
+  title: Alignment pipeline Apertus and SwissAI format
+  body: ''
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 47662
+  source: github
+  url: https://github.com/huggingface/transformers/pull/47662
+  topic: null
+  title: 'Apertus 1.5: add model'
+  body: "<!-- ci-dashboard-badge:start -->\n[![CPU CI](https://transformers-ci.lor-e.huggingface.cool/badge/pr?pr=47662&event=pr-ci)](https://transformers-ci.lor-e.huggingface.cool/d/pytest-observability-by-pr/pytest-observability-branch?var-pr=47662)\
+    \ [![GPU run-slow](https://transformers-ci.lor-e.huggingface.cool/badge/pr?pr=47662&event=run-slow)](https://transformers-ci.lor-e.huggingface.cool/d/pytest-observability-by-pr/pytest-observability-branch?var-pr=47662)\n\
+    <!-- ci-dashboard-badge:end -->\n\n# What does this PR do?\r\n\r\nAdds **Apertus 1.5**, released 24.07.2026\
+    \ by the Apertus team. Its a multimodal model (image + audio + text to text) extending the [Apertus](https://huggingface.co/docs/transformers/model_doc/apertus)\
+    \ language model by continued pretraining with model vocabulary extended by two discrete tokenizers:\
+    \ Emu3.5 for images and WavTokenizer for audio. (More details in Architecture section).\r\nWe released\
+    \ the two final checkpoints: [swiss-ai/Apertus-v1.5-8B](https://huggingface.co/swiss-ai/Apertus-v1.5-8B)\
+    \ and [swiss-ai/Apertus-v1.5-70B](https://huggingface.co/swiss-ai/Apertus-v1.5-70B) with the intermediate\
+    \ checkpoints released together with the technical report in the coming weeks.\r\n\r\nThe closest\
+    \ contribution precedent to this architecture and style of model is probably [Emu3](https://github.com/huggingface/transformers/pull/33770).\r\
+    \n\r\n## Usage\r\n\r\n```python\r\nimport torch\r\nfrom transformers import AutoModelForImageTextToText,\
+    \ AutoProcessor\r\n\r\nmodel_id = \"swiss-ai/Apertus-v1.5-8B\"\r\nprocessor = AutoProcessor.from_pretrained(model_id)\r\
+    \nmodel = AutoModelForImageTextToText.from_pretrained(model_id, dtype=torch.bfloat16, device_map=\"\
+    auto\")\r\n\r\n# a batch of two independent prompts, one per modality\r\nconversations = [\r\n   \
+    \ [{\"role\": \"user\", \"content\": [\r\n        {\"type\": \"image\", \"url\": \"https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg\"\
+    },\r\n          {\"type\": \"text\", \"text\": \"Describe this image in one sentence.\"},\r\n    \
+    \  ]}],\r\n    [{\"role\": \"user\", \"content\": [\r\n          {\"type\": \"audio\", \"url\": \"\
+    https://huggingface.co/datasets/hf-internal-testing/dummy-audio-samples/resolve/main/mary_had_lamb.mp3\"\
+    },\r\n          {\"type\": \"text\", \"text\": \"Does this clip contain speech, music, or ambient\
+    \ noise? Answer briefly.\"},\r\n      ]}],\r\n  ]\r\n\r\n# the processor fetches and resamples the\
+    \ media; batched generation uses the tokenizer's default left padding\r\ninputs = processor.apply_chat_template(\r\
+    \n    conversations, add_generation_prompt=True, tokenize=True,\r\n    return_dict=True, return_tensors=\"\
+    pt\", padding=True,\r\n).to(model.device)\r\n\r\ngenerated = model.generate(**inputs, max_new_tokens=64)\r\
+    \nfor reply in processor.batch_decode(generated[:, inputs[\"input_ids\"].shape[1]:], skip_special_tokens=True):\r\
+    \n  print(reply)\r\n```\r\n\r\n## Architecture\r\n\r\nApertus 1.5 uses **discrete-token early fusion**:\
+    \ frozen, encode-only tokenizers(these are not classic BPE style text tokenizers but Neural Networks)\
+    \ turn images and audio into\r\ndiscrete codes, and fixed integer offsets map those codes into an\
+    \ enlarged shared vocabulary, so the backbone\r\nmodels all modalities as one token stream. The 266,752-id\
+    \ vocabulary holds 131,072 text tokens plus 200\r\nspecials, then 131,072 visual codes at offset 131,272\
+    \ and 4,096 audio codes at offset 262,344.\r\n\r\nThe backbone is an Apertus-style transformer with\
+    \ the embedding table enlarged to that vocabulary. Its **LM\r\nhead is physically pruned** to the\
+    \ text-token rows (`output_vocab_size` in the config): for legal reasons the\r\nreleased model must\
+    \ not generate images or audio, so the multimodal rows are removed from the output\r\nprojection entirely.\r\
+    \n\r\nNeither the EMU3.5 vision tokenizer nor WavTokenizer existed in transformers; both are added\
+    \ in this PR as well:\r\n\r\n1. **EMU3.5 vision tokenizer, encode-only** (`Apertus1p5VisionTokenizerModel`,\
+    \ bundled inside `apertus1p5`):\r\n   the encoder, quantizer, and codebook-scoring path of BAAI's\
+    \ EMU3.5 Vision Tokenizer, an IBQ image tokenizer\r\n   with a 131k codeboo"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 44567
+  source: github
+  url: https://github.com/huggingface/transformers/pull/44567
+  topic: null
+  title: '[`fix`] Prevent crash with Apertus without xielu installed'
+  body: "# What does this PR do?\r\n\r\nCurrently, when using Apertus (or rather, it's `XIELUActivation`),\
+    \ and you don't have `xielu` installed, then you'll fall to this `except:`\r\nhttps://github.com/huggingface/transformers/blob/5a098a1e01034095f037c8a37f7fe87c31118e26/src/transformers/activations.py#L268-L273\r\
+    \n\r\nHowever, `logger.warning_once` doesn't accept multiple parameters like this, and so it'll crash:\r\
+    \n```\r\n            except Exception as err:\r\n                msg += f\" Could not enable torch._dynamo\
+    \ for xIELU ({err}) - this may result in slower performance.\"\r\n                self._xielu_cuda_fn\
+    \ = self._xielu_cuda\r\n            logger.warning_once(msg)\r\n        except Exception as err:\r\
+    \n>           logger.warning_once(\r\n                \"CUDA-fused xIELU not available (%s) – falling\
+    \ back to a Python version.\\n\"\r\n                \"For CUDA xIELU (experimental), `pip install\
+    \ git+https://github.com/nickjbrowning/XIELU`\",\r\n                str(err),\r\n            )\r\n\
+    E           TypeError: NNCFLogger.warning_once() takes 2 positional arguments but 3 were given\r\n\
+    ```\r\n\r\nInstead, this PR uses f-string formatting to place the stringified error into the first\
+    \ line, resulting in this logger warning instead:\r\n```\r\nCUDA-fused xIELU not available (No module\
+    \ named 'xielu') – falling back to a Python version.\r\nFor CUDA xIELU (experimental), `pip install\
+    \ git+https://github.com/nickjbrowning/XIELU`\r\n```\r\n\r\n## Before submitting\r\n- [ ] This PR\
+    \ fixes a typo or improves the docs (you can dismiss the other checks if that's the case).\r\n- [x]\
+    \ Did you read the [contributor guideline](https://github.com/huggingface/transformers/blob/main/CONTRIBUTING.md#create-a-pull-request),\r\
+    \n      Pull Request section?\r\n- [ ] Was this discussed/approved via a Github issue or the [forum](https://discuss.huggingface.co/)?\
+    \ Please add a link\r\n      to it if that's the case.\r\n- [ ] Did you make sure to update the documentation\
+    \ with your changes? Here are the\r\n      [documentation guidelines](https://github.com/huggingface/transformers/tree/main/docs),\
+    \ and\r\n      [here are tips on formatting docstrings](https://github.com/huggingface/transformers/tree/main/docs#writing-source-documentation).\r\
+    \n- [ ] Did you write any new necessary tests?\r\n\r\n\r\n## Who can review?\r\n\r\n@Cyrilvallez @vasqu\r\
+    \n\r\n- Tom Aarsen"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 44512
+  source: github
+  url: https://github.com/huggingface/transformers/issues/44512
+  topic: null
+  title: Docs still mention transformers run command which was removed in v5
+  body: "### System Info\n\nTransformers version: 5.x\n\nThe issue is related to the documentation rather\
+    \ than a specific runtime environment.\n\n### Who can help?\n\n@stevhliu \n\n### Information\n\n-\
+    \ [x] The official example scripts\n- [ ] My own modified scripts\n\n### Tasks\n\n- [x] An officially\
+    \ supported task in the `examples` folder (such as GLUE/SQuAD, ...)\n- [ ] My own task or dataset\
+    \ (give details below)\n\n### Reproduction\n\nThis is a documentation inconsistency in Transformers\
+    \ v5.\n`transformers run` command was removed in v5.\nDespite this, the official documentation still\
+    \ contains multiple references to this command.\n\n- https://huggingface.co/docs/transformers/main/en/model_doc/apertus?usage=transformers+CLI#overview\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/barthez?usage=transformers+CLI#barthez\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/xlm?usage=transformers+CLI#xlm\n- https://huggingface.co/docs/transformers/main/en/model_doc/bertweet?usage=transformers+CLI#bertweet\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/eurobert?usage=transformers+CLI#overview\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/olmo3?usage=transformers+CLI#olmo3\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/nanochat?usage=transformers+CLI#nanochat\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/bert?usage=transformers+CLI#bert\n- https://huggingface.co/docs/transformers/main/en/model_doc/t5?usage=transformers+CLI#t5\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/vaultgemma?usage=transformers+CLI#overview\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/roberta?usage=transformers+CLI#roberta\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/olmo?usage=transformers+CLI#olmo\n- https://huggingface.co/docs/transformers/main/en/model_doc/bart?usage=transformers+CLI#bart\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/roformer?usage=transformers+CLI#roformer\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/canine?usage=transformers+CLI#canine\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/opt?usage=transformers+CLI#opt\n- https://huggingface.co/docs/transformers/main/en/model_doc/byt5?usage=transformers#byt5\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/roc_bert?usage=transformers+CLI#rocbert\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/deberta?usage=transformers+CLI#deberta\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/phi?usage=transformers+CLI#phi\n- https://huggingface.co/docs/transformers/main/en/model_doc/gpt_neo?usage=transformers+CLI#gpt-neo\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/mt5?usage=transformers+CLI#mt5\n- https://huggingface.co/docs/transformers/main/en/model_doc/olmo2?usage=transformers+CLI#olmo2\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/bartpho?usage=transformers+CLI#bartpho\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/t5gemma?usage=transformers+CLI#t5gemma\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/mobilebert?usage=transformers+CLI#mobilebert\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/mamba?usage=transformers+CLI#mamba\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/gpt2?usage=transformers+CLI#gpt-2\n-\
+    \ https://huggingface.co/docs/transformers/main/en/model_doc/gemma2?usage=transformers+CLI#gemma2\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/distilbert?usage=transformers+CLI#distilbert\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/granite?usage=transformers+CLI#granite\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/llama?usage=transformers+CLI#llama\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/flex_olmo?usage=transformers+CLI#flexolmo\n\
+    - https://huggingface.co/docs/transformers/main/en/model_doc/big_bird?usage=transformers+CLI#bigbird\n\
+    - https://huggingface.co/docs/transformers/main/ko/model"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 43473
+  source: github
+  url: https://github.com/huggingface/transformers/pull/43473
+  topic: null
+  title: 'Fix Apertus model loading (NotImplementedError: Cannot copy out of meta tensor; no data!)'
+  body: "\r\n# What does this PR do?\r\n\r\n<!--\r\nCongratulations! You've made it this far! You're not\
+    \ quite done yet though.\r\n\r\nOnce merged, your PR is going to appear in the release notes with\
+    \ the title you set, so make sure it's a great title that fully reflects the extent of your awesome\
+    \ contribution.\r\n\r\nThen, please replace this with a description of the change and which issue\
+    \ is fixed (if applicable). Please also include relevant motivation and context. List any dependencies\
+    \ (if any) that are required for this change.\r\n\r\nOnce you're done, someone will review your PR\
+    \ shortly (see the section \"Who can review?\" below to tag some potential reviewers). They may suggest\
+    \ changes to make the code even better. If no one reviewed your PR after a week has passed, don't\
+    \ hesitate to post a new comment @-mentioning the same persons---sometimes notifications get lost.\r\
+    \n-->\r\n\r\n<!-- Remove if not applicable -->\r\n\r\nFixes issue related to loading Apertus models\
+    \ to meta device. Reproduction:\r\n```py\r\n>>> from transformers import AutoModelForCausalLM\r\n\
+    >>> AutoModelForCausalLM.from_pretrained('onnx-internal-testing/tiny-random-ApertusForCausalLM')\r\
+    \nTraceback (most recent call last):\r\n  File \"<stdin>\", line 1, in <module>\r\n    AutoModelForCausalLM.from_pretrained('onnx-internal-testing/tiny-random-ApertusForCausalLM')\r\
+    \n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\
+    \n  File \".../transformers/src/transformers/models/auto/auto_factory.py\", line 372, in from_pretrained\r\
+    \n    return model_class.from_pretrained(\r\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^\r\n        pretrained_model_name_or_path,\
+    \ *model_args, config=config, **hub_kwargs, **kwargs\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\
+    \n    )\r\n    ^\r\n  File \".../transformers/src/transformers/modeling_utils.py\", line 4072, in\
+    \ from_pretrained\r\n    model = cls(config, *model_args, **model_kwargs)\r\n  File \".../transformers/src/transformers/models/apertus/modeling_apertus.py\"\
+    , line 440, in __init__\r\n    self.model = ApertusModel(config)\r\n                 ~~~~~~~~~~~~^^^^^^^^\r\
+    \n  File \".../transformers/src/transformers/models/apertus/modeling_apertus.py\", line 361, in __init__\r\
+    \n    [ApertusDecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]\r\n\
+    \     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \".../transformers/src/transformers/models/apertus/modeling_apertus.py\"\
+    , line 296, in __init__\r\n    self.mlp = ApertusMLP(config)\r\n               ~~~~~~~~~~^^^^^^^^\r\
+    \n  File \".../transformers/src/transformers/models/apertus/modeling_apertus.py\", line 50, in __init__\r\
+    \n    self.act_fn = ACT2FN[config.hidden_act]\r\n                  ~~~~~~^^^^^^^^^^^^^^^^^^^\r\n \
+    \ File \".../transformers/src/transformers/activations.py\", line 221, in __getitem__\r\n    return\
+    \ cls(**kwargs)\r\n  File \".../transformers/src/transformers/activations.py\", line 250, in __init__\r\
+    \n    self._beta_scalar = float(self.beta.detach().cpu().float().item())\r\n                     \
+    \         ~~~~~~~~~~~~~~~~~~~~~~^^\r\n  File \"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/torch/utils/_device.py\"\
+    , line 103, in __torch_function__\r\n    return func(*args, **kwargs)\r\nNotImplementedError: Cannot\
+    \ copy out of meta tensor; no data!\r\n```\r\n\r\n\r\n## Before submitting\r\n- [ ] This PR fixes\
+    \ a typo or improves the docs (you can dismiss the other checks if that's the case).\r\n- [ ] Did\
+    \ you read the [contributor guideline](https://github.com/huggingface/transformers/blob/main/CONTRIBUTING.md#create-a-pull-request),\r\
+    \n      Pull Request section?\r\n- [ ] Was this discussed/approved via a Github issue or the [forum](https://discuss.huggingface.co/)?\
+    \ Please add a link\r\n      to it if that's the case.\r\n- [ ] Did you make sure to update the documentation\
+    \ with your changes? Here are the\r\n      [documentation guidelines](https://github.com/huggingface/transformers/tree/main/docs),\
+    \ and\r\n      [here are tips on formatting docstrings](https://github.com/huggingf"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 43016
+  source: github
+  url: https://github.com/huggingface/transformers/issues/43016
+  topic: null
+  title: Dia model cannot load/ generation error
+  body: "### System Info\n\ntransformers main branch\n\n### Who can help?\n\n@zucchini-nlp \n\n### Information\n\
+    \n- [ ] The official example scripts\n- [ ] My own modified scripts\n\n### Tasks\n\n- [ ] An officially\
+    \ supported task in the `examples` folder (such as GLUE/SQuAD, ...)\n- [ ] My own task or dataset\
+    \ (give details below)\n\n### Reproduction\n\n```python\nfrom transformers import set_seed, AutoProcessor,\
+    \ DiaForConditionalGeneration\n\nset_seed(42)\n\ntorch_device = \"cuda\"\nmodel_checkpoint = \"nari-labs/Dia-1.6B-0626\"\
+    \n\n#text = [\"[S1] Dia is an open weights text to dialogue model. [S2] You get full control over\
+    \ scripts and voices. [S1] Wow. Amazing. (laughs) [S2] Try it now on Git hub or Hugging Face.\"]\n\
+    text = [\"[S1] Hello, my dog is cooler than you!\"]\nprocessor = AutoProcessor.from_pretrained(model_checkpoint)\n\
+    inputs = processor(text=text, padding=True, return_tensors=\"pt\").to(torch_device)\n\nmodel = DiaForConditionalGeneration.from_pretrained(model_checkpoint).to(torch_device)\n\
+    outputs = model.generate(**inputs, max_new_tokens=3072, guidance_scale=3.0, temperature=1.8, top_p=0.90,\
+    \ top_k=45)\n\nprint(outputs)\noutputs = processor.batch_decode(outputs)\nprocessor.save_audio(outputs,\
+    \ \"dia_example.mp3\")\n```\nI ran the previous script on A100.\nThe output audio is noise for the\
+    \ input2: ` [\"[S1] Hello, my dog is cooler than you!\"]`. For input1:`[\"[S1] Dia is an open weights\
+    \ text to dialogue model. [S2] You get full control over scripts and voices. [S1] Wow. Amazing. (laughs)\
+    \ [S2] Try it now on Git hub or Hugging Face.\"]`, the output audio is correct. I want to know if\
+    \ it's a bug from the model. Thanks!\n\nBTW, if we load the most common dia model [nari-labs/Dia-1.6B](https://huggingface.co/nari-labs/Dia-1.6B):\n\
+    ```python\nfrom transformers import pipeline\n\npipe = pipeline(\"text-to-audio\", model=\"nari-labs/Dia-1.6B\"\
+    )\n```\nThe error will be:\n```\n>>> pipe = pipeline(\"text-to-audio\", model=\"nari-labs/Dia-1.6B\"\
+    )\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\n  File \"/home/jiqing/transformers/src/transformers/pipelines/__init__.py\"\
+    , line 781, in pipeline\n    config = AutoConfig.from_pretrained(\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"/home/jiqing/transformers/src/transformers/models/auto/configuration_auto.py\", line 1352,\
+    \ in from_pretrained\n    raise ValueError(\nValueError: Unrecognized model in nari-labs/Dia-1.6B.\
+    \ Should have a `model_type` key in its config.json, or contain one of the following\n strings in\
+    \ its name: afmoe, aimv2, aimv2_vision_model, albert, align, altclip, apertus, arcee, aria, aria_text,\
+    \ audio-spectrogram-trans\nformer, audioflamingo3, audioflamingo3_encoder, autoformer, aya_vision,\
+    \ bamba, bark, bart, beit, bert, bert-generation, big_bird, bigbir\nd_pegasus, biogpt, bit, bitnet,\
+    \ blenderbot, blenderbot-small, blip, blip-2, blip_2_qformer, bloom, blt, bridgetower, bros, camembert,\
+    \ ca\nnine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model, clip_vision_model,\
+    \ clipseg, clvp, code_llama, cod\negen, cohere, cohere2, cohere2_vision, colpali, colqwen2, conditional_detr,\
+    \ convbert, convnext, convnextv2, cpmant, csm, ctrl, cvt, cwm,\n...\n```\n\n### Expected behavior\n\
+    \nHi @zucchini-nlp . Could you please take a look at this issue? Maybe at the Dia maintainer to look\
+    \ it together. Thanks!"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 42864
+  source: github
+  url: https://github.com/huggingface/transformers/pull/42864
+  topic: null
+  title: 'fix: Initialize ApertusMLP''s xielu activation using `torch_dtype`'
+  body: "# What does this PR do?\r\n\r\nI cannot infer this model architecture on Turing. This fixes the\
+    \ issue at the root.\r\n\r\nSee #42371, https://github.com/vllm-project/vllm/issues/29349, https://github.com/vllm-project/vllm/pull/30635\
+    \ and https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509/discussions/21 for context.\r\n\r\n\
+    Fixes `RuntimeError: expected m1 and m2 to have the same dtype, but got: float != c10::Half`\r\n\r\
+    \nIssue reproduction:\r\n\r\n```py\r\n\r\nimport torch\r\nfrom torch import nn\r\nfrom transformers.models.apertus.configuration_apertus\
+    \ import ApertusConfig\r\nfrom transformers.models.apertus.modeling_apertus import ApertusMLP\r\n\
+    import sys\r\n\r\ndef test_apertus_mlp_crash():\r\n    print(f\"Python executable: {sys.executable}\"\
+    )\r\n    print(\"Testing ApertusMLP crash on float16...\")\r\n    \r\n    # 1. Setup Config with float16\
+    \ and xielu\r\n    config = ApertusConfig(\r\n        hidden_size=64,\r\n        intermediate_size=128,\r\
+    \n        hidden_act=\"xielu\",\r\n        torch_dtype=\"float16\" # Simulating the runner or user\
+    \ choice\r\n    )\r\n    \r\n    # 2. Instantiate MLP\r\n    # We might need to manually set default\
+    \ dtype if the model doesn't pick it up from config immediately\r\n    # usage in vllm often sets\
+    \ the torch default dtype or casts the model\r\n    torch.set_default_dtype(torch.float16) # Simulating\
+    \ \"float16 hardware\" env\r\n    \r\n    try:\r\n        mlp = ApertusMLP(config)\r\n        \r\n\
+    \        # Check act_fn dtype\r\n        if hasattr(mlp.act_fn, 'beta'):\r\n             print(f\"\
+    XIELU beta dtype: {mlp.act_fn.beta.dtype}\")\r\n        \r\n        # 3. Create Input\r\n        x\
+    \ = torch.randn(1, 64, dtype=torch.float16)\r\n        \r\n        # 4. Forward Pass\r\n        output\
+    \ = mlp(x)\r\n        print(\"Forward pass successful!\")\r\n        print(f\"Output dtype: {output.dtype}\"\
+    )\r\n        \r\n    except RuntimeError as e:\r\n        print(\"\\nCaught expected RuntimeError:\"\
+    )\r\n        print(e)\r\n    except Exception as e:\r\n        print(f\"\\nCaught unexpected exception:\
+    \ {type(e)}\")\r\n        print(e)\r\n    finally:\r\n         torch.set_default_dtype(torch.float32)\
+    \ # Cleanup\r\n\r\nif __name__ == \"__main__\":\r\n    test_apertus_mlp_crash()\r\n\r\n```\r\n\r\n\
+    Output Without this patch:\r\n```\r\nPython executable: /home/waser/Projets/Transformers/transformers/venv/bin/python\r\
+    \nTesting ApertusMLP crash on float16...\r\nCUDA-fused xIELU not available (No module named 'xielu')\
+    \ – falling back to a Python version.\r\nFor CUDA xIELU (experimental), `pip install git+https://github.com/nickjbrowning/XIELU`\r\
+    \nXIELU beta dtype: torch.bfloat16\r\n\r\nCaught expected RuntimeError:\r\nexpected m1 and m2 to have\
+    \ the same dtype, but got: float != c10::Half\r\n```\r\n\r\nOutput with this patch:\r\n```\r\nPython\
+    \ executable: /home/waser/Projets/Transformers/transformers/venv/bin/python\r\nTesting ApertusMLP\
+    \ crash on float16...\r\nCUDA-fused xIELU not available (No module named 'xielu') – falling back to\
+    \ a Python version.\r\nFor CUDA xIELU (experimental), `pip install git+https://github.com/nickjbrowning/XIELU`\r\
+    \n`torch_dtype` is deprecated! Use `dtype` instead!\r\nXIELU beta dtype: torch.float16\r\nForward\
+    \ pass successful!\r\nOutput dtype: torch.float16\r\n```\r\n\r\nBig thanks to everyone who helped\
+    \ to shape this patch into light."
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 42381
+  source: github
+  url: https://github.com/huggingface/transformers/issues/42381
+  topic: null
+  title: 'ValueError: Unrecognized model in OrdalieTech/Solon-embeddings-large-0.1. Should have a `model_type`
+    key in its config.json'
+  body: "### System Info\n\n- Python 3.13.7\n- Transformers 4.57.2\n- Sentence-transformers 5.2.0.dev0\n\
+    - Windows 11\n\n\n\n### Who can help?\n\n@ArthurZucker @Cyrilvallez\n\n### Information\n\n- [ ] The\
+    \ official example scripts\n- [x] My own modified scripts\n\n### Tasks\n\n- [ ] An officially supported\
+    \ task in the `examples` folder (such as GLUE/SQuAD, ...)\n- [ ] My own task or dataset (give details\
+    \ below)\n\n### Reproduction\n\nJust run the following :\n```\nfrom sentence_transformers import SentenceTransformer\n\
+    model=SentenceTransformer(\"OrdalieTech/Solon-embeddings-large-0.1\")\n```\n\nOutput : \n```\nTraceback\
+    \ (most recent call last):\n  File \"<python-input-1>\", line 1, in <module>\n    model=SentenceTransformer(\"\
+    OrdalieTech/Solon-embeddings-large-0.1\")\n  File \"D:\\Nextcloud\\IA\\UtopIA_posit\\env_UtopIA\\\
+    Lib\\site-packages\\sentence_transformers\\SentenceTransformer.py\", line 327, in __init__\n    modules,\
+    \ self.module_kwargs = self._load_sbert_model(\n                                  ~~~~~~~~~~~~~~~~~~~~~~^\n\
+    \        model_name_or_path,\n        ^^^^^^^^^^^^^^^^^^^\n    ...<7 lines>...\n        config_kwargs=config_kwargs,\n\
+    \        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"D:\\Nextcloud\\IA\\UtopIA_posit\\env_UtopIA\\\
+    Lib\\site-packages\\sentence_transformers\\SentenceTransformer.py\", line 2305, in _load_sbert_model\n\
+    \    module = module_class.load(\n        model_name_or_path,\n    ...<11 lines>...\n        backend=self.backend,\n\
+    \    )\n  File \"D:\\Nextcloud\\IA\\UtopIA_posit\\env_UtopIA\\Lib\\site-packages\\sentence_transformers\\\
+    models\\Transformer.py\", line 366, in load\n    return cls(model_name_or_path=model_name_or_path,\
+    \ **init_kwargs)\n  File \"D:\\Nextcloud\\IA\\UtopIA_posit\\env_UtopIA\\Lib\\site-packages\\sentence_transformers\\\
+    models\\Transformer.py\", line 88, in __init__\n    config, is_peft_model = self._load_config(model_name_or_path,\
+    \ cache_dir, backend, config_args)\n                            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"D:\\Nextcloud\\IA\\UtopIA_posit\\env_UtopIA\\Lib\\site-packages\\sentence_transformers\\\
+    models\\Transformer.py\", line 163, in _load_config\n    return AutoConfig.from_pretrained(model_name_or_path,\
+    \ **config_args, cache_dir=cache_dir), False\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"D:\\Nextcloud\\IA\\UtopIA_posit\\env_UtopIA\\Lib\\site-packages\\transformers\\models\\\
+    auto\\configuration_auto.py\", line 1380, in from_pretrained\n    raise ValueError(\n    ...<3 lines>...\n\
+    \    )\nValueError: Unrecognized model in OrdalieTech/Solon-embeddings-large-0.1. Should have a `model_type`\
+    \ key in its config.json, or contain one of the following strings in its name: aimv2, aimv2_vision_model,\
+    \ albert, align, altclip, apertus, arcee, aria, aria_text, audio-spectrogram-transformer, autoformer,\
+    \ aya_vision, bamba, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit,\
+    \ bitnet, blenderbot, blenderbot-small, blip, blip-2, blip_2_qformer, bloom, blt, bridgetower, bros,\
+    \ camembert, canine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model,\
+    \ clip_vision_model, clipseg, clvp, code_llama, codegen, cohere, cohere2, cohere2_vision, colpali,\
+    \ colqwen2, conditional_detr, convbert, convnext, convnextv2, cpmant, csm, ctrl, cvt, d_fine, dab-detr,\
+    \ dac, data2vec-audio, data2vec-text, data2vec-vision, dbrx, deberta, deberta-v2, decision_transformer,\
+    \ deepseek_v2, deepseek_v3, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything,\
+    \ depth_pro, deta, detr, dia, diffllama, dinat, dinov2, dinov2_with_registers, dinov3_convnext, dinov3_vit,\
+    \ distilbert, doge, donut-swin, dots1, dpr, dpt, edgetam, edgetam_video, edgetam_vision_model, efficientformer,\
+    \ efficientloftr, efficientnet, electra, emu3, encodec, encoder-decoder, eomt, ernie, ernie4_5, ernie4_5_moe,\
+    \ ernie_m, esm, evolla, exaone4, falcon, falcon_h1, falcon_mamba, fastspeech2_conformer, fastspeech2_conformer_with_hifigan,\
+    \ flaubert, flava, flex_olmo, florence2, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, gem"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 42371
+  source: github
+  url: https://github.com/huggingface/transformers/issues/42371
+  topic: null
+  title: Please use the new API settings to control TF32 behavior, ...
+  body: '### System Info
+
+
+    > UserWarning: Please use the new API settings to control TF32 behavior, such as torch.backends.cudnn.conv.fp32_precision
+    = ''tf32'' or torch.backends.cuda.matmul.fp32_precision = ''ieee''. Old settings, e.g, torch.backends.cuda.matmul.allow_tf32
+    = True, torch.backends.cudnn.allow_tf32 = True, allowTF32CuDNN() and allowTF32CuBLAS() will be deprecated
+    after Pytorch 2.9. Please see https://pytorch.org/docs/main/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
+    (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:80.)
+
+
+    I''m having an issue with vllm and this warning seams related to transformers? You can find the corresponding
+    error at [vllm#29349](https://github.com/vllm-project/vllm/issues/29349) with relevant info about
+    it.
+
+
+    ### Who can help?
+
+
+    _No response_
+
+
+    ### Information
+
+
+    - [x] The official example scripts
+
+    - [ ] My own modified scripts
+
+
+    ### Tasks
+
+
+    - [x] An officially supported task in the `examples` folder (such as GLUE/SQuAD, ...)
+
+    - [ ] My own task or dataset (give details below)
+
+
+    ### Reproduction
+
+
+    ```
+
+    docker run --runtime nvidia --gpus=all -v ~/.cache/huggingface:/root/.cache/huggingface -p 8000:8000
+    vllm/vllm-openai:v0.11.2 --model swiss-ai/Apertus-8B-Instruct-2509
+
+    ```
+
+
+    ### Expected behavior
+
+
+    The new PyTorch API should be used so that MoE models can be loaded and inferred on the Turing architecture.'
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 41846
+  source: github
+  url: https://github.com/huggingface/transformers/issues/41846
+  topic: null
+  title: Incompatibility single-modality AutoProcessor and PEFT Adapter
+  body: "Hello!\n\n## Bug report overview\n* I've encountered an incompatibility between `AutoProcessor`\
+    \ and PEFT Adapters\n\n## Details\nStraight to the point:\n```python\nfrom transformers import AutoProcessor,\
+    \ AutoModel\nfrom peft import LoraConfig, TaskType\n\nmodel_name = \"google-bert/bert-base-uncased\"\
+    \nmodel = AutoModel.from_pretrained(model_name)\ntokenizer = AutoProcessor.from_pretrained(model_name)\n\
+    \npeft_config = LoraConfig(\n    task_type=TaskType.FEATURE_EXTRACTION\n)\nmodel.add_adapter(peft_config)\n\
+    \nsave_path = \"peft_processor_test_path\"\nmodel.save_pretrained(save_path)\ntokenizer.save_pretrained(save_path)\n\
+    \nloaded_model = AutoModel.from_pretrained(save_path)\nloaded_tokenizer = AutoProcessor.from_pretrained(save_path)\n\
+    print(loaded_model)\nprint(loaded_tokenizer)\n```\nInitially, I run into #4273, which is being resolved\
+    \ in #41604. When I use that branch, an issue appears:\n\n```\nTraceback (most recent call last):\n\
+    \  File \"c:\\code\\transformers\\demo_test_peft_processor.py\", line 21, in <module>\n    loaded_tokenizer\
+    \ = AutoProcessor.from_pretrained(save_path)\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"C:\\code\\transformers\\src\\transformers\\models\\auto\\processing_auto.py\", line 360,\
+    \ in from_pretrained\n    config = AutoConfig.from_pretrained(\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \"C:\\code\\transformers\\src\\transformers\\models\\auto\\configuration_auto.py\", line 1383,\
+    \ in from_pretrained\n    raise ValueError(\nValueError: Unrecognized model in peft_processor_test_path.\
+    \ Should have a `model_type` key in its config.json, or contain one of the following strings in its\
+    \ name: aimv2, aimv2_vision_model, albert, align, altclip, apertus, arcee, aria, aria_text, audio-spectrogram-transformer,\
+    \ autoformer, aya_vision, bamba, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus,\
+    \ biogpt, bit, bitnet, blenderbot, blenderbot-small, blip, blip-2, blip_2_qformer, bloom, blt, bridgetower,\
+    \ bros, camembert, canine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model,\
+    \ clip_vision_model, clipseg, clvp, code_llama, codegen, cohere, cohere2, cohere2_vision, colpali,\
+    \ colqwen2, conditional_detr, convbert, convnext, convnextv2, cpmant, csm, ctrl, cvt, cwm, d_fine,\
+    \ dab-detr, dac, data2vec-audio, data2vec-text, data2vec-vision, dbrx, deberta, deberta-v2, decision_transformer,\
+    \ deepseek_v2, deepseek_v3, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything,\
+    \ depth_pro, deta, detr, dia, diffllama, dinat, dinov2, dinov2_with_registers, dinov3_convnext, dinov3_vit,\
+    \ distilbert, doge, donut-swin, dots1, dpr, dpt, edgetam, edgetam_video, edgetam_vision_model, efficientformer,\
+    \ efficientloftr, efficientnet, electra, emu3, encodec, encoder-decoder, eomt, ernie, ernie4_5, ernie4_5_moe,\
+    \ ernie_m, esm, evolla, exaone4, falcon, falcon_h1, falcon_mamba, fastspeech2_conformer, fastspeech2_conformer_with_hifigan,\
+    \ flaubert, flava, flex_olmo, florence2, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, gemma3,\
+    \ gemma3_text, gemma3n, gemma3n_audio, gemma3n_text, gemma3n_vision, git, glm, glm4, glm4_moe, glm4v,\
+    \ glm4v_moe, glm4v_moe_text, glm4v_text, glpn, got_ocr2, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox,\
+    \ gpt_neox_japanese, gpt_oss, gptj, gptsan-japanese, granite, granite_speech, granitemoe, granitemoehybrid,\
+    \ granitemoeshared, granitevision, graphormer, grounding-dino, groupvit, helium, hgnet_v2, hiera,\
+    \ hubert, hunyuan_v1_dense, hunyuan_v1_moe, ibert, idefics, idefics2, idefics3, idefics3_vision, ijepa,\
+    \ imagegpt, informer, instructblip, instructblipvideo, internvl, internvl_vision, jamba, janus, jetmoe,\
+    \ jukebox, kosmos-2, kosmos-2.5, kyutai_speech_to_text, layoutlm, layoutlmv2, layoutlmv3, led, levit,\
+    \ lfm2, lfm2_moe, lfm2_vl, lightglue, lilt, llama, llama4, llama4_text, llava, llava_next, llava_next_video,\
+    \ llava_onevision, longcat_flash, longformer, longt5, luke, lxmert, m2m_100, mamba, mamba2, marian,\
+    \ markuplm, mask2former, maskformer, maskformer-swin, mbart, mctct, mega, megatron-bert, metaclip_2,\
+    \ mgp-str,"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 41810
+  source: github
+  url: https://github.com/huggingface/transformers/issues/41810
+  topic: null
+  title: How do you use t5gemma decoder with a different encoder?
+  body: "I am trying to combine the t5gemma decoder with a pretrained deberta encoder that I have trained\
+    \ from scratch using `EncoderDecoderModel`. \n\nHere is the code:\n\n```\nmodel_1 = \"WikiQuality/pre_filtered.am\"\
+    \nmodel_2 = \"google/t5gemma-2b-2b-ul2\"\n\nencoder = AutoModel.from_pretrained(model_1)\ndecoder\
+    \ = AutoModel.from_pretrained(model_2, dtype=torch.bfloat16)\n\nmodel = EncoderDecoderModel(encoder=encoder,\
+    \ decoder=decoder)\n```\n\nThe above code raises the error:\n```\nAttributeError: 'T5GemmaConfig'\
+    \ object has no attribute 'hidden_size'\n```\n\nFrom this I understand that `hidden_size` is accesible\
+    \ from `decoder.config.decoder.hidden_size` and not `decoder.config.hidden_size`, which is where EncoderDecoderModel\
+    \ is looking. So I change my code to load the encoder-decoder model to this:\n\n```\nmodel = EncoderDecoderModel(encoder=encoder,\
+    \ decoder=decoder.decoder)\n```\nThis gives me the following error:\n\n```\nValueError: Unrecognized\
+    \ model identifier: t5_gemma_module. Should contain one of aimv2, aimv2_vision_model, albert, align,\
+    \ altclip, apertus, arcee, aria, aria_text, audio-spectrogram-transformer, autoformer, aya_vision,\
+    \ bamba, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit, bitnet,\
+    \ blenderbot, blenderbot-small, blip, blip-2, blip_2_qformer, bloom, blt, bridgetower, bros, camembert,\
+    \ canine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model, clip_vision_model,\
+    \ clipseg, clvp, code_llama, codegen, cohere, cohere2, cohere2_vision, colpali, colqwen2, conditional_detr,\
+    \ convbert, convnext, convnextv2, cpmant, csm, ctrl, cvt, d_fine, dab-detr, dac, data2vec-audio, data2vec-text,\
+    \ data2vec-vision, dbrx, deberta, deberta-v2, decision_transformer, deepseek_v2, deepseek_v3, deepseek_vl,\
+    \ deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dia, diffllama,\
+    \ dinat, dinov2, dinov2_with_registers, dinov3_convnext, dinov3_vit, distilbert, doge, donut-swin,\
+    \ dots1, dpr, dpt, edgetam, edgetam_video, edgetam_vision_model, efficientformer, efficientloftr,\
+    \ efficientnet, electra, emu3, encodec, encoder-decoder, eomt, ernie, ernie4_5, ernie4_5_moe, ernie_m,\
+    \ esm, evolla, exaone4, falcon, falcon_h1, falcon_mamba, fastspeech2_conformer, fastspeech2_conformer_with_hifigan,\
+    \ flaubert, flava, flex_olmo, florence2, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, gemma3,\
+    \ gemma3_text, gemma3n, gemma3n_audio, gemma3n_text, gemma3n_vision, git, glm, glm4, glm4_moe, glm4v,\
+    \ glm4v_moe, glm4v_moe_text, glm4v_text, glpn, got_ocr2, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox,\
+    \ gpt_neox_japanese, gpt_oss, gptj, gptsan-japanese, granite, granite_speech, granitemoe, granitemoehybrid,\
+    \ granitemoeshared, granitevision, graphormer, grounding-dino, groupvit, helium, hgnet_v2, hiera,\
+    \ hubert, hunyuan_v1_dense, hunyuan_v1_moe, ibert, idefics, idefics2, idefics3, idefics3_vision, ijepa,\
+    \ imagegpt, informer, instructblip, instructblipvideo, internvl, internvl_vision, jamba, janus, jetmoe,\
+    \ jukebox, kosmos-2, kosmos-2.5, kyutai_speech_to_text, layoutlm, layoutlmv2, layoutlmv3, led, levit,\
+    \ lfm2, lfm2_vl, lightglue, lilt, llama, llama4, llama4_text, llava, llava_next, llava_next_video,\
+    \ llava_onevision, longcat_flash, longformer, longt5, luke, lxmert, m2m_100, mamba, mamba2, marian,\
+    \ markuplm, mask2former, maskformer, maskformer-swin, mbart, mctct, mega, megatron-bert, metaclip_2,\
+    \ mgp-str, mimi, minimax, ministral, mistral, mistral3, mixtral, mlcd, mllama, mm-grounding-dino,\
+    \ mobilebert, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, modernbert, modernbert-decoder,\
+    \ moonshine, moshi, mpnet, mpt, mra, mt5, musicgen, musicgen_melody, mvp, nat, nemotron, nezha, nllb-moe,\
+    \ nougat, nystromformer, olmo, olmo2, olmo3, olmoe, omdet-turbo, oneformer, open-llama, openai-gpt,\
+    \ opt, ovis2, owlv2, owlvit, paligemma, parakeet, parakeet_ctc, parakeet_encoder, patchtsmixer, patchtst,\
+    \ pegasus, pegasus_x, perceiver, perception_encoder, perception_lm, persimmon, phi, phi3, phi4_multimodal,\
+    \ phimoe, pix2struct, pixtral, plbart, poolform"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 41037
+  source: github
+  url: https://github.com/huggingface/transformers/pull/41037
+  topic: null
+  title: 'Tests: Apertus integration tests'
+  body: "# What does this PR do?\r\n\r\nThis PR adds integration tests for the Apertus model, the tests\
+    \ are:\r\n- Check short greedy generation\r\n- Check short instruct model greedy generation\r\n- Check\
+    \ model logits in bfloat16, and compare with XIELU cuda output\r\n- Check model logits in float32,\
+    \ and compare with XIELU cuda output (I think float32 tests are not desired?)\r\n\r\nNote: Right now\
+    \ I do an environment variable just to show the difference between experimental XIELU cuda and no\
+    \ XIELU cuda outputs (but if this isn't desirable I'll remove it and just do a test for one of the\
+    \ two versions instead)\r\n\r\nRelated PR: #39381 \r\n\r\n@ArthurZucker\r\n"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 40829
+  source: github
+  url: https://github.com/huggingface/transformers/issues/40829
+  topic: null
+  title: Cannot load config for Qwen/Qwen2.5-32B-Instruct
+  body: "### System Info\n\nI suddenly cannot run `Qwen/Qwen2.5-32B-Instruct` model locally! It happened\
+    \ all of a sudden.\n\nDebugging gives:\n\n```                                                    \
+    \                                                                 \n(Pdb) PretrainedConfig.get_config_dict('Qwen/Qwen2.5-32B-Instruct')\
+    \                                                                                                \
+    \                         \n({}, {})   \n```\n\nAutoConfig.from_pretrained gives:\n```\nValueError:\
+    \ Unrecognized model in Qwen/Qwen2.5-32B-Instruct. Should have a `model_type` key in its config.json,\
+    \ or contain one of the following strings in its name: aimv2, aimv2_vision_model, albert, align, altclip,\
+    \ apertus, arcee, aria, aria_text, audio-spectrogram-transformer, autoformer, aya_vision, bamba, bark,\
+    \ bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit, bitnet, blenderbot, blenderbot-small,\
+    \ blip, blip-2, blip_2_qformer, bloom, bridgetower, bros, camembert, canine, chameleon, chinese_clip,\
+    \ chinese_clip_vision_model, clap, clip, clip_text_model, clip_vision_model, clipseg, clvp, code_llama,\
+    \ codegen, cohere, cohere2, cohere2_vision, colpali, colqwen2, conditional_detr, convbert, convnext,\
+    \ convnextv2, cpmant, csm, ctrl, cvt, d_fine, dab-detr, dac, data2vec-audio, data2vec-text, data2vec-vision,\
+    \ dbrx, deberta, deberta-v2, decision_transformer, deepseek_v2, deepseek_v3, deepseek_vl, deepseek_vl_hybrid,\
+    \ deformable_detr, deit, depth_anything, depth_pro, deta, detr, dia, diffllama, dinat, dinov2, dinov2_with_registers,\
+    \ dinov3_convnext, dinov3_vit, distilbert, doge, donut-swin, dots1, dpr, dpt, efficientformer, efficientloftr,\
+    \ efficientnet, electra, emu3, encodec, encoder-decoder, eomt, ernie, ernie4_5, ernie4_5_moe, ernie_m,\
+    \ esm, evolla, exaone4, falcon, falcon_h1, falcon_mamba, fastspeech2_conformer, fastspeech2_conformer_with_hifigan,\
+    \ flaubert, flava, florence2, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, gemma3, gemma3_text,\
+    \ gemma3n, gemma3n_audio, gemma3n_text, gemma3n_vision, git, glm, glm4, glm4_moe, glm4v, glm4v_moe,\
+    \ glm4v_moe_text, glm4v_text, glpn, got_ocr2, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox, gpt_neox_japanese,\
+    \ gpt_oss, gptj, gptsan-japanese, granite, granite_speech, granitemoe, granitemoehybrid, granitemoeshared,\
+    \ granitevision, graphormer, grounding-dino, groupvit, helium, hgnet_v2, hiera, hubert, hunyuan_v1_dense,\
+    \ hunyuan_v1_moe, ibert, idefics, idefics2, idefics3, idefics3_vision, ijepa, imagegpt, informer,\
+    \ instructblip, instructblipvideo, internvl, internvl_vision, jamba, janus, jetmoe, jukebox, kosmos-2,\
+    \ kosmos-2.5, kyutai_speech_to_text, layoutlm, layoutlmv2, layoutlmv3, led, levit, lfm2, lightglue,\
+    \ lilt, llama, llama4, llama4_text, llava, llava_next, llava_next_video, llava_onevision, longformer,\
+    \ longt5, luke, lxmert, m2m_100, mamba, mamba2, marian, markuplm, mask2former, maskformer, maskformer-swin,\
+    \ mbart, mctct, mega, megatron-bert, metaclip_2, mgp-str, mimi, minimax, mistral, mistral3, mixtral,\
+    \ mlcd, mllama, mm-grounding-dino, mobilebert, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2,\
+    \ modernbert, modernbert-decoder, moonshine, moshi, mpnet, mpt, mra, mt5, musicgen, musicgen_melody,\
+    \ mvp, nat, nemotron, nezha, nllb-moe, nougat, nystromformer, olmo, olmo2, olmoe, omdet-turbo, oneformer,\
+    \ open-llama, openai-gpt, opt, ovis2, owlv2, owlvit, paligemma, patchtsmixer, patchtst, pegasus, pegasus_x,\
+    \ perceiver, perception_encoder, perception_lm, persimmon, phi, phi3, phi4_multimodal, phimoe, pix2struct,\
+    \ pixtral, plbart, poolformer, pop2piano, prompt_depth_anything, prophetnet, pvt, pvt_v2, qdqbert,\
+    \ qwen2, qwen2_5_omni, qwen2_5_vl, qwen2_5_vl_text, qwen2_audio, qwen2_audio_encoder, qwen2_moe, qwen2_vl,\
+    \ qwen2_vl_text, qwen3, qwen3_moe, rag, realm, recurrent_gemma, reformer, regnet, rembert, resnet,\
+    \ retribert, roberta, roberta-prelayernorm, roc_bert, roformer, rt_detr, rt_detr_resnet, rt_detr_v2,\
+    \ rwkv, sam, sam2, sam2_hiera_det_model, sam2_video, sam2_vision_model, sam_hq, sam_hq_vision_m"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 40812
+  source: github
+  url: https://github.com/huggingface/transformers/pull/40812
+  topic: null
+  title: 'fix: XIELU act parameters not being casted to correct dtype'
+  body: "# What does this PR do?\r\n\r\n<!--\r\nCongratulations! You've made it this far! You're not quite\
+    \ done yet though.\r\n\r\nOnce merged, your PR is going to appear in the release notes with the title\
+    \ you set, so make sure it's a great title that fully reflects the extent of your awesome contribution.\r\
+    \n\r\nThen, please replace this with a description of the change and which issue is fixed (if applicable).\
+    \ Please also include relevant motivation and context. List any dependencies (if any) that are required\
+    \ for this change.\r\n\r\nOnce you're done, someone will review your PR shortly (see the section \"\
+    Who can review?\" below to tag some potential reviewers). They may suggest changes to make the code\
+    \ even better. If no one reviewed your PR after a week has passed, don't hesitate to post a new comment\
+    \ @-mentioning the same persons---sometimes notifications get lost.\r\n-->\r\n\r\n<!-- Remove if not\
+    \ applicable -->\r\n\r\nWas in the process of integrating the new Swiss-ai's Apertus model into axolotl\
+    \ and found an error with the xielu_cuda method. Ran with a 4bit QLoRA config.\r\n\r\n```bash\r\n\
+    \  File \"/root/miniconda3/envs/py3.11/lib/python3.11/site-packages/transformers/activations.py\"\
+    , line 282, in forward\r\n    return self._xielu_cuda_fn(input)\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\r\
+    \n  File \"/root/miniconda3/envs/py3.11/lib/python3.11/site-packages/transformers/activations.py\"\
+    , line 268, in _xielu_cuda\r\n    result = self._xielu_cuda_obj.forward(\r\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\
+    \nRuntimeError: Data type of x (c10::BFloat16) must match data type of alpha_p (float).\r\n```\r\n\
+    \r\nThis error is raised from: \r\n\r\n```cuda\r\n  TORCH_CHECK(x.dtype() == alpha_p.dtype(), \"Data\
+    \ type of x (\", x.dtype(),\r\n              \") must match data type of alpha_p (\", alpha_p.dtype(),\
+    \ \").\");\r\n  TORCH_CHECK(x.dtype() == alpha_n.dtype(), \"Data type of x (\", x.dtype(),\r\n   \
+    \           \") must match data type of alpha_n (\", alpha_n.dtype(), \").\");\r\n```\r\nhttps://github.com/rubber-duck-debug/xielu/blob/59d60314edf567ad6b9895a1ff5d7533a14ddc96/xielu/cuda/src/xielu_impl.cu#L395-L398\r\
+    \n\r\nI see that it does start with `dtype=bf16` https://github.com/huggingface/transformers/blob/de01a22aff21d16532d8dd68806589ca6c73dd5c/src/transformers/activations.py#L203-L210\r\
+    \n\r\nHowever, it could be due to some casting (maybe peft and FA) that caused it to end up being\
+    \ fp32.\r\n\r\nThis PR solves it by casting it to the hidden states. Since they are both 1D Tensor\
+    \ of 1element, there should be very minor cost to this cast.\r\n\r\nTested working downstream via\
+    \ monkey patching https://github.com/axolotl-ai-cloud/axolotl/pull/3144\r\n\r\n\r\n## Before submitting\r\
+    \n- [ ] This PR fixes a typo or improves the docs (you can dismiss the other checks if that's the\
+    \ case).\r\n- [x] Did you read the [contributor guideline](https://github.com/huggingface/transformers/blob/main/CONTRIBUTING.md#create-a-pull-request),\r\
+    \n      Pull Request section?\r\n- [ ] Was this discussed/approved via a Github issue or the [forum](https://discuss.huggingface.co/)?\
+    \ Please add a link\r\n      to it if that's the case.\r\n- [ ] Did you make sure to update the documentation\
+    \ with your changes? Here are the\r\n      [documentation guidelines](https://github.com/huggingface/transformers/tree/main/docs),\
+    \ and\r\n      [here are tips on formatting docstrings](https://github.com/huggingface/transformers/tree/main/docs#writing-source-documentation).\r\
+    \n- [ ] Did you write any new necessary tests?\r\n\r\n\r\n## Who can review?\r\n\r\nAnyone in the\
+    \ community is free to review the PR once the tests have passed. Feel free to tag\r\nmembers/contributors\
+    \ who may be interested in your PR.\r\n\r\n@ArthurZucker\r\n\r\n<!-- Your PR will be replied to more\
+    \ quickly if you can figure out the right person to tag with @\r\n\r\n If you know how to use git\
+    \ blame, that is the easiest way, otherwise, here is a rough guide of **who to tag**.\r\n Please tag\
+    \ fewer than 3 people.\r\n\r\nModels:\r\n\r\n- text models: @ArthurZucker\r\n- vision models: @amyeroberts,\
+    \ @qubvel\r\n- speech models: @eustlb\r\n- graph models: @clefourrier\r\n\r\nLibrary:\r\n\r\n-"
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 40650
+  source: github
+  url: https://github.com/huggingface/transformers/issues/40650
+  topic: null
+  title: Apertus - Error while loading model
+  body: "### System Info\n\nLatest VLLM Docker image with latest git transformers, running on an NVIDIA\
+    \ GPU\n\n### Who can help?\n\n@ArthurZucker @EduardDurech @Cyrilvallez \n\n### Information\n\n- [\
+    \ ] The official example scripts\n- [ ] My own modified scripts\n\n### Tasks\n\n- [ ] An officially\
+    \ supported task in the `examples` folder (such as GLUE/SQuAD, ...)\n- [ ] My own task or dataset\
+    \ (give details below)\n\n### Reproduction\n\n`ValueError: There is no module or parameter named 'model.layers.0.mlp.act_fn.beta'\
+    \ in TransformersForCausalLM`\n\nTo reproduce, load `swiss-ai/Apertus-8B-Instruct-2509` with the latest\
+    \ git version of Transformers for inference.\n\nIn my case, I used the VLLM Docker image and upgraded\
+    \ `transformers` manually:\n\n```bash\ndocker run --rm -it --gpus all -e HF_TOKEN=$HF_TOKEN vllm/vllm-openai:latest\
+    \ --model swiss-ai/Apertus-8B-Instruct-2509 --port 8080 --async-scheduling\n```\n\n### Expected behavior\n\
+    \nThe model should load without any issue. I don't know what this missing module is."
+  bucket: assigner_false
+- repo: huggingface/transformers
+  number: 39381
+  source: github
+  url: https://github.com/huggingface/transformers/pull/39381
+  topic: null
+  title: Add Apertus
+  body: "Pre-release of Apertus from the Swiss AI Initiative\r\n\r\nMain modifications from Llama\r\n\
+    - xIELU Activation\r\n- QK-norm\r\n\r\n@ArthurZucker "
+  bucket: assigner_false
+- repo: vllm-project/vllm
+  number: 50496
+  source: github
+  url: https://github.com/vllm-project/vllm/pull/50496
+  topic: null
+  title: '[Model] Apertus 1.5'
+  body: "## General Information\r\n\r\n  This change enables support for serving Apertus v1.5 multimodal\
+    \ (hf tags apertus-ai/Apertus-v1.5-8B,  apertus-ai/Apertus-v1.5-70B) \r\n\r\n  Special thanks to @blancsw\
+    \  for creating a workable refactor  from https://github.com/swiss-ai/vllm/tree/apertus_integration\
+    \ that optimizes the multimodal inference pipeline and provides a foundation for future integration.\
+    \ Also, special thanks to @tomas-polach for the bug-fix contribution, @AryanAhadinia for the reasoning\
+    \ parser, and @robmsmt for the double BOS-token fix.\r\n\r\nThis PR depends on transformers [PR](https://github.com/huggingface/transformers/pull/47662).\r\
+    \n\r\n  ## Test Plan\r\n\r\n```\r\n  vllm serve apertus-ai/Apertus-v1.5-70B \\\r\n    --max-model-len\
+    \ 100000 \\\r\n    --tensor-parallel-size 4 \\\r\n    --enable-chunked-prefill \\\r\n    --async-scheduling\
+    \ \\\r\n    --enable-prefix-caching \\\r\n    --max-num-seqs 128 \\\r\n    --max-num-batched-tokens\
+    \ 65536 \\\r\n    --block-size 16 \\\r\n    --enable-auto-tool-choice \\\r\n    --tool-call-parser\
+    \ apertus \\\r\n    --reasoning-parser apertus \\\r\n    --chat-template-content-format string\r\n\
+    \ ```   \r\n \r\n ## Tests added\r\n\r\nAudio tests were not added because default sample rate supported\
+    \ is 16Khz and Apertus 1.5 works with 24Khz hence leading to test failures. and multiple audio case\
+    \ does not exist.\r\n\r\n```\r\nXDG_CACHE_HOME=/tmp/vllm-test-cache /opt/venv/bin/python -m pytest\
+    \ \\\r\n    tests/models/multimodal/processing/test_common.py \\\r\n    -k 'Apertus-v1.5-8B' -v\r\n\
+    \r\n XDG_CACHE_HOME=/tmp/vllm-test-cache /opt/venv/bin/python -m pytest \\\r\n    tests/models/multimodal/generation/test_common.py\
+    \ \\\r\n    -k apertus_1p5 -v\r\n```\r\n"
+  bucket: assigner_false
+- repo: vllm-project/vllm
+  number: 49409
+  source: github
+  url: https://github.com/vllm-project/vllm/pull/49409
+  topic: null
+  title: '[Bugfix] Do not discard model output when tool_choice defaults to "none" with no tools declared'
+  body: 'FIX #49254
+
+
+    ## Purpose
+
+
+    When a chat request declares **no tools**, the protocol defaults `tool_choice` to `"none"`. Since
+    #45413, engine-based parsers handle that branch by running the full tool-parsing pipeline and then
+    stripping the parsed tool calls (`delta_message.tool_calls = []` in `DelegatingParser._extract_tool_calls_streaming`).
+    If the model emits tool-call syntax anyway — common for agentic-tuned models given tool-heavy context
+    — its entire output is parsed into tool calls and then discarded: the client receives an empty response
+    (`finish_reason: "stop"`, every chunk `"delta": {}`), with the generated tokens visible only in `logprobs`.
+    That is exactly the symptom reported in #49254.
+
+
+    This is not model-specific: replaying the same shape through all ten engine-based parsers (gemma4,
+    qwen3, seed_oss, glm4.7, kimi_k2, deepseek v3.2/v4, minimax_m2, nemotron_v3, inkling) loses the response
+    identically. Gemma-4 became exposed when it was converted to the engine implementation in #45588.
+
+
+    ## Fix
+
+
+    Gate the strip on the request actually declaring tools:
+
+
+    - **Tools declared + `tool_choice="none"`** (explicit opt-out): unchanged — run the pipeline, strip
+    tool calls silently. This keeps the existing tested contract (`test_delegating_parse_tool_choice_none`,
+    `assert_no_terminal_leakage`).
+
+    - **No tools declared** (defaulted `"none"`): run the same pipeline under the engine''s existing `skip_tool_parsing`
+    mode — reasoning is still extracted into the `reasoning` field, and tool syntax streams through incrementally
+    as `content`. This matches what legacy (non-engine) parsers already do on this exact branch (`DeltaMessage(content=delta_text)`
+    passthrough), so engine and non-engine parsers now behave consistently.
+
+
+    `skip_tool_parsing` is used rather than raw passthrough because parsers like gemma4 extract reasoning
+    inside the same unified engine; raw passthrough would leak `<|channel>thought` markers into content.
+
+
+    Also fixes the test trace builder deriving request tools via truthiness (`if scenario.tool_calls`),
+    which silently gave the `empty-tool-block` samples (`tool_calls=[]`) no-tools requests — those samples
+    now declare a tool, matching their intent of exercising a tool-calling context.
+
+
+    ## Why this is not duplicating an existing PR
+
+
+    No open PR references #49254. The two adjacent open PRs repair *different* branches of the same `tool_choice`
+    plumbing and do not touch the `"none"` strip:
+
+
+    - #49228 fixes the `required`/named tool-choice streaming crash (#49216).
+
+    - #49346 fixes request *validation* (`protocol.py`) to accept `tools: []`. Verified compatible: this
+    PR''s gate uses truthiness, so the newly-legal `tools: []` correctly behaves like tools-absent (passthrough).
+
+
+    ## Root cause commits
+
+
+    - `c4a3f9d13` (#45413) introduced the engine-based strip branch; before it, `tool_choice="none"` always
+    returned `delta_text` as content.
+
+    - `76a373eff` (#45588) converted Gemma-4 to the engine implementation, exposing it to the branch (this
+    is why the reporter observed it "worked before").
+
+
+    ## Test Plan
+
+
+    ```bash
+
+    pytest tests/parser/engine/test_delegating_replay.py   # includes new regression test
+
+    pytest tests/parser/ tests/tool_parsers/ tests/reasoning/
+
+    ```
+
+
+    New regression test `test_delegating_replay_no_tools_recovers_suppressed_output`: replays tool-only
+    outputs through every engine parser (auto-discovered) at all chunk sizes with a no-tools request,
+    asserting no tool calls are emitted and the tool name/argument payloads survive in content.
+
+
+    ## Test Result
+
+
+    - New regression test: **189/189 parametrizations fail without the fix, pass with it.**
+
+    - `tests/parser/` + `tests/tool_parsers/` + `tests/reasoning/`: **4974 passed** with the fix vs 4785
+    on clean main (+189 = the new parametrizations); the 35 failures in both runs are **byte-identical
+    pre-existing failures** (apertus/granite/jamba/kimi_k2; unrelated files, present on clean `main`).
+
+    - Non-streaming, explicit-none, and `tools: []` variants covered by existing + new unit tests.
+
+
+    ## Model evalu'
+  bucket: assigner_false
+- repo: vllm-project/vllm
+  number: 48410
+  source: github
+  url: https://github.com/vllm-project/vllm/pull/48410
+  topic: null
+  title: '[Model] Apertus 1.5 multimodality'
+  body: "## General Info\r\n\r\nThis PR is the Apertus 1.5 implementation with image and audio multimodality.\
+    \ The model weights will be available very soon.\r\n\r\nSpecial thanks to @tomas-polach for the bug\
+    \ fix contribution!\r\nAnd @Anunay-Yadav for his startpoint code at https://github.com/swiss-ai/vllm/tree/apertus_integration\r\
+    \n\r\n## Purpose\r\n\r\nThis PR introduces native vLLM asynchronous execution support for the multimodal\
+    \ **Apertus 1.5** model, integrating **Emu3.5** for vision tokenization and **WavTokenizer40** for\
+    \ audio tokenization.\r\n\r\nThe implementation strictly adheres to a high-performance CPU/GPU separation\
+    \ architecture contract to optimize execution and avoid pipeline stalls:\r\n- **Processor (CPU-bound,\
+    \ zero NN inference):** Implements deterministic tensor creation, dynamic batch padding, and dummy\
+    \ token injection. Variable-resolution images and variable-length audio sequences are mathematically\
+    \ padded to the maximum dimensions in the batch (`apertus_utils.py`, `ApertusMultiModalProcessor`\
+    \ in `apertus_mm.py`).\r\n- **Worker (GPU-bound, native execution):** Heavy neural network inference\
+    \ executes natively on the GPU (`ApertusForConditionalGeneration` in `apertus_mm.py`). It embeds pixel\
+    \ values using the Emu3.5 vision tower, embeds audio using WavTokenizer, and performs O(1) boolean\
+    \ mask ID substitution to inject visual/audio embeddings directly into the language model.\r\n- **Self-contained\
+    \ Tokenizers:** Introduces clean, self-contained, and statically-instantiated versions of `Emu3.5`\
+    \ (`apertus_emu35.py`) and `WavTokenizer40` (`apertus_wavetokenizer.py`). This eliminates dynamic\
+    \ imports and external path injections, ensuring stability and simplified deployment.\r\n\r\n## Test\
+    \ Plan\r\n\r\n```bash\r\nvllm serve apertus-ai/Apertus-v1.5-70B-Prerelease-2607 \\\r\n  --enable-chunked-prefill\
+    \ \\\r\n  --async-scheduling \\\r\n  --enable-prefix-caching \\\r\n  --served-model-name \\\r\n  \
+    \  apertus-ai/Apertus-v1.5-70B-Prerelease-2607 \\\r\n  --tensor-parallel-size 2 \\\r\n  --quantization\
+    \ fp8 \\\r\n  --kv-cache-dtype fp8 \\\r\n  --max-model-len 100000 \\\r\n  --trust-remote-code \\\r\
+    \n  --max-num-seqs 128 \\\r\n  --max-num-batched-tokens 65536 \\\r\n  --block-size 16 \\\r\n  --enable-auto-tool-choice\
+    \ \\\r\n  --tool-call-parser apertus \\\r\n  --hf-overrides '{\"architectures\": [\"ApertusForConditionalGeneration\"\
+    ]}'\r\n```\r\n\r\n\r\n## Test Result\r\n\r\nTODO\r\n\r\n---\r\n<details>\r\n<summary> Essential Elements\
+    \ of an Effective PR Description Checklist </summary>\r\n\r\n- [x] The purpose of the PR, such as\
+    \ \"Fix some issue (link existing issues this PR will resolve)\".\r\n- [x] The test plan, such as\
+    \ providing test command.\r\n- [x] The test results, such as pasting the results comparison before\
+    \ and after, or e2e results\r\n- [ ] (Optional) The necessary documentation update, such as updating\
+    \ `supported_models.md` and `examples` for a new model.\r\n</details>\r\n\r\n"
+  bucket: assigner_false
+- repo: vllm-project/vllm
+  number: 46813
+  source: github
+  url: https://github.com/vllm-project/vllm/pull/46813
+  topic: apertus format
+  title: '[Rust Frontend] Add Rust Apertus tool parser'
+  body: "## Purpose\r\n  Add Rust Apertus tool parser (`ApertusToolParser`) for the vLLM Rust frontend.\
+    \                                                                                                \
+    \                                                                                \r\n  Extracts tool\
+    \ calls from the Apertus model format:                                                           \
+    \                                                                                                \
+    \                                                 \r\n                                           \
+    \                                                                                                \
+    \                                                                                                \
+    \                     \r\n  `<|tools_prefix|>[{\"function_name\": {\"arg\": \"val\"}}, ...]<|tools_suffix|>`\
+    \                                                                                                \
+    \                                                                                    \r\n        \
+    \                                                                                                \
+    \                                                                                                \
+    \                                                        \r\n  Architecture follows the qwen_coder\
+    \ pattern: `take_until_marker` waits for the                                                     \
+    \                                                                                                \
+    \                           \r\n  suffix marker across chunks, then the complete JSON-array body is\
+    \ parsed in one\r\n  shot via `serde_json`. The parser is registered in `ToolParserFactory` with the\
+    \                                                                                                \
+    \                                                                               \r\n  name `\"apertus\"\
+    ` and auto-matched for model IDs containing `\"apertus\"`                                        \
+    \                                                                                                \
+    \                                                \r\n  (e.g. `swiss-ai/Apertus-8B-Instruct-2509`).\
+    \ \r\ncontributing to \"apertus tool parser\" in the Rust frontend roadmap\r\n(https://github.com/vllm-project/vllm/issues/44280).\r\
+    \n\r\n## Test Plan\r\n  ```bash                                                                  \
+    \                                                                                                \
+    \                                                                                     \r\n  # Rust\
+    \ unit tests (19 tests)\r\n  cargo test -p vllm-parser apertus                                   \
+    \                                                                                                \
+    \                                                                                          \r\n  \
+    \                                                                                                \
+    \                                                                                                \
+    \                                                              \r\n  # Full parser regression    \
+    \                                                                                                \
+    \                                                                                                \
+    \                                  \r\n  cargo test -p vllm-parser                               \
+    \                                                                                                \
+    \                                                                                                \
+    \      \r\n                                                                                      \
+    \                                                                                                \
+    \                                                                          \r\n  # Chat tool parser\
+    \ registration tests                                    "
+  bucket: assigner_false
+- repo: vllm-project/vllm
+  number: 41154
+  source: github
+  url: https://github.com/vllm-project/vllm/pull/41154
+  topic: apertus format
+  title: '[Model] Add Apertus Tool Parser'
+  body: "<!-- markdownlint-disable -->\r\n\r\nHello the Team !\r\n\r\nI re-open an [old PR for apertus,](https://github.com/vllm-project/vllm/pull/26307)\
+    \ but I upgrade the tool parser based on the new vLLM versions\r\n\r\n## Purpose\r\n\r\nAdd Apertus\
+    \ tool parser class\r\n\r\nFix Apertus jinja template to accept both tool call format (chat/completion\
+    \ and responses), and multi turn tool call\r\n\r\n```json\r\n# Chat Completions API\r\n{\r\n  \"type\"\
+    : \"function\",\r\n  \"function\": {\r\n    \"name\": \"get_weather\",\r\n    \"description\": \"\
+    Determine weather in my location\",\r\n    \"strict\": true,\r\n    \"parameters\": {\r\n      \"\
+    type\": \"object\",\r\n      \"properties\": {\r\n        \"location\": {\r\n          \"type\": \"\
+    string\",\r\n        },\r\n      },\r\n      \"additionalProperties\": false,\r\n      \"required\"\
+    : [\r\n        \"location\",\r\n        \"unit\"\r\n      ]\r\n    }\r\n  }\r\n}\r\n\r\n# Responses\
+    \ API\r\n{\r\n  \"type\": \"function\",\r\n  \"name\": \"get_weather\",\r\n  \"description\": \"Determine\
+    \ weather in my location\",\r\n  \"parameters\": {\r\n    \"type\": \"object\",\r\n    \"properties\"\
+    : {\r\n      \"location\": {\r\n        \"type\": \"string\",\r\n      },\r\n    },\r\n    \"additionalProperties\"\
+    : false,\r\n    \"required\": [\r\n      \"location\",\r\n      \"unit\"\r\n    ]\r\n  }\r\n}\r\n\r\
+    \n```\r\n\r\n## Test Plan\r\n\r\nTest on `swiss-ai/Apertus-70B-Instruct-2509` with 4xL40s with the\
+    \ base image `docker.io/vllm/vllm-openai:v0.10.2`\r\nWith and without streaming\r\n\r\nTesting code:\r\
+    \n```python\r\n@pytest.fixture()\r\ndef sample_tool_schema():\r\n    return {\r\n        \"type\"\
+    : \"function\",\r\n        \"function\": {\r\n            \"name\": \"calculate_sum\",\r\n       \
+    \     \"description\": \"Calculate the sum of two numbers\",\r\n            \"parameters\": {\r\n\
+    \                \"type\": \"object\",\r\n                \"properties\": {\r\n                  \
+    \  \"a\": {\"type\": \"number\", \"description\": \"First number\"},\r\n                    \"b\"\
+    : {\"type\": \"number\", \"description\": \"Second number\"},\r\n                },\r\n          \
+    \      \"required\": [\"a\", \"b\"],\r\n            },\r\n        },\r\n    }\r\n    \r\n@pytest.mark.order(3)\r\
+    \ndef test_tool_calling(get_client, sample_tool_schema):\r\n    \"\"\"Test tool calling functionality\"\
+    \"\"\r\n    client, model, config = get_client\r\n    if config[\"tool_calling\"]:\r\n        response\
+    \ = client.chat.completions.create(\r\n            model=model,\r\n            messages=[{\"role\"\
+    : \"user\", \"content\": \"Calculate the sum of 15 and 27\"}],\r\n            tools=[sample_tool_schema],\r\
+    \n            max_tokens=300,\r\n        )\r\n\r\n        assert response is not None\r\n        assert\
+    \ hasattr(response, \"choices\")\r\n        assert len(response.choices) > 0\r\n        choice = response.choices[0]\r\
+    \n\r\n        # Check if tool was called\r\n        assert choice.message.tool_calls\r\n        tool_call\
+    \ = choice.message.tool_calls[0]\r\n        assert tool_call.function.name == \"calculate_sum\"\r\n\
+    \        assert tool_call.function.arguments is not None\r\n        args = json.loads(tool_call.function.arguments)\r\
+    \n        assert \"a\" in args\r\n        assert \"b\" in args\r\n    else:\r\n        pytest.skip(f\"\
+    Model {model} does not support tool_calling functionality\")\r\n```\r\n\r\nOr testing curl multi turn\
+    \ tool call\r\n\r\n```\r\ncurl -X POST 'http://localhost:8000/v1/chat/completions' \\\r\n  --header\
+    \ 'User-Agent: yaak' \\\r\n  --header 'Accept: */*' \\\r\n  --header 'Content-Type: application/json'\
+    \ \\\r\n  --data '{\r\n  \"stream\": true,\r\n  \"temperature\": 0.13,\r\n  \"tools\": [\r\n    {\r\
+    \n      \"type\": \"function\",\r\n      \"function\": {\r\n        \"name\": \"get_weather\",\r\n\
+    \        \"description\": \"Get current weather information for a specific city location\",\r\n  \
+    \      \"parameters\": {\r\n          \"type\": \"object\",\r\n          \"properties\": {\r\n   \
+    \         \"location\": {\r\n              \"type\": \"string\",\r\n              \"description\"\
+    : \"The city and country, e.g. \\'London, UK\\' to get the weather\"\r\n            }\r\n        \
+    \  },\r\n          \"required\": [\r\n            \"location\"\r\n          ],\r\n          \"additionalProperties\"\
+    : false\r\n        },\r\n        \"strict\": true\r\n      }\r\n    }\r\n  ],\r\n  \"messages\": [\r\
+    \n    {\r\n      \"role\": \"user\",\r\n      \"content\": \"What is the weather like in Paris today\
+    \ and London ?\"\r\n"
+  bucket: assigner_false
+- repo: vllm-project/vllm
+  number: 26307
+  source: github
+  url: https://github.com/vllm-project/vllm/pull/26307
+  topic: apertus format
+  title: '[Model] Add ApertusToolParser'
+  body: "<!-- markdownlint-disable -->\n\nHello the Team !\n\n## Purpose\n\nAdd Apertus tool parser class\n\
+    \nFix Apertus jinja template to accept both tool call format (chat/completion and responses)\n\n```json\n\
+    # Chat Completions API\n{\n  \"type\": \"function\",\n  \"function\": {\n    \"name\": \"get_weather\"\
+    ,\n    \"description\": \"Determine weather in my location\",\n    \"strict\": true,\n    \"parameters\"\
+    : {\n      \"type\": \"object\",\n      \"properties\": {\n        \"location\": {\n          \"type\"\
+    : \"string\",\n        },\n      },\n      \"additionalProperties\": false,\n      \"required\": [\n\
+    \        \"location\",\n        \"unit\"\n      ]\n    }\n  }\n}\n\n# Responses API\n{\n  \"type\"\
+    : \"function\",\n  \"name\": \"get_weather\",\n  \"description\": \"Determine weather in my location\"\
+    ,\n  \"parameters\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"location\": {\n\
+    \        \"type\": \"string\",\n      },\n    },\n    \"additionalProperties\": false,\n    \"required\"\
+    : [\n      \"location\",\n      \"unit\"\n    ]\n  }\n}\n\n```\n\n## Test Plan\n\nTest on `swiss-ai/Apertus-70B-Instruct-2509`\
+    \ with 4xL40s with the base image `docker.io/vllm/vllm-openai:v0.10.2`\nWith and without streaming\n\
+    \nTesting code:\n```python\n@pytest.fixture()\ndef sample_tool_schema():\n    return {\n        \"\
+    type\": \"function\",\n        \"function\": {\n            \"name\": \"calculate_sum\",\n       \
+    \     \"description\": \"Calculate the sum of two numbers\",\n            \"parameters\": {\n    \
+    \            \"type\": \"object\",\n                \"properties\": {\n                    \"a\":\
+    \ {\"type\": \"number\", \"description\": \"First number\"},\n                    \"b\": {\"type\"\
+    : \"number\", \"description\": \"Second number\"},\n                },\n                \"required\"\
+    : [\"a\", \"b\"],\n            },\n        },\n    }\n    \n@pytest.mark.order(3)\ndef test_tool_calling(get_client,\
+    \ sample_tool_schema):\n    \"\"\"Test tool calling functionality\"\"\"\n    client, model, config\
+    \ = get_client\n    if config[\"tool_calling\"]:\n        response = client.chat.completions.create(\n\
+    \            model=model,\n            messages=[{\"role\": \"user\", \"content\": \"Calculate the\
+    \ sum of 15 and 27\"}],\n            tools=[sample_tool_schema],\n            max_tokens=300,\n  \
+    \      )\n\n        assert response is not None\n        assert hasattr(response, \"choices\")\n \
+    \       assert len(response.choices) > 0\n        choice = response.choices[0]\n\n        # Check\
+    \ if tool was called\n        assert choice.message.tool_calls\n        tool_call = choice.message.tool_calls[0]\n\
+    \        assert tool_call.function.name == \"calculate_sum\"\n        assert tool_call.function.arguments\
+    \ is not None\n        args = json.loads(tool_call.function.arguments)\n        assert \"a\" in args\n\
+    \        assert \"b\" in args\n    else:\n        pytest.skip(f\"Model {model} does not support tool_calling\
+    \ functionality\")\n```\n\n\n\n## Test Result\n\nReturn the proper tool\n\n---\n<details>\n<summary>\
+    \ Essential Elements of an Effective PR Description Checklist </summary>\n\n- [x] The purpose of the\
+    \ PR, such as \"Fix some issue (link existing issues this PR will resolve)\".\n- [x] The test plan,\
+    \ such as providing test command.\n- [x] The test results, such as pasting the results comparison\
+    \ before and after, or e2e results\n- [ ] (Optional) The necessary documentation update, such as updating\
+    \ `supported_models.md` and `examples` for a new model.\n- [ ] (Optional) Release notes update. If\
+    \ your change is user facing, please update the release notes draft in the [Google Doc](https://docs.google.com/document/d/1YyVqrgX4gHTtrstbq8oWUImOyPCKSGnJ7xtTpmXzlRs/edit?tab=t.0).\n\
+    </details>\n\n"
+  bucket: assigner_false
+- repo: vllm-project/vllm
+  number: 25259
+  source: github
+  url: https://github.com/vllm-project/vllm/issues/25259
+  topic: apertus format
+  title: '[Usage]: Apertus --tool-call-parser value'
+  body: '### Your current environment
+
+
+    N/A
+
+
+
+    ### How would you like to use vllm
+
+
+    I want to use tools with Apertus. The model supports them but there is no references on the Tool parser
+    or the tool chat template to use. Any idea which one can we use for it?
+
+
+
+    ### Before submitting a new issue...
+
+
+    - [x] Make sure you already searched for relevant issues, and asked the chatbot living at the bottom
+    right corner of the [documentation page](https://docs.vllm.ai/en/latest/), which can answer lots of
+    frequently asked questions.'
+  bucket: assigner_positive
+- repo: ggml-org/llama.cpp
+  number: 26300
+  source: github
+  url: https://github.com/ggml-org/llama.cpp/issues/26300
+  topic: null
+  title: 'Feature Request: Support Apertus (a family of models from ETH Zurich)'
+  body: '### Prerequisites
+
+
+    - [x] I am running the latest code. Mention the version if possible as well.
+
+    - [x] I carefully followed the [README.md](https://github.com/ggml-org/llama.cpp/blob/master/README.md).
+
+    - [x] I searched using keywords relevant to my issue to make sure that I am creating a new issue that
+    is not already open (or closed).
+
+    - [x] I reviewed the [Discussions](https://github.com/ggml-org/llama.cpp/discussions), and have a
+    new and useful enhancement to share.
+
+
+    ### Feature Description
+
+
+    ETH''s Apertus model: https://www.apertus-ai.org/articles/2026-07-apertus-1-5/
+
+
+    ### Motivation
+
+
+    This family of open models are quite useful in practice: multimodal input, reasoning, longer context,
+    and better instruction following
+
+
+    ### Possible Implementation
+
+
+    _No response_'
+  bucket: assigner_false
+- repo: ggml-org/llama.cpp
+  number: 26226
+  source: github
+  url: https://github.com/ggml-org/llama.cpp/pull/26226
+  topic: null
+  title: 'core : support output vocab size distinct from embedding vocab size'
+  body: "## Overview\r\n\r\n`llama_vocab::n_tokens()` controls both the embedding table and the logits/sampling\
+    \ buffers. They have identical size for all current arches, and were thus never separated, but the\
+    \ relationship is also baked in the public API (`include/llama.h` logits stride `output_ids[i]*n_vocab`).\r\
+    \n\r\n[Apertus v1.5 (`swiss-ai/Apertus-v1.5-8B`)](https://huggingface.co/swiss-ai/Apertus-v1.5-8B)\
+    \ consumes text/image/audio tokens but outputs only text, meaning its `lm_head` is indeed smaller\
+    \ than the embedding table (confirmed from `config.json` of the checkpoint plus `.safetensors` header):\r\
+    \n\r\n```\r\nvocab_size = 266752   # embed_tokens -> [266752, 4096]\r\noutput_vocab_size = 131072\
+    \   # lm_head      -> [131072, 4096]   (untied)\r\n```\r\n\r\nThe 135,680 excess rows are control\
+    \ and discrete image/audio tokens which occur only in input ID space, never as output. Unadulterated\
+    \ llama.cpp will either reject the `lm_head` (mismatched shape), or (in case of forcing) allocate\
+    \ the logits buffer for the bigger embedding vocabulary, thus corrupting data on every subsequent\
+    \ `ggml_backend_tensor_get_async` fill operation.\r\n\r\n**Fix:** Use the same `n_embd_out_impl` /\
+    \ `LLM_KV_EMBEDDING_LENGTH_OUT` strategy for vocab size. Adds an optional GGUF key `%s.vocab_size_out`\
+    \ and `llama_model::n_vocab_out()` (= `n_vocab_out_impl > 0 ? n_vocab_out_impl : vocab.n_tokens()`).\
+    \ Now the few logits/sampling buffer allocation points in `llama-context.cpp` use `n_vocab_out()`\
+    \ while `vocab.n_tokens()` keeps controlling the embedding\r\n\r\n## Additional information\r\n\r\n\
+    Apertus v1.5 is the only consumer today. I can't name a second in-tree model that needs it. Implemented\
+    \ as a minimal generic mechanism rather than an Apertus-specific hack because that was cheaper and\
+    \ safer in `llama-context.cpp`, not because it's built ahead of demand. Cost is effectively zero at\
+    \ runtime. the one real tradeoff is a layer of indirection (`n_vocab_out()` vs `vocab.n_tokens()`)\
+    \ in a hot shared file. happy to reshape or narrow if preferred.\r\n\r\n## Requirements\r\n\r\n- [x]\
+    \ I have read and agree with the [contributing guidelines](https://github.com/ggml-org/llama.cpp/blob/master/CONTRIBUTING.md)\r\
+    \n- [x] AI usage disclosure: Yes, it was predominately AI written by Sonnet 5 with steering.\r\n"
+  bucket: assigner_false
+- repo: ggml-org/llama.cpp
+  number: 26224
+  source: github
+  url: https://github.com/ggml-org/llama.cpp/issues/26224
+  topic: null
+  title: 'core: support output vocab size distinct from embedding vocab size'
+  body: "## Problem\n\n`llama_vocab::n_tokens()` is currently the single source of truth for both:\n-\
+    \ the embedding table row count (`tok_embd`)\n- the logits/sampling buffer width, via the public API\
+    \ contract documented at\n  `llama_get_logits(ctx) + output_ids[i]*n_vocab` (include/llama.h)\n\n\
+    This assumes embedding rows == output rows, which holds for every architecture\ncurrently in the tree.\
+    \ It does not hold for swiss-ai/Apertus-v1.5-8B: its\n`embed_tokens.weight` is `[266752, 4096]` while\
+    \ `lm_head.weight` is a separate,\nuntied `[131072, 4096]` tensor. The extra 135680 ids in the embedding\
+    \ table are\nreserved for multimodal (image/audio) input-only tokens that are never valid\nmodel outputs\
+    \ - confirmed against the model's own tokenizer_config.json\n(`base_vocab_size: 131072`, matching\
+    \ lm_head exactly; the rest are \"added\ntokens\").\n\nLoading such a model today either fails outright\
+    \ (output tensor shape\nmismatch) or requires fabricating ~135680 output rows that don't exist in\
+    \ the\ncheckpoint, just to keep n_vocab symmetric.\n\n## Proposed fix\n\nMirror the existing `n_embd_out_impl`\
+    \ / `LLM_KV_EMBEDDING_LENGTH_OUT` pattern\n(already used for output embedding dimension overrides):\n\
+    \n- new optional GGUF key `%s.vocab_size_out`\n- `hparams.n_vocab_out_impl` (default 0 = no override)\n\
+    - `llama_model::n_vocab_out()` returns `n_vocab_out_impl > 0 ? n_vocab_out_impl\n  : vocab.n_tokens()`\n\
+    - the ~5 buffer-sizing call sites in `llama-context.cpp` (`decode()`,\n  `encode()`, `output_reserve()`,\
+    \ `output_reorder()`, backend-sampler init)\n  switch from `vocab.n_tokens()` to `model.n_vocab_out()`\n\
+    \nFor every existing model this is a no-op (n_vocab_out_impl stays 0), so\nbehavior is unchanged unless\
+    \ a converter explicitly opts in.\n\n## Status\n\nImplemented and tested locally: full CPU `ci/run.sh`\
+    \ (debug+release ctest,\nmodel-based smoke tests) passes 100%, plus manual regression testing against\n\
+    a real model (Qwen2.5-0.5B-Instruct) confirming no behavior change. PR to\nfollow.\n\nThis is a prerequisite\
+    \ for Apertus v1.5 support, split out as its own PR per\nthe \"separate PRs per feature\" guideline\
+    \ in CONTRIBUTING.md."
+  bucket: assigner_false
+- repo: ggml-org/llama.cpp
+  number: 16725
+  source: github
+  url: https://github.com/ggml-org/llama.cpp/issues/16725
+  topic: null
+  title: 'Misc bug: OOM despite sufficient VRAM'
+  body: "### Name and Version\n\n[user@server ~]$ llama-server --version\nggml_cuda_init: GGML_CUDA_FORCE_MMQ:\
+    \    no\nggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no\nggml_cuda_init: found 2 ROCm devices:\n  Device\
+    \ 0: AMD Radeon RX 7900 XTX, gfx1100 (0x1100), VMM: no, Wave Size: 32\n  Device 1: AMD Radeon RX 7900\
+    \ XTX, gfx1100 (0x1100), VMM: no, Wave Size: 32\nversion: 1033 (43af7d0)\nbuilt with AMD clang version\
+    \ 19.0.0git (/srcdest/rocm-llvm d366fa84f3fdcbd4b10847ebd5db572ae12a34fb) for x86_64-pc-linux-gnu\n\
+    [user@server ~]$ yay -Qs llama.cpp\nlocal/llama.cpp-hip b6816-1\n    Port of Facebook's LLaMA model\
+    \ in C/C++ (with AMD ROCm optimizations)\n\n### Operating systems\n\nLinux\n\n### GGML backends\n\n\
+    HIP\n\n### Hardware\n\n2x RX 7900 TX\n\n### Models\n\nhttps://huggingface.co/unsloth/Apertus-70B-Instruct-2509-GGUF?show_file_info=Apertus-70B-Instruct-2509-IQ4_XS.gguf\n\
+    \n### Problem description & steps to reproduce\n\nLoading a model using this command:\n```\nllama-server\
+    \ --host 0.0.0.0 -c 20480 --no-context-shift -ngl 99 -fa on --jinja --no-warmup --temp 0.5 --dynatemp-range\
+    \ 0.5 --min-p 0 --top-p 1 --top-k 100 -ts 1,1 -m models/large/Apertus-70B-Instruct-2509-IQ4_XS.gguf\n\
+    ```\nLoading fails despite that the reported VRAM (eg for `ROCm0`) is `24524 MiB`, which should be\
+    \ larger than `ROCm0 model buffer size = 17827.35 MiB` + `ROCm0 KV buffer size =  3280.00 MiB`.\n\n\
+    Unless I'm missing something.\n\n\n### First Bad Commit\n\n_No response_\n\n### Relevant log output\n\
+    \n```shell\nggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no\nggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no\n\
+    ggml_cuda_init: found 2 ROCm devices:\n  Device 0: AMD Radeon RX 7900 XTX, gfx1100 (0x1100), VMM:\
+    \ no, Wave Size: 32\n  Device 1: AMD Radeon RX 7900 XTX, gfx1100 (0x1100), VMM: no, Wave Size: 32\n\
+    build: 1033 (43af7d0) with AMD clang version 19.0.0git (/srcdest/rocm-llvm d366fa84f3fdcbd4b10847ebd5db572ae12a34fb)\
+    \ for x86_64-pc-linux-gnu\nsystem info: n_threads = 16, n_threads_batch = 16, total_threads = 32\n\
+    \nsystem_info: n_threads = 16 (n_threads_batch = 16) / 32 | ROCm : NO_VMM = 1 | PEER_MAX_BATCH_SIZE\
+    \ = 128 | FA_ALL_QUANTS = 1 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX_VNNI = 1 | AVX2 = 1 | F16C\
+    \ = 1 | FMA = 1 | BMI2 = 1 | AVX512 = 1 | AVX512_VBMI = 1 | AVX512_VNNI = 1 | AVX512_BF16 = 1 | LLAMAFILE\
+    \ = 1 | OPENMP = 1 | REPACK = 1 |\n\nmain: binding port with default address family\nmain: HTTP server\
+    \ is listening, hostname: 0.0.0.0, port: 8080, http threads: 31\nmain: loading model\nsrv    load_model:\
+    \ loading model 'models/large/Apertus-70B-Instruct-2509-IQ4_XS.gguf'\nllama_model_load_from_file_impl:\
+    \ using device ROCm0 (AMD Radeon RX 7900 XTX) (0000:03:00.0) - 24524 MiB free\nllama_model_load_from_file_impl:\
+    \ using device ROCm1 (AMD Radeon RX 7900 XTX) (0000:07:00.0) - 24524 MiB free\nllama_model_loader:\
+    \ loaded meta data with 43 key-value pairs and 804 tensors from models/large/Apertus-70B-Instruct-2509-IQ4_XS.gguf\
+    \ (version GGUF V3 (latest))\nllama_model_loader: Dumping metadata keys/values. Note: KV overrides\
+    \ do not apply in this output.\nllama_model_loader: - kv   0:                       general.architecture\
+    \ str              = apertus\nllama_model_loader: - kv   1:                              xielu.alpha_n\
+    \ arr[f32,80]      = [7.593750, 6.500000, 4.656250, 4.1250...\nllama_model_loader: - kv   2:     \
+    \                         xielu.alpha_p arr[f32,80]      = [2.796875, 11.125000, 7.000000, 5.968...\n\
+    llama_model_loader: - kv   3:                                 xielu.beta arr[f32,80]      = [0.500000,\
+    \ 0.500000, 0.500000, 0.5000...\nllama_model_loader: - kv   4:                                  xielu.eps\
+    \ arr[f32,80]      = [-0.000001, -0.000001, -0.000001, -0....\nllama_model_loader: - kv   5:     \
+    \                          general.type str              = model\nllama_model_loader: - kv   6:  \
+    \                             general.name str              = Apertus-70B-Instruct-2509\nllama_model_loader:\
+    \ - kv   7:                            general.version str              = 2509\nllama_model_loader:\
+    \ - kv   8:                           general.finetune str          "
+  bucket: assigner_false
+- repo: ggml-org/llama.cpp
+  number: 15877
+  source: github
+  url: https://github.com/ggml-org/llama.cpp/pull/15877
+  topic: null
+  title: 'feat: Extra debugging support for model conversion'
+  body: "These are some things I've added while working on the Apertus conversion, thought they'd come\
+    \ in handy.\r\n\r\nFirst of all, in the `examples/model_conversion` scripts, I've added `llama-callback-eval`-style\
+    \ dumping for intermediate steps when running the original model.\r\n\r\nAlso added BF16 support for\
+    \ llama-callback-eval."
+  bucket: assigner_false
+- repo: ggml-org/llama.cpp
+  number: 15852
+  source: github
+  url: https://github.com/ggml-org/llama.cpp/pull/15852
+  topic: null
+  title: 'Feat: Apertus model implementation'
+  body: "Help!\r\n\r\nThis seems like an easy enough model. I've done the XIELU implementation, but for\
+    \ some reason, the tensor outputs diverge in the QKV calculations (it's either the RoPE or the norm).\
+    \ I've tried everything, spent a whole day debugging it, maybe I'm missing something really obvious?\r\
+    \n\r\n@foldl you did the implementation in chatllm.cpp and it works fine, maybe you can see something\
+    \ obvious here?"
+  bucket: assigner_false
+- repo: ggml-org/llama.cpp
+  number: 15844
+  source: github
+  url: https://github.com/ggml-org/llama.cpp/issues/15844
+  topic: null
+  title: '[unsupported model] Apertus-8B-Instruct-2509'
+  body: 'Any plans to add support for this one?
+
+    https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509
+
+    '
+  bucket: assigner_false
+- repo: ggml-org/llama.cpp
+  number: 15751
+  source: github
+  url: https://github.com/ggml-org/llama.cpp/issues/15751
+  topic: null
+  title: 'Eval bug: ApertusForCausalLM is not supported - gguf conversion for model swiss-ai/Apertus-8B-Instruct-2509
+    & swiss-ai/Apertus-70B-Instruct-2509'
+  body: "### Name and Version\n\nversion: 6357 (0a2a3841)\nbuilt with cc (Ubuntu 14.2.0-19ubuntu2) 14.2.0\
+    \ for x86_64-linux-gnu\n\nWhen i try to convert files to .gguf format using convert_hf_to_gguf.py\n\
+    i get this error : \nINFO:hf-to-gguf:Model architecture: ApertusForCausalLM\nERROR:hf-to-gguf:Model\
+    \ **ApertusForCausalLM is not supported**\n\nI am expecting to convert latest apertus LLM files to\
+    \ .gguf format i used to do that with several LLM published on huggingface\n\nI did a conversion try\
+    \ with this brand new LLM\nhttps://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509\n\nI have updated\
+    \ transformers to 4.56.0 as requested by ApertusForCausalLM\n\nTu reproduce : Download LLM files and\
+    \ try to convert to .gguf format using convert_hf_to_gguf.py\n\nMany thanks in advance for effort\
+    \ and clues\n\n\n\n### Operating systems\n\nLinux\n\n### GGML backends\n\nCUDA\n\n### Hardware\n\n\
+    13th Gen Intel(R) Core(TM) i9-13900K To Be Filled By O.E.M. CPU @ 3.0GHz\n2x NVIDIA GeForce RTX 4090\n\
+    \n### Models\n\nswiss-ai/Apertus-8B-Instruct-2509 & swiss-ai/Apertus-70B-Instruct-2509\n\n### Problem\
+    \ description & steps to reproduce\n\nTo reproduce : Download LLM files swiss-ai/Apertus-8B-Instruct-2509\
+    \  and try to convert to .gguf format using convert_hf_to_gguf.py\n\n### First Bad Commit\n\n_No response_\n\
+    \n### Relevant log output\n\n```shell\n(gguf_env) llama@aiborg:/data/LLAMA/llama.cpp$ /data/LLAMA/llama.cpp/convert_hf_to_gguf.py\
+    \ --outtype f16 --outfile /data/LLAMA/models/Swiss-AI/apertus-70B/swissai-70B.gguf /data/LLAMA/models/Swiss-AI/apertus-70B/\n\
+    INFO:hf-to-gguf:Loading model: apertus-70B\nINFO:hf-to-gguf:Model architecture: ApertusForCausalLM\n\
+    ERROR:hf-to-gguf:Model ApertusForCausalLM is not supported\n```"
+  bucket: assigner_false
+- repo: ggml-org/llama.cpp
+  number: 15748
+  source: github
+  url: https://github.com/ggml-org/llama.cpp/issues/15748
+  topic: null
+  title: 'Feature Request: Apertus models support'
+  body: '### Prerequisites
+
+
+    - [x] I am running the latest code. Mention the version if possible as well.
+
+    - [x] I carefully followed the [README.md](https://github.com/ggml-org/llama.cpp/blob/master/README.md).
+
+    - [x] I searched using keywords relevant to my issue to make sure that I am creating a new issue that
+    is not already open (or closed).
+
+    - [x] I reviewed the [Discussions](https://github.com/ggml-org/llama.cpp/discussions), and have a
+    new and useful enhancement to share.
+
+
+    ### Feature Description
+
+
+    Support the models at https://huggingface.co/collections/swiss-ai/apertus-llm-68b699e65415c231ace3b059
+
+
+    ### Motivation
+
+
+    New fully open-source model with training data and code. It supports almost all languages in the world.
+
+
+    ### Possible Implementation
+
+
+    https://github.com/vllm-project/vllm/pull/23068
+
+    https://github.com/huggingface/transformers/pull/39381'
+  bucket: assigner_false

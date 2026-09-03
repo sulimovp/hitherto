@@ -1,0 +1,99 @@
+name: Casefile Evidence Brief
+description: On new issues (or a label), run Casefile and post a sticky evidence comment.
+author: Arraxis
+
+# Composite Action — Track C W6. Secrets stay in the consumer repo.
+# Default path is retrieval-only (--no-synthesis) so maintainers get citations first.
+
+inputs:
+  github-token:
+    description: Token for GitHub API reads and posting the sticky comment
+    required: true
+  question:
+    description: Assessment question; defaults to the issue title
+    required: false
+    default: ""
+  repo:
+    description: owner/name to assess; defaults to the current repository
+    required: false
+    default: ${{ github.repository }}
+  path:
+    description: Optional module path inside the repo
+    required: false
+    default: ""
+  ecosystem:
+    description: Optional Casefile ecosystem profile name
+    required: false
+    default: ""
+  synthesize:
+    description: Set to "true" to allow LLM synthesis (requires CASEFILE_* LLM key)
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install Casefile
+      shell: bash
+      run: pip install casefile
+
+    - name: Run Casefile
+      id: assess
+      shell: bash
+      env:
+        CASEFILE_GITHUB_TOKEN: ${{ inputs.github-token }}
+        CASEFILE_ANTHROPIC_API_KEY: ${{ env.CASEFILE_ANTHROPIC_API_KEY }}
+        CASEFILE_OPENAI_API_KEY: ${{ env.CASEFILE_OPENAI_API_KEY }}
+      run: |
+        set -euo pipefail
+        Q='${{ inputs.question }}'
+        if [ -z "$Q" ]; then Q="${{ github.event.issue.title }}"; fi
+        ARGS=(-q "$Q" -r "${{ inputs.repo }}" --no-synthesis -o "$RUNNER_TEMP/casefile-report.md")
+        if [ "${{ inputs.synthesize }}" = "true" ]; then
+          ARGS=(-q "$Q" -r "${{ inputs.repo }}" -o "$RUNNER_TEMP/casefile-report.md")
+        fi
+        if [ -n "${{ inputs.path }}" ]; then ARGS+=(-p "${{ inputs.path }}"); fi
+        if [ -n "${{ inputs.ecosystem }}" ]; then ARGS+=(-e "${{ inputs.ecosystem }}"); fi
+        casefile assess "${ARGS[@]}"
+        {
+          echo "body<<CASEFILE_EOF"
+          echo "<!-- casefile-sticky -->"
+          echo "## Casefile evidence brief"
+          echo
+          cat "$RUNNER_TEMP/casefile-report.md"
+          echo "CASEFILE_EOF"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Upsert sticky comment
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const marker = '<!-- casefile-sticky -->';
+          const body = `${{ steps.assess.outputs.body }}`;
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          const existing = comments.find(c => c.body && c.body.includes(marker));
+          if (existing) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: existing.id,
+              body,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
+          }

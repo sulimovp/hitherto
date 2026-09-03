@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Report — Casefile{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+  <div>
+    <h1 class="h3 fw-bold mb-1">Assessment report</h1>
+    <p class="text-muted mb-0"><code>{{ report.request.repo }}</code>
+      {% if report.request.path %} · <code>{{ report.request.path }}</code>{% endif %}
+      {% if report.request.ecosystem %} · profile <strong>{{ report.request.ecosystem }}</strong>{% endif %}
+    </p>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('index') }}">New assessment</a>
+    <button class="btn btn-outline-primary btn-sm" type="button" onclick="downloadMarkdown()">Download .md</button>
+  </div>
+</div>
+
+{% if report.validation_errors %}
+<div class="alert alert-warning">
+  <strong>Synthesis withheld</strong> — citation validation failed. Evidence below is still valid.
+  <ul class="mb-0 mt-2">{% for e in report.validation_errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+{% if summary_html %}
+<section class="card shadow-sm mb-4 border-primary border-opacity-25">
+  <div class="card-header bg-primary bg-opacity-10">
+    <span class="fw-semibold">Summary</span>
+    <span class="badge text-bg-secondary ms-2">verify citations in evidence</span>
+  </div>
+  <div class="card-body summary-body">{{ summary_html }}</div>
+</section>
+{% elif report.request.synthesize %}
+<div class="alert alert-secondary">Synthesis was skipped (no LLM key or validation failure).</div>
+{% endif %}
+
+{% if report.evidence.open_questions %}
+<section class="card shadow-sm mb-4 border-warning border-opacity-50">
+  <div class="card-header bg-warning bg-opacity-10 fw-semibold">Open questions</div>
+  <ul class="list-group list-group-flush">
+    {% for q in report.evidence.open_questions %}
+      <li class="list-group-item">{{ q }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="mb-4">
+  <h2 class="h5 fw-semibold mb-3">Evidence</h2>
+  <div class="accordion" id="evidenceAccordion">
+    {% for kind_label, items in evidence_by_kind %}
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button {% if not loop.first %}collapsed{% endif %}" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapse-{{ loop.index }}">
+          {{ kind_label }} <span class="badge text-bg-light text-dark ms-2">{{ items|length }}</span>
+        </button>
+      </h3>
+      <div id="collapse-{{ loop.index }}" class="accordion-collapse collapse {% if loop.first %}show{% endif %}"
+           data-bs-parent="#evidenceAccordion">
+        <div class="accordion-body p-0">
+          <ul class="list-group list-group-flush">
+            {% for item in items %}
+            <li class="list-group-item">
+              <div class="fw-semibold">{{ item.title }}</div>
+              <a href="{{ item.url }}" target="_blank" rel="noopener" class="small">{{ item.url }}</a>
+              <p class="small text-muted mb-0 mt-1">{{ item.snippet[:280] }}{% if item.snippet|length > 280 %}…{% endif %}</p>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<details class="mb-4">
+  <summary class="fw-semibold user-select-none">Full markdown report</summary>
+  <pre class="bg-white border rounded p-3 mt-2 small" id="md-source">{{ markdown_raw }}</pre>
+</details>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const md = {{ markdown_raw | tojson }};
+  function downloadMarkdown() {
+    const blob = new Blob([md], {type: 'text/markdown'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'assessment-report.md';
+    a.click();
+  }
+</script>
+{% endblock %}

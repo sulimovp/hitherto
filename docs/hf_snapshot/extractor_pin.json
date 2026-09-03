@@ -1,0 +1,11 @@
+{
+  "captured_at": "2026-08-30",
+  "hub_model_id": "openai/gpt-oss-120b",
+  "revision_sha": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a",
+  "last_modified": "2025-08-26T17:25:03.000Z",
+  "router_id": "openai/gpt-oss-120b:groq",
+  "extractor_model_id": "openai/gpt-oss-120b:groq@b5c939de8f754692c1647ca79fbf85e8c1e70f8a",
+  "provider": "groq",
+  "provider_status": "live",
+  "note": ":fastest is a routing alias. groq was live on the 30 Aug router catalog with structured output. Hub revision pins the weights; router_id is what CASEFILE_LLM_MODEL must send."
+}

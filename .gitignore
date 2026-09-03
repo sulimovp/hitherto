@@ -1,0 +1,15 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+report.md
+report-live-test.md
+reports/
+.cache/
+eval/topic_assignment/_raw.json
+eval/topic_assignment/_raw_holdout.json
+eval/topic_assignment/apertus_raw.json
+eval/topic_assignment/_probe_hf.py
+eval/topic_assignment/_dump_apertus.py
+eval/topic_assignment/_apply_*.py

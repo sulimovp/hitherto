@@ -1,0 +1,21 @@
+.summary-body p:last-child {
+  margin-bottom: 0;
+}
+
+#md-source {
+  max-height: 24rem;
+  overflow: auto;
+}
+
+.user-select-none {
+  cursor: pointer;
+}
+
+.sample-case-card {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sample-case-card:hover {
+  border-color: var(--bs-primary) !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}

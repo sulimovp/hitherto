@@ -1,0 +1,96 @@
+# PyTorch ecosystem profile — reference instance for torch.masked assessments.
+# Curator: update last_verified after checking links and label taxonomy.
+# Re-verified 2026-08-30: adjacent/discourse/RFC URLs 200; golden issues 200.
+# GitHub renamed the labels this profile was written against: `module: masked`
+# → `module: masked operators`, `triaged review` → `triage review`, and
+# `prototype` is gone (search total_count 0). Talk week still needs a pass —
+# 22 October is 53 days after this stamp.
+
+id: pytorch
+display_name: PyTorch
+version: 1
+
+last_verified: 2026-08-30
+max_age_days: 90
+
+default_repos:
+  - pytorch/pytorch
+
+synonyms:
+  masked tensor: [MaskedTensor, torch.masked, maskedtensor]
+  masked array: [MaskedTensor]
+  ragged tensor: [NestedTensor, nested tensor, torch.nested]
+  sparse attention mask: [FlexAttention, flex attention, scaled_dot_product_attention]
+
+label_boosts:
+  "module: masked operators": 0.25
+  "triage review": 0.05
+
+adjacent_projects:
+  - name: NestedTensor
+    url: https://pytorch.org/docs/stable/nested.html
+    relevance: Core team's structured approach to ragged/masked batch data; often preferred over MaskedTensor for sequence models.
+  - name: FlexAttention
+    url: https://pytorch.org/blog/flexattention/
+    relevance: Masked attention patterns without a dedicated MaskedTensor type in hot paths.
+  - name: torch.nested
+    url: https://github.com/pytorch/pytorch/tree/main/torch/nested
+    relevance: Active investment area adjacent to masked/ragged use cases.
+
+scope_files:
+  - docs/source/masked.md
+  - torch/masked/__init__.py
+
+discourse:
+  base_url: https://dev-discuss.pytorch.org
+  search_path: /search?q=
+  # Curated threads (MaskedTensor / tensor subclasses / maintainer context)
+  pinned_threads:
+    - https://dev-discuss.pytorch.org/t/state-of-pytorch-core-september-2021-edition/332
+    - https://dev-discuss.pytorch.org/t/what-and-why-is-torch-dispatch/557
+    - https://dev-discuss.pytorch.org/t/torch-nn-h2-2021-lookback-and-h1-2022-lookahead/477
+
+rfc:
+  - label: PyTorch RFC repo
+    url: https://github.com/pytorch/rfcs
+
+sibling_repos:
+  - jax-ml/jax
+  - numpy/numpy
+
+# Path hints when CLI omits --path but question mentions a module
+path_hints:
+  masked: torch/masked
+  nested: torch/nested
+
+# Default golden issues (torch.masked); overridden per path when path_pinned_issue_numbers matches
+pinned_issue_numbers:
+  - 89734
+  - 89320
+  - 124964
+
+issue_search_queries:
+  - 'label:"module: masked operators"'
+  - MaskedTensor in:title
+
+path_pinned_issue_numbers:
+  torch/nested:
+    - 112398
+    - 82534
+    - 118580
+
+path_issue_search_queries:
+  torch/nested:
+    - NestedTensor in:title
+    - jagged in:title
+  torch/masked:
+    - 'label:"module: masked operators"'
+
+# Disjoint holdout 2026-08-28 (eval/topic_assignment/pytorch_holdout.yaml).
+# The n=88 / 1.00 numbers were in-sample on the set the vetoes were tuned on.
+# Recall is omitted: adjacent titles were drawn from queries the assigner
+# already rejects, so 1.00 would pass the recall floor without measuring it.
+assignment_precision:
+  measured_at: 2026-08-28
+  n: 95
+  precision: 0.91

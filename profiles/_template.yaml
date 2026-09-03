@@ -1,0 +1,61 @@
+# Ecosystem profile template — copy to {name}.yaml and fill in.
+# Schema: casefile/profiles/schema.yaml (TODO Phase 0.5)
+# Loader refuses profiles where last_verified is older than max_age_days.
+
+id: example
+display_name: Example Project
+version: 1
+
+last_verified: 2026-01-01  # ISO date; curator updates after manual review
+max_age_days: 90
+
+# Default GitHub repos this profile enriches (primary repo can override via CLI)
+default_repos:
+  - owner/example
+
+# Query expansion — map user phrases to search terms
+synonyms:
+  feature name: [alias one, alias two]
+
+# Ranking boosts (optional) — matched against issue labels
+label_boosts:
+  enhancement: 0.05
+
+# Static adjacent projects — URLs must be valid; curator maintains
+adjacent_projects:
+  - name: Related Library
+    url: https://github.com/org/repo
+    relevance: one sentence on why this matters for contribution decisions
+
+# Extra files to fetch from target repo beyond README / CONTRIBUTING / CODEOWNERS
+scope_files:
+  - docs/design/README.md
+
+# External discussion and design sources
+discourse:
+  base_url: https://discourse.example.com
+  search_path: /search?q=
+  # Optional curated threads (always fetched)
+  pinned_threads:
+    - url: https://discourse.example.com/t/example-rfc/123
+
+rfc:
+  - label: RFC index
+    url: https://example.com/rfcs
+
+# Cross-repo comparisons (Tier 2)
+sibling_repos:
+  - jax-ml/jax
+
+# Path hints when CLI omits --path but question mentions a module
+path_hints: {}
+
+# Always include in issue search (repo: qualifier added by planner)
+pinned_issue_numbers: []
+
+# e.g. label:"module: foo", FeatureName in:title
+issue_search_queries: []
+
+# Optional per-module paths (override pinned_issue_numbers when path matches)
+path_pinned_issue_numbers: {}
+path_issue_search_queries: {}

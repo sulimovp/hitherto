@@ -1,0 +1,31 @@
+{
+  "type": "user",
+  "id": "6272f74a7e5432ee8573f161",
+  "name": "sulimovp",
+  "fullname": "Pavel Sulimov",
+  "email": "<redacted>",
+  "emailVerified": "<redacted>",
+  "canPay": true,
+  "billingMode": "prepaid",
+  "periodEnd": 1788220800,
+  "isPro": true,
+  "avatarUrl": "/avatars/0b5f8297b871b06cab809632884f2512.svg",
+  "orgs": [
+    {
+      "type": "org",
+      "id": "681b0cb0dba891d54be0773d",
+      "name": "context-course",
+      "fullname": "Hugging Face Context Course",
+      "email": null,
+      "canPay": false,
+      "billingMode": "postpaid",
+      "periodEnd": null,
+      "avatarUrl": "https://cdn-avatars.huggingface.co/v1/production/uploads/62d648291fa3e4e7ae3fa6e8/Rv0Bz5uHKIjSjzaNmykya.png",
+      "roleInOrg": "read"
+    }
+  ],
+  "auth": {
+    "type": "access_token",
+    "accessToken": "<redacted>"
+  }
+}

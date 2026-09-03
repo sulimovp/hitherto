@@ -1,0 +1,85 @@
+# Curated assessment scenarios — UI presets, CLI samples, and offline eval.
+# Loaded by assessor.eval.sample_cases; do not duplicate in app.py.
+cases:
+  - id: pytorch-masked
+    label: "PyTorch — torch.masked"
+    blurb: >
+      Arraxis reference case. Tier 2 pulls golden issues (#89734, #89320, #124964),
+      dev-discuss (pinned + search), adjacent NestedTensor/FlexAttention, and merged PRs.
+    question: "Is reviving torch.masked / MaskedTensor worth an upstream contribution?"
+    repo: pytorch/pytorch
+    path: torch/masked
+    ecosystem: pytorch
+    tier: 2
+    synthesize_default: true
+    held_out: true
+    expect_issue_numbers: [89734, 89320, 124964]
+    expect_evidence_kinds: [issue, discourse_thread, adjacent_project]
+
+  - id: pytorch-nested
+    label: "PyTorch — torch.nested"
+    blurb: >
+      Second PyTorch module path — compare jagged/nested direction vs MaskedTensor for
+      variable-length batch work.
+    question: "Is contributing to torch.nested worth it for variable-length sequences?"
+    repo: pytorch/pytorch
+    path: torch/nested
+    ecosystem: pytorch
+    tier: 2
+    synthesize_default: true
+    held_out: false
+
+  - id: numpy-ma
+    label: "NumPy — numpy.ma"
+    blurb: >
+      Missing-data / masked arrays in core NumPy. Tier 2 adds PRs; use tier 1 for a
+      faster smoke test. Open questions should name pandas/xarray, not MaskedTensor.
+    question: "Is improving numpy.ma __array_function__ support worth an upstream contribution?"
+    repo: numpy/numpy
+    path: numpy/ma
+    ecosystem: numpy
+    tier: 2
+    synthesize_default: false
+    held_out: true
+    expect_issue_numbers: [22338]
+    expect_evidence_kinds: [issue, repo_file]
+
+  - id: numpy-ma-strategy
+    label: "NumPy — numpy.ma (strategy)"
+    blurb: >
+      Shorter strategy-style wording from the held-out eval set — same repo/profile as numpy-ma.
+    question: "Should we invest in numpy.ma long-term?"
+    repo: numpy/numpy
+    path: numpy/ma
+    ecosystem: numpy
+    tier: 1
+    synthesize_default: false
+    held_out: true
+    expect_issue_numbers: [22338]
+    expect_evidence_kinds: [issue, repo_file]
+
+  - id: sklearn-routing
+    label: "scikit-learn — metadata routing"
+    blurb: >
+      SLEP006 / metadata routing — pinned issues and sklearn ecosystem adjacencies.
+    question: "Is contributing to sklearn metadata routing (SLEP006) still worth it?"
+    repo: scikit-learn/scikit-learn
+    path: ""
+    ecosystem: sklearn
+    tier: 2
+    synthesize_default: true
+    held_out: false
+
+  - id: sklearn-generic
+    label: "scikit-learn — generic feature"
+    blurb: >
+      Template question when you do not have a specific feature name yet — tests generic
+      profile retrieval on sklearn.
+    question: "Is adding feature X to sklearn worth a PR?"
+    repo: scikit-learn/scikit-learn
+    path: ""
+    ecosystem: sklearn
+    tier: 1
+    synthesize_default: false
+    held_out: true
+    expect_evidence_kinds: [issue]

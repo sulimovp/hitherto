@@ -1,0 +1,6 @@
+{
+  "id": "openai/gpt-oss-120b",
+  "sha": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a",
+  "lastModified": "2025-08-26T17:25:03.000Z",
+  "pipeline_tag": "text-generation"
+}

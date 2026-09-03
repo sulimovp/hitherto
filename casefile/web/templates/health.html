@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Status — Casefile{% endblock %}
+{% block content %}
+<h1 class="h3 fw-bold mb-4">Connectivity</h1>
+<div class="card shadow-sm">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item d-flex justify-content-between">
+      <span>GitHub API</span>
+      <span class="{% if status.github == 'ok' %}text-success{% else %}text-warning{% endif %}">{{ status.github }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span>LLM ({{ llm_provider }})</span>
+      <span class="{% if status.llm == 'ok' %}text-success{% else %}text-warning{% endif %}">{{ status.llm }}</span>
+    </li>
+  </ul>
+</div>
+<p class="text-muted small mt-3">Configure tokens in <code>casefile/.env</code> (see <code>.env.example</code>).</p>
+<a class="btn btn-primary mt-2" href="{{ url_for('index') }}">Back to assessment</a>
+{% endblock %}

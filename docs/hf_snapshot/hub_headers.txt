@@ -1,0 +1,22 @@
+HTTP 200
+Content-Type: application/json; charset=utf-8
+Content-Length: 4787
+Connection: close
+Date: Sun, 30 Aug 2026 21:57:03 GMT
+ETag: W/"12b3-qyOAoqK7KzeR+cI7ck3lZCwTnaI"
+X-Powered-By: huggingface-moon
+X-Request-Id: Root=1-6a94a72f-4291799d12b3f53c3a736a1e
+RateLimit: "api";r=2487;t=155
+RateLimit-Policy: "fixed window";"api";q=2500;w=300
+cross-origin-opener-policy: same-origin
+Referrer-Policy: strict-origin-when-cross-origin
+Access-Control-Max-Age: 86400
+Access-Control-Allow-Origin: https://huggingface.co
+Vary: Origin
+Access-Control-Expose-Headers: X-Repo-Commit,X-Request-Id,X-Error-Code,X-Error-Message,X-Total-Count,ETag,Link,Accept-Ranges,Content-Range,X-Linked-Size,X-Linked-ETag,X-Xet-Hash
+X-Cache: Miss from cloudfront
+Via: 1.1 33bbce3c2eb1494fd9ca9c71d11cf154.cloudfront.net (CloudFront)
+X-Amz-Cf-Pop: ZRH52-P1
+Alt-Svc: h3=":443"; ma=86400
+X-Amz-Cf-Id: NUeAOYRSkaUFQODPa8CqEP4n8c2LJ8Dk1FzwbtM--tkd3uJikZk0DA==
+Strict-Transport-Security: max-age=31536000

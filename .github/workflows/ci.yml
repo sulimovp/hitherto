@@ -1,0 +1,27 @@
+# Public-repo CI. Copy to the new repo root as `.github/workflows/ci.yml`
+# when splitting (see docs/SPLIT.md). Working directory is the package root.
+name: Casefile tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install casefile
+        run: pip install -e ".[dev,web]"
+      - name: Mandatory verify script
+        run: bash scripts/verify.sh
+      - name: Doc link check
+        run: |
+          if [ -f scripts/check_agent_docs.py ]; then
+            python scripts/check_agent_docs.py
+          else
+            echo "SKIP check_agent_docs.py (workspace-only helper)"
+          fi

@@ -1,0 +1,58 @@
+# scikit-learn ecosystem — API design via SLEPs, estimator conventions (data-science staple).
+# Curator: update last_verified after checking links.
+# Re-verified 2026-08-30: adjacent/SLEP/metadata-routing URLs 200; pins
+# 22893/18936/31039 200; `Enhancement` label still exists.
+
+id: sklearn
+display_name: scikit-learn
+version: 1
+
+last_verified: 2026-08-30
+max_age_days: 90
+
+default_repos:
+  - scikit-learn/scikit-learn
+
+synonyms:
+  metadata routing: [sample props, SLEP006, set_fit_request, routing]
+  callbacks: [SLEP023, training callbacks, Callback API]
+  pipeline: [Pipeline, ColumnTransformer, meta-estimator]
+
+label_boosts:
+  Enhancement: 0.05
+
+adjacent_projects:
+  - name: imbalanced-learn
+    url: https://imbalanced-learn.org/
+    relevance: Extension for imbalanced classification; builds on sklearn estimators.
+  - name: skorch
+    url: https://skorch.readthedocs.io/
+    relevance: sklearn API wrapper for PyTorch models when deep learning is needed.
+  - name: XGBoost sklearn API
+    url: https://xgboost.readthedocs.io/en/stable/python/sklearn_estimator.html
+    relevance: Common gradient boosting choice alongside sklearn ensembles.
+
+scope_files:
+  - CONTRIBUTING.md
+  - doc/developer/develop.rst
+
+rfc:
+  - label: SLEP index (enhancement proposals)
+    url: https://scikit-learn-enhancement-proposals.readthedocs.io/
+  - label: Metadata routing user guide
+    url: https://scikit-learn.org/stable/metadata_routing.html
+
+sibling_repos:
+  - scikit-learn/enhancement_proposals
+
+path_hints:
+  sklearn: sklearn
+
+pinned_issue_numbers:
+  - 22893
+  - 18936
+  - 31039
+
+issue_search_queries:
+  - SLEP006 in:body
+  - metadata routing in:title

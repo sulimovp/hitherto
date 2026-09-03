@@ -1,0 +1,2019 @@
+profile: pytorch
+path: torch/masked
+labelled_at: '2026-08-28'
+labeller: 'cursor-agent: disjoint from pytorch.yaml. Positives are later PRs/issues the frozen MaskedTensor
+  assigner accepted. Adjacent: masked_select / masked_fill / boolean mask / sparse / DTensor titles it
+  rejected. Four assigner-true PRs labelled null (passing mention or boolean mask).'
+draw_method: Excluded the 88 numbers in pytorch.yaml. 50-target assigner-true from issue/PR searches for
+  torch/masked, torch.masked, MaskedTensor (45 unique after exclusion). 50 assigner-false from masked_select,
+  masked_fill, boolean mask, torch.sparse, DTensor title searches.
+items:
+- repo: pytorch/pytorch
+  number: 192516
+  topic: torch/masked
+  title: '[Test][XPU] Enable XPU support for maskedtensor tests'
+  body: "This PR prepares the maskedtensor test suite for XPU (Intel GPU) execution.\r\n\r\nChanges:\r\
+    \n- Enable XPU for maskedtensor device tests for TestBasics and TestOperators\r\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 187831
+  topic: torch/masked
+  title: 'fix(maskedtensor): map each kwarg from its own value in _map_mt_args_kwargs'
+  body: "## Summary\n\n`_map_mt_args_kwargs` in `torch/masked/maskedtensor/core.py` maps each keyword\
+    \ argument from the wrong source:\n\n```python\nimpl_args = []\nfor a in args:\n    impl_args.append(_helper(a,\
+    \ map_fn))\nimpl_kwargs = {}\nfor k in kwargs:\n    impl_kwargs[k] = _helper(a, map_fn)   # uses `a`,\
+    \ not `kwargs[k]`\n```\n\nThe kwargs loop calls `_helper(a, ...)`, where `a` is the loop variable\
+    \ left over from the preceding `for a in args` loop, instead of `_helper(kwargs[k], ...)`. So:\n\n\
+    - every kwarg is mapped from the **last positional arg's** value, ignoring the actual kwarg value;\
+    \ and\n- when there are **no positional args**, `a` is never bound and the function raises `NameError`.\n\
+    \nThe mapped kwargs are not always discarded. `passthrough.py` feeds them straight into the op:\n\n\
+    ```python\ndata_args, data_kwargs = _map_mt_args_kwargs(args, kwargs, lambda x: x.get_data())\nresult_data\
+    \ = fn(*data_args, **data_kwargs)\n```\n\nso a passthrough op invoked with a keyword argument silently\
+    \ runs on the wrong tensor data (or crashes when invoked with keyword args only).\n\nThe fix maps\
+    \ each kwarg from its own value, mirroring the positional-arg loop.\n\n## Test\n\nAdded `TestBasics.test_map_mt_args_kwargs_maps_each_kwarg`,\
+    \ which feeds a distinct `MaskedTensor` as a kwarg and asserts the mapped kwarg matches that kwarg's\
+    \ data (not the positional arg's), including the no-positional-args case that used to raise `NameError`.\n\
+    \n```\npytest test/test_maskedtensor.py -k test_map_mt_args_kwargs_maps_each_kwarg\n```\n\nI could\
+    \ not run the suite in my environment (no compiled `torch` build available here), so I verified the\
+    \ control-flow bug with a standalone reduction of the function (`_helper` stubbed, which does not\
+    \ affect the leaked-variable behavior):\n\n- `_map_mt_args_kwargs((1, 2), {\"x\": 99}, lambda v: v)`\
+    \ → `([1, 2], {\"x\": 2})` before the fix (should be `{\"x\": 99}`); `([1, 2], {\"x\": 99})` after.\n\
+    - `_map_mt_args_kwargs((), {\"x\": 99}, lambda v: v)` → `NameError` before the fix; `([], {\"x\":\
+    \ 99})` after.\n\nRelying on CI to run the added test against a real build.\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 165269
+  topic: torch/masked
+  title: Fix broken links in MaskedTensors documentation
+  body: "## Description\r\nFixes broken links in the MaskedTensors documentation by removing references\
+    \ to tutorials that were recently removed.\r\n\r\n## Changes Made\r\n- Removed 4 broken tutorial links\
+    \ from the bulleted list section\r\n- Removed 2 broken tutorial links from the Reductions section\
+    \  \r\n- Updated documentation to use plain text instead of broken links\r\n\r\n## Issue Fixed\r\n\
+    Fixes #165134\r\n\r\n## Testing\r\nVerified that all broken `maskedtensor_overview`, `maskedtensor_sparsity`,\
+    \ `maskedtensor_adagrad`, and `maskedtensor_advanced_semantics` links have been removed.\r\n\r\n##\
+    \ Notes\r\nAs mentioned in the issue comments, these tutorials were recently removed from PyTorch,\
+    \ so the links have been converted to plain text descriptions.\r\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 173081
+  topic: torch/masked
+  title: Fix broken links to masked tensor tutorials
+  body: "- Update Overview tutorial link to use /prototype/ path\r\n- Add missing .html extensions to\
+    \ tutorial links\r\n- Change pytorch.org to docs.pytorch.org for consistency\r\n- Fix all tutorial\
+    \ links in masked.md documentation\r\n\r\nFixes #173055\r\n\r\nCC @malfet "
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 151205
+  topic: torch/masked
+  title: Fix `MaskedTensor` to device ignored mask
+  body: "Fixes #147140\r\n\r\n## Changes\r\n\r\n- Add `to` implementation in `MaskedTensor` to support\
+    \ move `mask` to target device\r\n\r\n## Test Result\r\n\r\n```python\r\nIn [1]: import torch\r\n\
+    \   ...: from torch.masked import as_masked_tensor\r\n   ...: data = torch.tensor([1,2,3])\r\n   ...:\
+    \ mask = torch.tensor([True,False,True])\r\n   ...: mt = as_masked_tensor(data, mask).to('cuda')\r\
+    \n   ...: mt.get_data().device, mt.get_mask().device\r\n/home/zong/code/pytorch/torch/masked/maskedtensor/core.py:247:\
+    \ UserWarning: The PyTorch API of MaskedTensors is in prototype stage and will change in the near\
+    \ future. Please open a Github issue for features requests and see our documentation on the torch.masked\
+    \ module for further information about the project.\r\n  return MaskedTensor(data, mask)\r\n/home/zong/code/pytorch/torch/masked/maskedtensor/_ops_refs.py:354:\
+    \ UserWarning: The PyTorch API of MaskedTensors is in prototype stage and will change in the near\
+    \ future. Please open a Github issue for features requests and see our documentation on the torch.masked\
+    \ module for further information about the project.\r\n  return MaskedTensor(new_data, _maybe_get_mask(args[0]))\r\
+    \nOut[1]: (device(type='cuda', index=0), device(type='cuda', index=0))\r\n\r\nIn [2]: mt.sum(dim=0)\r\
+    \n/home/zong/code/pytorch/torch/masked/maskedtensor/core.py:247: UserWarning: The PyTorch API of MaskedTensors\
+    \ is in prototype stage and will change in the near future. Please open a Github issue for features\
+    \ requests and see our documentation on the torch.masked module for further information about the\
+    \ project.\r\n  return MaskedTensor(data, mask)\r\nOut[2]: MaskedTensor(4, True)\r\n\r\n```\r\n\r\n\
+    \r\n```bash\r\npytest test/test_maskedtensor.py -vv\r\n```\r\n\r\n![image](https://github.com/user-attachments/assets/640b809c-b4f0-4aca-a09e-04049017a745)\r\
+    \n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 155987
+  topic: null
+  title: '[doc] Add documentation for division by zero behavior in autograd'
+  body: "Fixes #128796\r\n\r\nThis PR adds documentation about the behavior of division by zero operations\
+    \ in PyTorch's autograd system. The documentation explains:\r\n\r\n1. How division by zero produces\
+    \ `inf` values following IEEE-754 floating point arithmetic\r\n2. How autograd handles these cases\
+    \ and why masking after division can lead to `nan` gradients\r\n3. Provides concrete examples showing\
+    \ the issue\r\n4. Recommends two solutions:\r\n   - Masking before division\r\n   - Using MaskedTensor\
+    \ (experimental API)\r\n\r\nThe documentation is added to the autograd notes section, making it easily\
+    \ discoverable for users who encounter this common issue.\r\n\r\nThis addresses the original issue\
+    \ #128796 which requested better documentation of this behavior to help users avoid common pitfalls\
+    \ when dealing with division by zero in their models.\r\n\r\ndditional changes:\r\n- Fixed formatting\
+    \ consistency by replacing curly apostrophes with straight apostrophes in the existing documentation\r\
+    \n\r\ncc @svekars @sekyondaMeta @AlannaBurke @ezyang @albanD @gqchen @nikitaved @soulitzer @Varal7\
+    \ @xmfan"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 137890
+  topic: null
+  title: Fix memory leak on masked Tensor
+  body: "Note that this reverts the change from https://github.com/pytorch/pytorch/pull/137815 as well\
+    \ which is not needed anymore!\r\n\r\nWithout this, you create an unbeakable reference cycle. It is\
+    \ unbreakable because part of the cycle is through the autograd graph which we cannot traverse."
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 143321
+  topic: torch/masked
+  title: remove allow-untyped-defs for torch/masked/maskedtensor/creation.py
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #143321
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 139999
+  topic: torch/masked
+  title: Update torch.masked.mean to upcast dtype for bool tensors
+  body: "When calling `torch.masked.mean(...)` with a boolean tensor, the dtype is inferred to be bool.\
+    \ When the mean is being computed, the sum operator is used. When the sum operator is used with dtype=torch.bool,\
+    \ the result is clamped to True (1) leading to an incorrect mean being calculated.\r\n\r\nThe below\
+    \ example shows how the incorrect result occurs:\r\n```\r\na = torch.tensor([True, True])\r\ncount\
+    \ = torch.sum(torch.ones(a.shape, dtype=torch.int64)) # 2\r\ntotal = torch.sum(a, dtype=torch.bool)\
+    \ # True (1)\r\nmean = total / count # 0.5\r\n```\r\n\r\nThis PR upcasts the dtype used for the sumation\
+    \ to int32 in the case of bool tensors allowing for the correct result to be computed.\n\ncc @voznesenskym\
+    \ @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx\
+    \ @ipiszy @yf225 @chenyang78 @kadeng @muchulee8 @ColinPeppler @amjames @desertfire @chauhang @aakhundov"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 134335
+  topic: torch/masked
+  title: Correctly specify size of sparse_csr tensors in maskedtensor binary ops
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #134335
+
+
+
+
+    cc @alexsamardzic @nikitaved @pearu @cpuhrsch @amjames @bhosmer @jcaip'
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 128637
+  topic: torch/masked
+  title: Add MaskedTensor support to *_like API
+  body: ''
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 137815
+  topic: torch/masked
+  title: Fix masked tensor test_stack memory leak
+  body: "This test is currently failing in trunk when memory leak check is enabled, for example https://github.com/pytorch/pytorch/actions/runs/11296206361/job/31422348823#step:22:1970.\
+    \  When testing locally, calling `backward` on a masked tensor always causes memory leak until I clean\
+    \ up the data and the mask manually.  This is probably related to this warning from masked tensor\
+    \ `UserWarning: It is not recommended to create a MaskedTensor with a tensor that requires_grad. To\
+    \ avoid this, you can use data.clone().detach()`, but I don't know much about the internal details\
+    \ here to go further.  So, let's just fix the test first/\r\n\r\n### Testing\r\n\r\n```\r\nPYTORCH_TEST_CUDA_MEM_LEAK_CHECK=1\
+    \ python test/test_maskedtensor.py TestBasicsCUDA.test_stack_cuda\r\n```\r\n\r\npasses and doesn't\
+    \ warn about memory leak anymore.\r\n\r\nThe test itself came from https://github.com/pytorch/pytorch/pull/125262#issuecomment-2344068012"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 125262
+  topic: torch/masked
+  title: 'Add MaskedTensor passthrough: unfold, F.Unfold, F.Fold, stack'
+  body: "Hi,\r\nI noticed the `unfold` operator was missing on MaskedTensor.\r\n\r\nI tested that my change\
+    \ works when calling unfold and backward on a `MaskedTensor` but I didn't find the tests for the dispatch\
+    \ of such operation. Where is it?"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 128574
+  topic: torch/masked
+  title: Add MaskedTensor support to _is_any_true
+  body: "Fixes #128557\r\n\r\nIf there is a better way to detect autograd anomalies consistently, feel\
+    \ free to share your ideas. This is a dirty check."
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 127715
+  topic: torch/masked
+  title: '[BE] enable UFMT for `torch/masked/`'
+  body: "Part of #123062 \r\n\r\n- #123062"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 87405
+  topic: torch/masked
+  title: Maskedtensor typo fix
+  body: "Fixes #ISSUE_NUMBER\r\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 110725
+  topic: torch/masked
+  title: Make is_sparse a property of MaskedTensor
+  body: "Fixes #104574\r\n\r\nSeeing that MaskedTensor is a prototype, the BC breaking nature of this\
+    \ change seems okay?\r\n\r\nLocally tested:\r\n<img width=\"1372\" alt=\"image\" src=\"https://github.com/pytorch/pytorch/assets/31798555/239e61ba-e0b9-4909-8c7a-0ce3869d7375\"\
+    >\r\n\r\nStack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #110725\n\
+    \r\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 94728
+  topic: null
+  title: Add sparse semantics context manager.
+  body: "The feature and its usage are described in https://github.com/pytorch/pytorch/pull/94728/files#diff-6d0bd55f94dcbd4ccf83f4006976fa4cb87eb06b72dc16238a21980226be6315R491\r\
+    \n\r\nThis PR is a piece of addressing the problem of interpreting unspecified elements in sparse\
+    \ tensors for autograd.\r\n\r\nHistorically, functions and their backward functions were written for\
+    \ masked semantics, but now, we target supporting sparse semantics while the masked semantics should\
+    \ be covered by `MaskedTensor` feature. In the meantime, an attempt was made to keep the operations\
+    \ with masked semantics in `torch.sparse` namespace but a clean separation has never been achieved\
+    \ (e.g. the backward of `torch.to_dense` is implemented using masked semantics) and with `MaskedTensor`,\
+    \ `torch.sparse` would not be needed when its implementations are moved under `MaskedTensor`.\r\n\r\
+    \nThis PR introduces a context manager that allows choosing the semantics of operations with sparse\
+    \ tensors, both in Python and Aten, using PyTorch Context. Until we have not clearly separated the\
+    \ default sparse (non-masked) semantics (within `torch` namespace) and masked semantics in `MaskedTensor`,\
+    \ the introduced context manager provides a method of separating the non-masked and masked semantics\
+    \ for autograd methods like `backward` (I presume we don't want to introduce `masked` kw argument\
+    \ to `backward` similar to `torch.autograd.gradcheck`) as well as for backward implementations of\
+    \ various operations (e.g. see the `to_dense_backward` implementation in this PR).\r\n\r\nIn fact,\
+    \ the suggested feature in this PR will promote moving `torch.sparse` implementations to `torch` implementations\
+    \ on sparse tensors (the implementations can use `at::globalContext().sparseSemantics()` for the expected\
+    \ behavior, `MaskedTensor` operations would disable sparse semantics, for instance).\r\n\r\nStack\
+    \ from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #94728\n* #95372\n\
+    \r\n\r\n\r\ncc @alexsamardzic @nikitaved @cpuhrsch @amjames @bhosmer @ezyang @albanD @zou3519 @gqchen\
+    \ @soulitzer @Lezcano @Varal7"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 85845
+  topic: torch/masked
+  title: '[maskedtensor] use masked_softmax for forward/backward instead of regular softmax'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #85845
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 87387
+  topic: torch/masked
+  title: '[maskedtensor] fix docs formatting'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #87387
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 84887
+  topic: torch/masked
+  title: '[maskedtensor] add docs'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #84887
+
+
+
+
+    cc @nikitaved @pearu @cpuhrsch @amjames @bhosmer'
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 82842
+  topic: torch/masked
+  title: '[maskedtensor] add unary/binary/reduction tests from common_method_invocations'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #82842
+
+    * #82841
+
+    * #82840
+
+    * #82839
+
+    * #82838
+
+    * #82837
+
+    * #82836
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 82840
+  topic: torch/masked
+  title: '[maskedtensor] adding matmul and other functions'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * #82842
+
+    * #82841
+
+    * __->__ #82840
+
+    * #82839
+
+    * #82838
+
+    * #82837
+
+    * #82836
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 82838
+  topic: torch/masked
+  title: '[maskedtensor] adding binary operations'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * #82842
+
+    * #82841
+
+    * #82840
+
+    * #82839
+
+    * __->__ #82838
+
+    * #82837
+
+    * #82836
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 82347
+  topic: torch/masked
+  title: '[maskedtensor] first commit, moving to  core'
+  body: "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* __->__ #82347\n\
+    \r\nIn this diff, we've migrated the code over from https://github.com/pytorch/maskedtensor into PyTorch\
+    \ Core. Tests have been migrated over from the out-of-tree test folder into PyTorch Core's test folder\r\
+    \n\r\nTODO: Move the docs and tutorials to the appropriate folder"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 90069
+  topic: null
+  title: Update Persons of Interest
+  body: Creates sections for contributors to MaskedTensor and NestedTensor and updates torchaudio.
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 87406
+  topic: torch/masked
+  title: '[maskedtensor] fix docs formatting (#87387)'
+  body: "Pull Request resolved: https://github.com/pytorch/pytorch/pull/87387\r\nApproved by: https://github.com/cpuhrsch\r\
+    \n\r\nFixes #ISSUE_NUMBER\r\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 87380
+  topic: torch/masked
+  title: Add prototype warning to MaskedTensor constructor (#87107)
+  body: "When a user constructs a MaskedTensor we should signal its development status to set expecations.\n\
+    Pull Request resolved: https://github.com/pytorch/pytorch/pull/87107\nApproved by: https://github.com/bhosmer\n\
+    \nFixes #ISSUE_NUMBER\r\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 87381
+  topic: torch/masked
+  title: '[maskedtensor] add docs (#84887)'
+  body: "Pull Request resolved: https://github.com/pytorch/pytorch/pull/84887\nApproved by: https://github.com/cpuhrsch\n\
+    \nFixes #ISSUE_NUMBER\r\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 87107
+  topic: torch/masked
+  title: Add prototype warning to MaskedTensor constructor
+  body: When a user constructs a MaskedTensor we should signal its development status to set expecations.
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 85515
+  topic: torch/masked
+  title: '[maskedtensor] port torch/_masked into torch/masked'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #85515
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 85938
+  topic: torch/masked
+  title: '[maskedtensor] negative testing'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #85938
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 85529
+  topic: torch/masked
+  title: '[maskedtensor] move __torch_function/dispatch__ functions to a map'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #85529
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 82841
+  topic: torch/masked
+  title: '[maskedtensor] add basic tests and unary/binary/reduction tests from common_method_invocations'
+  body: "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* #84887\n* __->__\
+    \ #82841\n\r\nDecided offline on the invariant that:\r\n\r\n`masked_tensor` calls `MaskedTensor()`,\
+    \ which is analogous to `torch.tensor`\r\n`as_masked_tensor` calls `MaskedTensor._from_values()`,\
+    \ which is analogous to `torch.as_tensor`"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 82839
+  topic: torch/masked
+  title: '[maskedtensor] adding reductions'
+  body: "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* #82841\n* __->__\
+    \ #82839\n\r\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 82339
+  topic: torch/masked
+  title: '[maskedtensor] first commit, moving to core'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * __->__ #82339
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 82837
+  topic: torch/masked
+  title: '[maskedtensor] adding unary and binary operations'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * #82841
+
+    * #82839
+
+    * __->__ #82837
+
+    * #82836
+
+
+    '
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 82836
+  topic: torch/masked
+  title: '[maskedtensor] first commit, core and creation'
+  body: 'Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):
+
+    * #82841
+
+    * #82839
+
+    * #82837
+
+    * __->__ #82836
+
+    * __->__ #82836'
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr MaskedTensor
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 189183
+  topic: torch/masked
+  title: '[inductor][mtia] Fix fp16 reduction accumulator dtype mismatch'
+  body: "Summary:\r\nOn MTIA the Inductor Triton backend sets `codegen_upcast_to_fp32=False`, so a low-precision\
+    \ reduction keeps its source dtype for the loop-carried accumulator (`upcast_acc_dtype(torch.float16)`\
+    \ returns `torch.float16`). But an op inside the reduction body can still upcast the reduced value\
+    \ to fp32 unconditionally -- e.g. the mean `truediv` in the `torch.masked._std_var` two-pass composite\
+    \ -- leaving the accumulated value at fp32 while the accumulator stays fp16. The generic reduction\
+    \ combine never reconciled the two, so the accumulator was reassigned from fp16 to fp32 inside the\
+    \ loop. TritonMTIA's stricter loop-carried type check rejects it: `Loop-carried variable _tmp23 has\
+    \ initial type <fp16> but is re-assigned to <fp32> in loop`.\r\n\r\nFix: in the non-persistent reduction\
+    \ combine in `triton.py`, cast the reduced value to the accumulator dtype before combining when they\
+    \ differ. The cast is guarded on a dtype mismatch, so it is a no-op for backends with `codegen_upcast_to_fp32=True`\
+    \ and only affects the low-precision-accumulator path.\r\n\r\nTest Plan:\r\n\r\nBefore: `masked.std;\
+    \ f16x5x5x5; mask; correction=0.5; keepdim=True` failed with the loop-carried type error.\r\n\r\n\
+    After: `masked.std` compiles (`1 compiled, 0 errors`); the generated kernel casts the value to fp16\
+    \ and keeps the `_tmp23` accumulator fp16 throughout.\r\n\r\nDifferential Revision: D110924494\r\n\
+    \r\n\r\n\r\n\r\ncc @voznesenskym @penguinwu @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe\
+    \ @blzheng @wenzhe-nrv @jiayisunx @ipiszy @kadeng @muchulee8 @amjames @chauhang @aakhundov @coconutruben\
+    \ @jataylo"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr "torch.masked"
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 131288
+  topic: torch/masked
+  title: Add functions from `torch.masked._ops` to `__all__` for `torch.masked`
+  body: "Add the non-private operations imported in this file to `__all__` so that pyright considers them\
+    \ to be publicly exported. Solves this error:\r\n\r\n```\r\n\"mean\" is not exported from module \"\
+    torch.masked\" Pylance[reportPrivateImportUsage]\r\n```\r\n\r\nRelated: https://github.com/pytorch/pytorch/pulls?q=pyright+export\r\
+    \n\r\ncc: @ezyang "
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr "torch.masked"
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 131293
+  topic: torch/masked
+  title: Improve `torch.masked.mean` and `torch.masked._std_var` scaling
+  body: "Fixes #131292\r\n\r\nUsing `new_ones` is expensive and unnecessary.\r\n\r\nBefore:\r\n\r\n![21232fda-366a-47ea-a017-15a35cd51d0c](https://github.com/user-attachments/assets/779830f0-0027-4fab-a9e6-b99954c80bc5)\r\
+    \n\r\nAfter:\r\n\r\n![aad2dfcc-52c9-4046-86ab-122b044fa19c](https://github.com/user-attachments/assets/810711c5-c4f0-4b6b-91dc-9a9e714f6ee0)\r\
+    \n\r\ncc: @ezyang @george-qi "
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr "torch.masked"
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 113206
+  topic: torch/masked
+  title: 'docs: Add docstring for torch.masked._ops.logaddexp'
+  body: "logaddexp is not a reduction and normalization, so\r\n_apply_docstring_templates cannot be used\
+    \ to add a docstring.\r\n\r\nFixes https://github.com/pytorch/pytorch/issues/113082\r\n\r\nAlso fix\
+    \ another misspelling.\r\n\r\ncc @svekars @carljparker "
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr "torch.masked"
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 110174
+  topic: torch/masked
+  title: Make  import `torch.masked` lazy
+  body: "EDIT: slow import is actually due to `import sympy`, `torch.masked` just happens to be the first\
+    \ time this occurs. Perhaps we could ~try~ to make all modules that import `sympy` be lazily imported?\r\
+    \n\r\n`torch.masked` import takes about a fifth of total `import torch` time, since it is a prototype\
+    \ perhaps we can make the import lazy\r\n\r\nRunning \r\n```\r\nPYTHONPROFILEIMPORTTIME=1 python -c\
+    \ \"import torch\" 2> import_torch_profile.txt\r\n```\r\nthen viewing the profile with [tuna](https://github.com/nschloe/tuna)\r\
+    \n\r\n\r\n<img width=\"669\" alt=\"Screenshot 2023-09-27 at 2 13 56 PM\" src=\"https://github.com/pytorch/pytorch/assets/35276741/76102483-8a27-4d80-81fa-fe6337d7685e\"\
+    >\r\n\r\n\r\nStack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\r\n* __->__\
+    \ #110174\r\n\r\n"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr "torch.masked"
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 87118
+  topic: torch/masked
+  title: Implement correction argument in torch.masked.{std,var}
+  body: "Stack from [ghstack](https://github.com/ezyang/ghstack) (oldest at bottom):\n* #55680\n* #55679\n\
+    * __->__ #87118\n\r\nThis makes the signature of `torch.masked.std` and `var` more consistent with\
+    \ the global namespace variant and also updates the sample inputs to repurpose the existing `sample_inputs_std_var`\
+    \ inputs which fully exercise the `correction` argument. \n\ncc @mlazos @soumith @voznesenskym @yanboliang\
+    \ @penguinwu @anijain2305 @EikanWang @jgong5 @Guobing-Chen @chunyuan-w @XiaobingSuper @zhuhaozhe @blzheng\
+    \ @Xia-Weiwen @wenzhe-nrv @jiayisunx @desertfire"
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr "torch.masked"
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 71996
+  topic: torch/masked
+  title: Move torch._masked to torch.masked
+  body: Maske torch._masked a public API in preparation for release.
+  bucket: assigner_positive
+  query: repo:pytorch/pytorch is:pr "torch.masked"
+  is_pull_request: true
+- repo: pytorch/pytorch
+  number: 88137
+  topic: null
+  title: Add eq, to, masked_select, index_select, narrow to nested tensors
+  body: "### \U0001F680 The feature, motivation and pitch\r\n\r\nI am working on better implementation\
+    \ of SQL operators in [TQP](https://www.vldb.org/pvldb/vol15/p2811-he.pdf) and I am exploring how\
+    \ to leverage nested tensors for this. However in order to use nested tensors in practice without\
+    \ bloating the memory we would love to have support for `eq`, `to`, `masked_select`, `index_select`\
+    \ and `narrow`.\r\n\r\n### Alternatives\r\n\r\nUse `to_padded_tensor` but this will increase memory\
+    \ pressure.\r\n\r\n### Additional context\r\n\r\n_No response_\n\ncc @cpuhrsch @jbschlosser @bhosmer\
+    \ @drisspg @mikaylagawarecki"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 109871
+  topic: null
+  title: masked_select for meta backend
+  body: "### \U0001F680 The feature, motivation and pitch\n\nI currently get:\r\n```\r\nNotImplementedError:\
+    \ Could not run 'aten::masked_select' with arguments from the 'Meta' backend\r\n```\r\n\r\nI first\
+    \ came here to ask for this being implemented.\r\n\r\nWhile thinking further about it, I realize that\
+    \ this is maybe not really possible? We cannot infer the shape of the result here. Does \"meta\" support\
+    \ an unknown shape? If not, then instead of raising `NotImplementedError`, I think it should raise\
+    \ some exception which explains this.\r\n\n\n### Alternatives\n\n_No response_\n\n### Additional context\n\
+    \n_No response_\n\ncc @ezyang @msaroufim @wconstab @bdhirsh @anijain2305 @eellison"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 99638
+  topic: null
+  title: Incorrect gradient for masked_select when inputs are non-contiguous
+  body: "### \U0001F41B Describe the bug\r\n\r\nCode:\r\n\r\n```python\r\nimport torch\r\n\r\nbatch_dim\
+    \ = 3\r\nin_dim = 5\r\nclasses_dim = 5\r\ntime_dim_sizes = torch.tensor([4, 3, 2], dtype=torch.int32)\r\
+    \ntime_dim = 4\r\n\r\n\r\ndef pack_padded_masked_select(x: torch.Tensor, sizes: torch.Tensor) -> torch.Tensor:\r\
+    \n    \"\"\"\r\n    :param x: [B,T,...]\r\n    :param sizes: [B]\r\n    :return: [sum(sizes),...]\r\
+    \n    \"\"\"\r\n    batch_dim, time_dim, *remaining_dims = x.shape\r\n    mask = torch.arange(time_dim,\
+    \ device=x.device)[None, :] < sizes[:, None]  # [B,T]\r\n    mask: torch.Tensor\r\n    mask_bc = mask.view(batch_dim,\
+    \ time_dim, *[1] * len(remaining_dims))  # [B,T,...]\r\n    # This, together with convolution, will\
+    \ cause a bad gradient?\r\n    packed = torch.masked_select(x, mask_bc)\r\n    packed = packed.view(-1,\
+    \ *remaining_dims)\r\n    return packed\r\n\r\n\r\ndef pack_padded_index_select(x: torch.Tensor, sizes:\
+    \ torch.Tensor) -> torch.Tensor:\r\n    \"\"\"\r\n    :param x: [B,T,...]\r\n    :param sizes: [B]\r\
+    \n    :return: [sum(sizes),...]\r\n    \"\"\"\r\n    batch_dim, time_dim, *remaining_dims = x.shape\r\
+    \n    mask = torch.arange(time_dim, device=x.device)[None, :] < sizes[:, None]  # [B,T]\r\n    mask:\
+    \ torch.Tensor\r\n    mask = mask.reshape(-1)  # [B*T]\r\n    packed = torch.index_select(x.reshape(-1,\
+    \ *remaining_dims), dim=0, index=mask.reshape(-1).nonzero().flatten())\r\n    return packed\r\n\r\n\
+    \r\ndef loss_packed_masked_select(logits: torch.Tensor, targets: torch.Tensor, sizes: torch.Tensor):\r\
+    \n    logits_packed = pack_padded_masked_select(logits, sizes)\r\n    targets_packed = pack_padded_masked_select(targets,\
+    \ sizes)\r\n    loss_pt_packed_raw = torch.nn.CrossEntropyLoss(reduction=\"sum\")(\r\n        logits_packed,\
+    \ targets_packed.long()\r\n    )\r\n    return loss_pt_packed_raw\r\n\r\n\r\ndef loss_packed_index_select(logits:\
+    \ torch.Tensor, targets: torch.Tensor, sizes: torch.Tensor):\r\n    logits_packed = pack_padded_index_select(logits,\
+    \ sizes)\r\n    targets_packed = pack_padded_index_select(targets, sizes)\r\n    loss_pt_packed_raw\
+    \ = torch.nn.CrossEntropyLoss(reduction=\"sum\")(\r\n        logits_packed, targets_packed.long()\r\
+    \n    )\r\n    return loss_pt_packed_raw\r\n\r\n\r\ndef loss_packed(logits: torch.Tensor, targets:\
+    \ torch.Tensor, sizes: torch.Tensor):\r\n    logits_packed = torch.nn.utils.rnn.pack_padded_sequence(\r\
+    \n        logits, sizes, batch_first=True, enforce_sorted=False\r\n    )\r\n    targets_packed = torch.nn.utils.rnn.pack_padded_sequence(\r\
+    \n        targets, sizes, batch_first=True, enforce_sorted=False\r\n    )\r\n    loss = torch.nn.CrossEntropyLoss(reduction=\"\
+    sum\")(\r\n        logits_packed.data, targets_packed.data.long()\r\n    )\r\n    return loss\r\n\r\
+    \n\r\ndef loss_padded(logits: torch.Tensor, targets: torch.Tensor, sizes: torch.Tensor):\r\n    loss\
+    \ = torch.nn.CrossEntropyLoss(reduction=\"none\")(logits.transpose(1, 2), targets.long())  # [B,T]\r\
+    \n    mask = torch.arange(time_dim, device=loss.device)[None, :] < sizes[:, None]  # [B,T]\r\n   \
+    \ loss = torch.where(mask, loss, torch.zeros_like(loss))\r\n    loss = loss.sum()\r\n    return loss\r\
+    \n\r\n\r\ntry:\r\n    import better_exchook\r\n    better_exchook.install()\r\nexcept ImportError:\r\
+    \n    pass\r\n\r\n\r\ntry:\r\n    import lovely_tensors as lt\r\n    lt.monkey_patch()\r\nexcept ImportError:\r\
+    \n    pass\r\n\r\n\r\nfor loss_fn in [loss_packed, loss_padded, loss_packed_index_select, loss_packed_masked_select]:\r\
+    \n    print(\"***\", loss_fn.__name__)\r\n    torch.manual_seed(42)\r\n\r\n    net = torch.nn.Conv1d(in_dim,\
+    \ classes_dim, 5, padding=\"same\")\r\n\r\n    inputs = torch.randn(batch_dim, time_dim, in_dim, requires_grad=True)\r\
+    \n    targets = torch.randint(0, classes_dim, (batch_dim, time_dim))\r\n\r\n    x = inputs.transpose(1,\
+    \ 2)\r\n    x = net(x)\r\n    x = x.transpose(1, 2)\r\n\r\n    loss = loss_fn(x, targets, time_dim_sizes)\r\
+    \n    print(\"loss:\", loss)\r\n    print(\"bias grad:\", torch.autograd.grad(loss, net.bias, create_graph=True))\r\
+    \n```\r\n\r\nOutput:\r\n```\r\n*** loss_packed\r\nloss: tensor grad NllLossBackward0 15.721\r\nbias\
+    \ grad: (tensor[5] x∈[-2.044, 1.539] μ=0. σ=1.628 grad ConvolutionBackwardBackward0 [-1.437, 0.733,\
+    \ 1.539, 1.208, -2.044],)\r\n*** loss_padded\r\nloss: tensor g"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 56896
+  topic: null
+  title: masked_select is x3 slower than reshaping and index_select
+  body: "## \U0001F41B Bug\r\n\r\nmasked_select is about x3 slower than index select of the corresponding\
+    \ nonzero'ed mask\r\n(this is true for nightly, I have not checked with stable)\r\n\r\n## To Reproduce\r\
+    \n```\r\nimport torch                                                                            \
+    \                                                            \r\nimport torch.utils.benchmark as benchmark\
+    \                                                                                                \
+    \           \r\n                                                                                 \
+    \                                                                   \r\ndevice = torch.device('cuda')\
+    \                                                                                                \
+    \                       \r\nsize = torch.Size([100, 100, 100])                                   \
+    \                                                                              \r\nmask = torch.randint(low=0,\
+    \ high=2, size=size, device=device).bool()                                                       \
+    \                                       \r\nx = torch.randn(size=size, device=device, dtype=torch.float)\
+    \                                                                                        \r\n    \
+    \                                                                                                \
+    \                                                  \r\nout0 = torch.masked_select(x, mask)       \
+    \                                                                                                \
+    \          \r\nout1 = x.view(-1).index_select(0, mask.view(-1).nonzero().squeeze())              \
+    \                                                                  \r\n                          \
+    \                                                                                                \
+    \                            \r\nassert (out0 == out1).all()                                     \
+    \                                                                                    \r\n        \
+    \                                                                                                \
+    \                                              \r\nt0 = benchmark.Timer(stmt='torch.masked_select(x,\
+    \ mask)', globals={'x':x, 'mask':mask})                                                          \
+    \   \r\nt1 = benchmark.Timer(stmt='x.view(-1).index_select(0, mask.view(-1).nonzero().squeeze())',\
+    \ globals={'x':x, 'mask':mask})                            \r\n                                  \
+    \                                                                                                \
+    \                    \r\nprint(t0.timeit(100))                                                   \
+    \                                                                            \r\nprint(t1.timeit(100))\
+    \ \r\n```\r\nOn my system this takes **140.64 us** for ``masked_select``, and **57.36 us** for the\
+    \ equivalent ``index_select``.\r\n\r\nIf the initial sizes are different but broadcastable and \"\
+    broadcast_tensors\" is used before index_select, a comparable slowdown is observed. This can be easily\
+    \ checked with a few modifications of the script.\r\n\r\nIf instead of Size([100, 100, 100]), Size([1000\
+    \ ** 3]) is used, then this prints **59.90 us** for masked_select, and **56.86 us** us for index_select,\
+    \ so index_select is still faster, but the difference is much smaller. \r\n\r\n## Expected behavior\r\
+    \n\r\nSince masked_select is a more specific operator than the hand made implementation with index\
+    \ select, it should be faster. I couldn't find any use case where masked_select was faster.\r\n\r\n\
+    ## Environment\r\n\r\nCollecting environment information...\r\nPyTorch version: 1.9.0.dev20210223\r\
+    \nIs debug build: False\r\nCUDA used to build PyTorch: 10.2\r\nROCM used to build PyTorch: N/A\r\n\
+    \r\nOS: Ubuntu 20.04.2 LTS (x86_64)\r\nGCC version: (Ubuntu 8.4.0-3ubuntu2) 8.4.0\r\nClang version:\
+    \ 10.0.0-4ubuntu1 \r\nCMake version: version 3.16.3\r\n\r\nPython version: 3.7 (64-bit runtime)\r\n\
+    Is CUDA available: True\r\nCUDA runtime version: 10.2.89\r\nGPU models and configuration: "
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 30246
+  topic: null
+  title: CUDA masked_select uses way too much memory
+  body: "```py\r\nIn [1]: x = torch.randn(20000, 20000,device='cuda')\r\n\r\nIn [2]: torch.cuda.max_memory_allocated()\r\
+    \nOut[2]: 1600126976\r\n\r\nIn [3]: m = ~torch.eye(20000, dtype=torch.bool, device='cuda')\r\n\r\n\
+    In [4]: torch.cuda.max_memory_allocated()\r\nOut[4]: 2401239040\r\n\r\nIn [5]: x[m]\r\nOut[5]:\r\n\
+    tensor([ 0.6415,  0.2951, -0.7630,  ...,  1.0940,  0.3103,  0.3631],\r\n       device='cuda:0')\r\n\
+    \r\nIn [6]: torch.cuda.max_memory_allocated()\r\nOut[6]: 10001317888\r\n\r\nIn [7]: torch.__version__\r\
+    \nOut[7]: '1.4.0a0+91c6d2e'\r\n```\r\n\r\nTitan XP\r\nCUDA: 10.1\r\n\r\nWhy does it allocate about\
+    \ 4.75x of the indexed tensor, rather than just 1x? \n\ncc @ngimel @VitalyFedyunin @mruberry"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 33053
+  topic: null
+  title: Migrate `masked_select` from TH to ATen (CPU)
+  body: "Porting TH operators is essential for code simplicity and performance reasons.\r\n\r\nPorting\
+    \ guides and Q&A are available in umbrella issue: #24507\r\n\r\nFeel free to add @VitalyFedyunin as\
+    \ a reviewer to get a prioritized review.\r\n\r\ncc @ezyang @gchanan @zou3519 @anjali411 @dylanbespalko\
+    \  as this affects complex tensor bring up"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 33054
+  topic: null
+  title: Migrate `masked_select` from TH to ATen (CUDA)
+  body: "Porting TH operators is essential for code simplicity and performance reasons.\r\n\r\nPorting\
+    \ guides and Q&A are available in umbrella issue: #24507\r\n\r\nFeel free to add @VitalyFedyunin as\
+    \ a reviewer to get a prioritized review.\r\n\r\ncc @ezyang @gchanan @zou3519 @anjali411 @dylanbespalko\
+    \ as this affects complex tensor bring up"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 26034
+  topic: null
+  title: '[ONNX] support masked_select masked_fill and masked_scatter'
+  body: "## \U0001F41B Bug\r\n\r\ntorch.masked_* operations are not exported\r\n\r\n## To Reproduce\r\n\
+    \r\nI could not used boolean indexing and tried masked_select but got this error\r\n\r\n```python\r\
+    \n        idx = conf > thresh\r\n        filtered_bbs = bbs.masked_select(idx)\r\n```\r\n\r\n## Expected\
+    \ behavior\r\n\r\nExport masked ops\r\n\r\n## Environment\r\nPyTorch version: 1.2.0\r\nIs debug build:\
+    \ No\r\nCUDA used to build PyTorch: 10.0.130\r\n\r\nOS: Ubuntu 16.04.6 LTS\r\nGCC version: (Ubuntu\
+    \ 5.4.0-6ubuntu1~16.04.11) 5.4.0 20160609\r\nCMake version: version 3.14.0\r\n\r\nPython version:\
+    \ 2.7\r\nIs CUDA available: Yes\r\nCUDA runtime version: Could not collect\r\nGPU models and configuration:\
+    \ GPU 0: GeForce GTX 1070\r\nNvidia driver version: 418.40.04\r\ncuDNN version: /usr/local/lib/libcudnn.so.5.1.10\r\
+    \n\r\nVersions of relevant libraries:\r\n[pip] mictorch==0.0.1\r\n[pip] numpy==1.16.4\r\n[pip] torch==1.2.0\r\
+    \n[pip] torchvision==0.4.0\r\n[conda] Could not collect\r\n\r\n## Additional context\r\n\r\nSince\
+    \ boolean indexign is also not supported I am going to try `torch.where` and `torch.nonzero` to convert\
+    \ to int64\r\n"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 3097
+  topic: null
+  title: No "out" keyword paramter for masked_select
+  body: "```\r\n>> torch.masked_select(x, amask, out=ax)\r\n*** TypeError: masked_select() got an unexpected\
+    \ keyword argument 'out'\r\n```\r\n\r\nThe documentation says this keyword should exist in PyTorch\
+    \ 0.2"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 2920
+  topic: null
+  title: Empty tensor returned by masked_select or advanced indexing causes error in backward
+  body: "As reported here: https://discuss.pytorch.org/t/empty-tensor-returned-by-masked-select-causes-error-in-backward/7044\r\
+    \n\r\ncc: @killeent "
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 2213
+  topic: null
+  title: 'weird behavior with non-broadcasting masked_select: a bug?'
+  body: "Hi, when I do this\r\n```\r\nimport torch\r\nA = torch.rand(5, 5, 1)\r\nmask = torch.ByteTensor(5,\
+    \ 5).fill_(1)\r\nB = torch.masked_select(A, mask)\r\nB.size()\r\n```\r\nI get a warning about no broadcasting,\
+    \ but the output tensor is of weird size of `torch.Size([125])`. Its the same of both CPU and a GPU.\r\
+    \nI'm on the head on the master branch.\r\n\r\nIt this an expected behavior or a bug? Some of older\
+    \ code broke because of this.\r\n"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_select in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 178392
+  topic: null
+  title: '[torch.compile] Integer overflow when comparing tensor with 9223372036854775809 (2^63+1) in
+    masked_fill'
+  body: "### \U0001F41B Describe the bug\n\nWhen using torch.compile with a model that performs masked_fill\
+    \ using a comparison with the integer 9223372036854775809 (which is 2^63 + 1), compilation fails with\
+    \ an integer overflow error. The error manifests with slightly different wording across PyTorch versions\
+    \ but has the same root cause: the value exceeds the maximum range of int64_t.\ncode：\n```\nimport\
+    \ torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass DotProductAttention(nn.Module):\n\
+    \n    def __init__(self, embed_size, heads):\n        super(DotProductAttention, self).__init__()\n\
+    \        self.embed_size = embed_size\n        self.heads = heads\n        self.head_dim = embed_size\
+    \ // heads\n        assert self.head_dim * heads == embed_size\n        self.values = nn.Linear(embed_size,\
+    \ embed_size)\n        self.keys = nn.Linear(embed_size, embed_size)\n        self.queries = nn.Linear(embed_size,\
+    \ embed_size)\n        self.fc_out = nn.Linear(embed_size, embed_size)\n\n    def forward(self, values,\
+    \ keys, queries, mask=None):\n        N = queries.shape[0]\n        (value_len, key_len, query_len)\
+    \ = (values.shape[1], keys.shape[1], queries.shape[1])\n        values = self.values(values)\n   \
+    \     keys = self.keys(keys)\n        queries = self.queries(queries)\n        values = values.reshape(N,\
+    \ value_len, self.heads, self.head_dim)\n        keys = keys.reshape(N, key_len, self.heads, self.head_dim)\n\
+    \        queries = queries.reshape(N, query_len, self.heads, self.head_dim)\n        energy = torch.einsum('nqhd,nkhd->nhqk',\
+    \ [queries, keys])\n        if mask is not None:\n            energy = energy.masked_fill(mask ==\
+    \ 9223372036854775809, float('-1e20'))\n        attention = torch.softmax(energy / self.embed_size\
+    \ ** (1 / 2), dim=3)\n        out = torch.einsum('nhql,nlhd->nqhd', [attention, values])\n       \
+    \ out = out.reshape(N, query_len, self.heads * self.head_dim)\n        out = self.fc_out(out)\n  \
+    \      return out\n\nclass DotProductAttentionBlock(nn.Module):\n\n    def __init__(self, embed_size,\
+    \ heads, forward_expansion, dropout):\n        super(DotProductAttentionBlock, self).__init__()\n\
+    \        self.attention = DotProductAttention(embed_size, heads)\n        self.norm1 = nn.LayerNorm(embed_size)\n\
+    \        self.norm2 = nn.LayerNorm(embed_size)\n        self.feed_forward = nn.Sequential(nn.Linear(embed_size,\
+    \ forward_expansion * embed_size), nn.ReLU(), nn.Linear(forward_expansion * embed_size, embed_size))\n\
+    \        self.dropout = nn.Dropout(dropout)\n\n    def forward(self, value, key, query, mask=None):\n\
+    \        attention = self.attention(value, key, query, mask)\n        x = self.dropout(self.norm1(attention\
+    \ + query))\n        forward = self.feed_forward(x)\n        out = self.dropout(self.norm2(forward\
+    \ + x))\n        return out\n\nclass DotProductAttentionDNN(nn.Module):\n\n    def __init__(self,\
+    \ input_size, embed_size, num_layers, heads, forward_expansion, output_size, dropout, max_length):\n\
+    \        super(DotProductAttentionDNN, self).__init__()\n        self.embed_size = embed_size\n  \
+    \      self.word_embedding = nn.Embedding(input_size, embed_size)\n        self.position_embedding\
+    \ = nn.Embedding(max_length, embed_size)\n        self.layers = nn.ModuleList([DotProductAttentionBlock(embed_size,\
+    \ heads, forward_expansion, dropout) for _ in range(num_layers)])\n        self.fc = nn.Linear(embed_size,\
+    \ output_size)\n        self.dropout = nn.Dropout(dropout)\n\n    def forward(self, x, mask=None):\n\
+    \        (N, seq_length) = x.shape\n        positions = torch.arange(0, seq_length).expand(N, seq_length).to(x.device)\n\
+    \        out = self.dropout(self.word_embedding(x) + self.position_embedding(positions))\n       \
+    \ for layer in self.layers:\n            out = layer(out, out, out, mask)\n        out = self.fc(out)\n\
+    \        return out\n\ndef get_default_model():\n    return DotProductAttentionDNN(input_size=1000,\
+    \ embed_size=128, num_layers=2, heads=4, forward_expansion=2, output_size=10, dropout=0.1, max_length=20)\n\
+    \ndef get_sample_inputs(batch_size=2, seq_length=10):\n    x = torch.randint(0, 1000, (batch_size,\
+    \ seq_"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 167825
+  topic: null
+  title: extra mem copy for value to assign when dispatching `index_put` to `masked_fill` on PrivateUse1
+    backend.
+  body: "### \U0001F41B Describe the bug\n\n```python\nimport torch\ntorch.manual_seed(0)\n\na = torch.zeros([3,\
+    \ 4], device=\"myown\")\nindex = torch.randn([3, 4], device=\"myown\") > 0.5\na[index] = 1.0\n```\n\
+    in this case , `1.0` will copy to my privateuse1 device in https://github.com/pytorch/pytorch/blob/0fabc3ba44823f257e70ce397d989c8de5e362c1/torch/csrc/autograd/python_variable_indexing.cpp#L510.\n\
+    \ninside index_put_impl_, if I dispatch to masked_fill implement, Tensor(1.0, device='myown') will\
+    \ copy back to cpu.\n\naccording to https://github.com/pytorch/pytorch/pull/61612, in `THPVariable_setitem`\
+    \ and `at::indexing::set_item`, value resides on CPU if self_device.is_cuda(), I want to send a PR\
+    \ to make value also on CPU if device if privateuse1 like adding:\n\n```c++\n// ...\nelse if (self_device.is_privateuseone())\
+    \ {\n    value = at::indexing::scalarToTensor(v, self.options(), at::Device(kCPU));\n} else {\n  \
+    \ // do rest\n}\n```\n\nabove code that can fix my case.\n\n### Versions\n\nPyTorch version: 2.9.0a0+git0fabc3b\n\
+    Is debug build: True\nCUDA used to build PyTorch: None\nROCM used to build PyTorch: N/A\n\nOS: Ubuntu\
+    \ 22.04.1 LTS (x86_64)\nGCC version: (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0\nClang version: Could\
+    \ not collect\nCMake version: version 4.1.0\nLibc version: glibc-2.35\n\nPython version: 3.12.12 |\
+    \ packaged by Anaconda, Inc. | (main, Oct 14 2025, 16:16:33) [GCC 11.2.0] (64-bit runtime)\nPython\
+    \ platform: Linux-5.15.0-43-generic-x86_64-with-glibc2.35\nIs CUDA available: False\nCUDA runtime\
+    \ version: No CUDA\nCUDA_MODULE_LOADING set to: N/A\nGPU models and configuration: No CUDA\nNvidia\
+    \ driver version: No CUDA\ncuDNN version: No CUDA\nIs XPU available: False\nHIP runtime version: N/A\n\
+    MIOpen runtime version: N/A\nIs XNNPACK available: True\n\nCPU:\nArchitecture:                   \
+    \ x86_64\nCPU op-mode(s):                  32-bit, 64-bit\nAddress sizes:                   52 bits\
+    \ physical, 57 bits virtual\nByte Order:                      Little Endian\nCPU(s):             \
+    \             224\nOn-line CPU(s) list:             0-223\nVendor ID:                       GenuineIntel\n\
+    Model name:                      Intel(R) Xeon(R) Platinum 8480+\nCPU family:                    \
+    \  6\nModel:                           143\nThread(s) per core:              2\nCore(s) per socket:\
+    \              56\nSocket(s):                       2\nStepping:                        8\nCPU max\
+    \ MHz:                     3800.0000\nCPU min MHz:                     800.0000\nBogoMIPS:       \
+    \                 4000.00\nFlags:                           fpu vme de pse tsc msr pae mce cx8 apic\
+    \ sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb\
+    \ rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf\
+    \ tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm\
+    \ pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm\
+    \ abm 3dnowprefetch cpuid_fault epb cat_l3 cat_l2 cdp_l3 invpcid_single intel_ppin cdp_l2 ssbd mba\
+    \ ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1\
+    \ avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb\
+    \ intel_pt avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc\
+    \ cqm_mbm_total cqm_mbm_local split_lock_detect avx_vnni avx512_bf16 wbnoinvd dtherm ida arat pln\
+    \ pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512vbmi umip pku ospke waitpkg avx512_vbmi2 gfni vaes\
+    \ vpclmulqdq avx512_vnni avx512_bitalg tme avx512_vpopcntdq la57 rdpid bus_lock_detect cldemote movdiri\
+    \ movdir64b enqcmd fsrm md_clear serialize tsxldtrk pconfig arch_lbr amx_bf16 avx512_fp16 amx_tile\
+    \ amx_int8 flush_l1d arch_capabilities\nVirtualization:                  VT-x\nL1d cache:        \
+    \               5.3 MiB (112 instances)\nL1i cache:                       3.5 MiB (112 instances)\n\
+    L2 cache:                        224 MiB (112 instances)\nL3 cache:                        210 MiB\
+    \ (2 instances)\nNUMA"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 57515
+  topic: null
+  title: Dispatch `index_put` with boolean mask argument to masked_fill/masked_scatter when possible
+  body: "Patterns like \r\n```\r\na[mask] = val\r\n```\r\nor\r\n```\r\na[mask] = tensor\r\n```\r\ngo through\
+    \ index_put, and convert boolean mask to Long indices. This is memory-inefficient and slow. Additionally,\
+    \ when people ask for deterministic algorithms, index_put_ does an unnecessary and inefficient thing\
+    \ of dispatching to sort-based algo (it's not needed for mask indexing), and sort-based algo has a\
+    \ bug related to broadcasting (see #61032).\r\n\r\nDispatch them to `masked_fill`/`masked_scatter`\
+    \ when possible (those functions don't convert mask to long indices). \r\nShould fix #53070 (although\
+    \ #53070 can be fixed directly). \r\nAs the next step, `masked_select` should be efficiently implemented\
+    \ (instead of calling into `index`), and `index` should dispatch to `masked_select` when possible\
+    \ (should fix #30246)\r\n\r\nFor cpu and gpu, perf difference is significant, especially for multi-d\
+    \ tensors:\r\n```\r\nimport torch\r\nfrom torch.utils.benchmark import Timer, Compare\r\n\r\nresults\
+    \ = []\r\nfor device in ['cuda', 'cpu']:\r\n    for dtype in [torch.float32]:\r\n        for tensor_size\
+    \ in [100_000, 500000, 1_000_000, 5000000, 10_000_000]:\r\n            if tensor_size >5000000 and\
+    \ device=='cpu':\r\n                continue\r\n            for mask_true_ratio in [0, 0.25, 0.5,\
+    \ 0.75, 1.]:\r\n                a = torch.rand(tensor_size, dtype=dtype, device=device)\r\n      \
+    \          mask = torch.empty(tensor_size, dtype=torch.bool, device=device).bernoulli_(mask_true_ratio)\r\
+    \n                size = (1000, tensor_size//1000)\r\n                val=1.\r\n                stmts\
+    \ = (\"a[mask]=val\", \"a.masked_fill_(mask, val)\")\r\n                labels = (f\"index, {device}\"\
+    , f\"masked_fill, {device}\")\r\n                timers = [Timer(stmt=stmt, num_threads = 10, sub_label=f\"\
+    {tensor_size}, full {mask_true_ratio}\", label = \"Fill\", description = l,\r\n                globals\
+    \ = globals()) for stmt, l in zip(stmts, labels)]\r\n                a=a.reshape(size)\r\n       \
+    \         mask = mask.reshape(size)\r\n                timers = timers + [Timer(stmt=stmt, num_threads\
+    \ = 10, sub_label=f\"{size}, full {mask_true_ratio}\", label = \"Fill\", description = l,\r\n    \
+    \            globals = globals()) for stmt, l in zip(stmts, labels)]\r\n                for t in timers:\r\
+    \n                    results.append(t.blocked_autorange())\r\n\r\nc=Compare(results)\r\nc.print()\r\
+    \n```\r\nresults on V100/devgpu, after #58468 fix. \r\n```\r\n[------------------------------------------------\
+    \ Fill ------------------------------------------------]\r\n                                |  index,\
+    \ cuda  |  masked_fill, cuda  |  index, cpu  |  masked_fill, cpu\r\n10 threads: --------------------------------------------------------------------------------------------\r\
+    \n      100000, full 0            |      49.3     |          5.8        |      53.0    |         34.6\
+    \     \r\n      (1000, 100), full 0       |      49.7     |          5.4        |      61.6    | \
+    \        34.5     \r\n      100000, full 0.25         |      59.6     |          5.8        |    \
+    \ 425.8    |        106.2     \r\n      (1000, 100), full 0.25    |      62.4     |          5.9 \
+    \       |     486.8    |        100.2     \r\n      100000, full 0.5          |      58.0     |  \
+    \        5.7        |     603.1    |        147.3     \r\n      (1000, 100), full 0.5     |      61.3\
+    \     |          5.8        |     713.8    |        132.0     \r\n      100000, full 0.75        \
+    \ |      55.7     |          5.6        |     521.5    |        104.0     \r\n      (1000, 100), full\
+    \ 0.75    |      61.4     |          5.7        |     656.8    |        103.5     \r\n      100000,\
+    \ full 1.0          |      56.2     |          5.7        |     377.7    |         37.9     \r\n \
+    \     (1000, 100), full 1.0     |      60.3     |          5.7        |     502.5    |         33.7\
+    \     \r\n      500000, full 0            |      50.3     |          5.6        |     251.0    | \
+    \        66.0     \r\n      (1000, 500), full 0       |      52.7     |          9.2        |    \
+    \ 264.0    |         60.9     \r\n      500000, full 0.25         |      66.5     |         "
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 143477
+  topic: null
+  title: 'Tensor size for `masked_fill` exceeds the limit supported by the MPS backend: must be less than
+    2**32 elements'
+  body: "### \U0001F41B Describe the bug\r\n\r\nI get the following error, when using `masked_fill` on\
+    \ larger tensors. See error and the minimal code below.\r\n\r\n**Error:**\r\n```\r\n/AppleInternal/Library/BuildRoots/.../Library/Caches/com.apple.xbs/Sources/MetalPerformanceShaders/MPSCore/Types/MPSNDArray.mm:850:\
+    \ failed assertion `[MPSNDArray initWithDevice:descriptor:isTextureBacked:] Error: total bytes of\
+    \ NDArray > 2**32'\r\n```\r\n\r\n**Code:**\r\n```python\r\nimport torch\r\ndevice = torch.device(\"\
+    mps\")\r\nmask_bool = torch.triu(torch.ones(1024, 1024, device=device), diagonal=1).bool()\r\nattn_scores\
+    \ = torch.rand(48, 25, 1024, 1024, device=device)\r\nattn_scores.masked_fill_(mask_bool, 0)\r\n```\r\
+    \n\r\n\r\n### Versions\r\n\r\n```\r\nPyTorch version: 2.6.0.dev20241217\r\nIs debug build: False\r\
+    \nCUDA used to build PyTorch: None\r\nROCM used to build PyTorch: N/A\r\n\r\nOS: macOS 15.2 (arm64)\r\
+    \nGCC version: Could not collect\r\nClang version: 16.0.0 (clang-1600.0.26.6)\r\nCMake version: Could\
+    \ not collect\r\nLibc version: N/A\r\n\r\nPython version: 3.11.10 | packaged by conda-forge | (main,\
+    \ Oct 16 2024, 01:26:25) [Clang 17.0.6 ] (64-bit runtime)\r\nPython platform: macOS-15.2-arm64-arm-64bit\r\
+    \nIs CUDA available: False\r\nCUDA runtime version: No CUDA\r\nCUDA_MODULE_LOADING set to: N/A\r\n\
+    GPU models and configuration: No CUDA\r\nNvidia driver version: No CUDA\r\ncuDNN version: No CUDA\r\
+    \nHIP runtime version: N/A\r\nMIOpen runtime version: N/A\r\nIs XNNPACK available: True\r\n\r\nCPU:\r\
+    \nApple M4 Max\r\n\r\nVersions of relevant libraries:\r\n[pip3] numpy==1.26.4\r\n[pip3] optree==0.13.1\r\
+    \n[pip3] torch==2.6.0.dev20241217\r\n[pip3] torchaudio==2.6.0.dev20241217\r\n[pip3] torchvision==0.22.0.dev20241217\r\
+    \n[conda] numpy                     1.26.4                   pypi_0    pypi\r\n[conda] optree    \
+    \                0.13.1                   pypi_0    pypi\r\n[conda] torch                     2.6.0.dev20241217\
+    \          pypi_0    pypi\r\n[conda] torchaudio                2.6.0.dev20241217          pypi_0 \
+    \   pypi\r\n[conda] torchvision               0.22.0.dev20241217          pypi_0    pypi\r\n```\n\n\
+    cc @kulinseth @albanD @malfet @DenisVieriu97 @jhavukainen"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 149284
+  topic: null
+  title: No examples in documentation for masked_fill and masked_fill_
+  body: '### 📚 The doc issue
+
+
+    No examples in documentation for masked_fill and masked_fill_
+
+    masked_fill - https://pytorch.org/docs/stable/generated/torch.Tensor.masked_fill.html
+
+    masked_fill_- https://pytorch.org/docs/stable/generated/torch.Tensor.masked_fill_.html
+
+
+    ### Suggest a potential alternative/fix
+
+
+    add example functions for both of them
+
+
+    cc @svekars @sekyondaMeta @AlannaBurke'
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 127891
+  topic: null
+  title: Document the torch.onnx.symbolic_opset9.masked_fill function
+  body: 'Document the `torch.onnx.symbolic_opset9.masked_fill` function located in [https://github.com/pytorch/pytorch/blob/main/torch/onnx/symbolic_opset9.py#L5582](https://github.com/pytorch/pytorch/blob/main/torch/onnx/symbolic_opset9.py#L5582).
+
+    Follow the [Docstring Guidelines](https://github.com/pytorch/pytorch/wiki/Docstring-Guidelines).
+
+
+    cc @brycebortree'
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 124693
+  topic: null
+  title: masked_fill supports PrivateUse1, when value.device.type is cpu
+  body: "### \U0001F41B Describe the bug\n\nWe added a device as privateuse1. I'm having trouble running\
+    \ hf_DistilBert using benchmark. The error message is as follows\r\n```\r\nRuntimeError: Expected\
+    \ `value` to be on same device as `a`\r\n```\r\nThe corresponding code is\r\n```\r\n@register_decomposition(aten.masked_fill)\r\
+    \n@out_wrapper()\r\ndef masked_fill(a: TensorLikeType, mask: TensorLikeType, value: TensorOrNumberLikeType):\r\
+    \n    python_type = utils.dtype_to_type(a.dtype)\r\n    if isinstance(value, Number):\r\n        value_type\
+    \ = type(value)\r\n    else:\r\n        # NOTE: Could not use value = item(value) as it resulted in\r\
+    \n        # RuntimeError: Cannot cast FakeTensor(cpu) to number\r\n        value_ndim = value.ndim\r\
+    \n        torch._check(\r\n            value_ndim == 0,\r\n            lambda: f\"only supports a\
+    \ 0-dimensional value tensor, but got tensor with {value_ndim} dimension\",\r\n        )\r\n     \
+    \   # `masked_fill` allows cpu scalar to be moved to cuda and xpu but not otherwise.\r\n        is_cpu_scalar\
+    \ = a.device.type in [\"cuda\", \"xpu\"] and value.device.type == \"cpu\"\r\n        torch._check(\r\
+    \n            is_cpu_scalar or value.device == a.device,\r\n            lambda: \"Expected `value`\
+    \ to be on same device as `a`\",\r\n        )\r\n        value_type = utils.dtype_to_type(value.dtype)\r\
+    \n```\r\n\r\nhttps://github.com/pytorch/pytorch/blob/34bce27f0d12bf7226b37dfe365660aad456701a/torch/_refs/__init__.py#L5555\r\
+    \n\r\nWhen a.device.type is `torch._C._get_privateuse1_backend_name()`（Not cuda or xpu）, and value.device.type\
+    \ is 'cpu', I expect 'is_cpu_scalar' is True, but because a.device.type does not equal to 'cuda' or\
+    \ 'xpu', causing 'torch.check( is_cpu_scalar or value.device == a.device,)' failed.\r\n\r\nModifying\
+    \ the code as follows can make the model pass, but I don't know if there will be problems or other\
+    \ restrictions.\r\n```\r\n is_cpu_scalar = a.device.type in [\"cuda\", \"xpu\", torch._C._get_privateuse1_backend_name()`]\
+    \ and value.device.type == \"cpu\"\r\n```\n\n### Versions\n\npytorch commit id:3df1b3b0ade3214b9030224667b187bb1d712b1f"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 95050
+  topic: null
+  title: view+in-place masked_fill operation is ignored when exporting onnx
+  body: "### \U0001F41B Describe the bug\n\nPytorch will ignore view+masked_fill_ operation when exporting\
+    \ onnx. Here is the example script:\r\n\r\n```python\r\nimport torch\r\n\r\nclass M(torch.nn.Module):\r\
+    \n    def __init__(self):\r\n        super().__init__()\r\n        self.mask = torch.tensor([True,\
+    \ False])\r\n    def forward(self, x):\r\n        x.view(3, 2).masked_fill_(self.mask.unsqueeze(0),\
+    \ torch.finfo(x.dtype).max)\r\n        return x\r\n\r\nm = M()\r\nx = torch.randn(6)\r\ntorch.onnx.export(m,\
+    \ (x,), 'mask.onnx')\r\n```\r\n\r\nThe exported onnx is:\r\n\r\n<img width=\"195\" alt=\"image\" src=\"\
+    https://user-images.githubusercontent.com/15194939/219577572-c9117c7a-b263-438e-965e-22e3a2a075bd.png\"\
+    >\r\n\n\n### Versions\n\nnvidia docker container 22.12 with pytorch 1.14"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 93823
+  topic: null
+  title: '[pt2] `torch.compile` produces wrong results for `masked_fill`'
+  body: "### \U0001F41B Describe the bug\n\n```python\r\nimport torch\r\n\r\ndef fn(x, y):\r\n    o =\
+    \ x.masked_fill(y, 0) # torch.Tensor.masked_fill-1 # v4: (4, 1040, 12)\r\n    return o\r\n\r\nx =\
+    \ torch.rand(2, 4, 8)\r\ny = torch.ones(2, 4, 1).bool()\r\n\r\n\"\"\"Other shapes may eliminate the\
+    \ error\r\nx = torch.rand(2, 4, 6)\r\ny = torch.ones(2, 4, 1).bool()\r\n\"\"\"\r\n\r\neager = fn(x,\
+    \ y)\r\ncompiled = torch.compile(fn)\r\ncomp = compiled(x, y)\r\n\r\nassert torch.allclose(\r\n  \
+    \  eager, comp,\r\n), '\\n'.join([\r\n    '',\r\n    f'>>> eager',\r\n    str(eager),\r\n    f'>>>\
+    \ comp',\r\n    str(comp),\r\n])\r\nprint(f'==== finished! ====')\r\n```\n\n### Error logs\n\n```python\r\
+    \nTraceback (most recent call last):\r\n  File \"/home/colin/code/path/bug.py\", line 19, in <module>\r\
+    \n    assert torch.allclose(\r\nAssertionError: \r\n>>> eager\r\ntensor([[[0., 0., 0., 0., 0., 0.,\
+    \ 0., 0.],\r\n         [0., 0., 0., 0., 0., 0., 0., 0.],\r\n         [0., 0., 0., 0., 0., 0., 0.,\
+    \ 0.],\r\n         [0., 0., 0., 0., 0., 0., 0., 0.]],\r\n\r\n        [[0., 0., 0., 0., 0., 0., 0.,\
+    \ 0.],\r\n         [0., 0., 0., 0., 0., 0., 0., 0.],\r\n         [0., 0., 0., 0., 0., 0., 0., 0.],\r\
+    \n         [0., 0., 0., 0., 0., 0., 0., 0.]]])\r\n>>> comp\r\ntensor([[[0.2872, 0.6392, 0.9319, 0.1317,\
+    \ 0.4369, 0.1854, 0.3762, 0.6749],\r\n         [0.2742, 0.7328, 0.8678, 0.8610, 0.6482, 0.3999, 0.2422,\
+    \ 0.5373],\r\n         [0.9709, 0.2897, 0.3877, 0.1228, 0.8505, 0.0393, 0.3404, 0.1397],\r\n     \
+    \    [0.1840, 0.1566, 0.1393, 0.5745, 0.0122, 0.1554, 0.6762, 0.0073]],\r\n\r\n        [[0.8470, 0.9235,\
+    \ 0.8760, 0.2368, 0.9499, 0.7036, 0.7472, 0.0482],\r\n         [0.6972, 0.6094, 0.1375, 0.7126, 0.6172,\
+    \ 0.0568, 0.4729, 0.1351],\r\n         [0.7203, 0.2941, 0.4052, 0.0503, 0.7970, 0.7026, 0.1992, 0.9565],\r\
+    \n         [0.6881, 0.2052, 0.8904, 0.0038, 0.5407, 0.7821, 0.0324, 0.8199]]])\r\n```\n\n### Minified\
+    \ repro\n\n_No response_\n\n### Versions\n\n```python\r\nCollecting environment information...\r\n\
+    PyTorch version: 2.0.0.dev20230131+cu117\r\nIs debug build: False\r\nCUDA used to build PyTorch: 11.7\r\
+    \nROCM used to build PyTorch: N/A\r\n\r\nOS: Ubuntu 20.04.5 LTS (x86_64)\r\nGCC version: (Ubuntu 9.4.0-1ubuntu1~20.04.1)\
+    \ 9.4.0\r\nClang version: 10.0.0-4ubuntu1 \r\nCMake version: version 3.25.0\r\nLibc version: glibc-2.31\r\
+    \n\r\nPython version: 3.10.9 (main, Jan 11 2023, 15:21:40) [GCC 11.2.0] (64-bit runtime)\r\nPython\
+    \ platform: Linux-5.15.0-58-generic-x86_64-with-glibc2.31\r\nIs CUDA available: True\r\nCUDA runtime\
+    \ version: Could not collect\r\nCUDA_MODULE_LOADING set to: LAZY\r\nGPU models and configuration:\
+    \ GPU 0: NVIDIA GeForce RTX 2080 Ti\r\nNvidia driver version: 510.85.02\r\ncuDNN version: Probably\
+    \ one of the following:\r\n/usr/lib/x86_64-linux-gnu/libcudnn.so.8.7.0\r\n/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.7.0\r\
+    \n/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.7.0\r\n/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.7.0\r\
+    \n/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.7.0\r\n/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.7.0\r\
+    \n/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.7.0\r\nHIP runtime version: N/A\r\nMIOpen runtime\
+    \ version: N/A\r\nIs XNNPACK available: True\r\n\r\nVersions of relevant libraries:\r\n[pip3] mypy-extensions==0.4.3\r\
+    \n[pip3] numpy==1.24.1\r\n[pip3] pytorch-triton==2.0.0+0d7e753227\r\n[pip3] torch==2.0.0.dev20230131+cu117\r\
+    \n[pip3] torchaudio==2.0.0.dev20230131+cu117\r\n[pip3] torchvision==0.15.0.dev20230131+cu117\r\n[conda]\
+    \ numpy                     1.24.1                   pypi_0    pypi\r\n[conda] pytorch-triton    \
+    \        2.0.0+0d7e753227          pypi_0    pypi\r\n[conda] torch                     2.0.0.dev20230131+cu117\
+    \          pypi_0    pypi\r\n[conda] torchaudio                2.0.0.dev20230131+cu117          pypi_0\
+    \    pypi\r\n[conda] torchvision               0.15.0.dev20230131+cu117          pypi_0    pypi\r\n\
+    ```\n\ncc @ezyang @soumith @msaroufim @wconstab @ngimel @bdhirsh @mlazos @voznesenskym @yanboliang\
+    \ @penguinwu @anijain2305 @EikanWang @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @Xia-Weiwen\
+    \ @wenzhe-nrv @jiayisunx @peterbell10 @desertfire"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 89320
+  topic: null
+  title: '`masked_fill` with `FloatTensor` mask will never mask but fails silently.'
+  body: "### \U0001F41B Describe the bug\n\nPassing `bool` or `int` tensors as a mask input to `masked_fill`\
+    \ returns the excepted result, but a `float` tensor will not mask and returns input tensor silently.\r\
+    \n\r\n```\r\nimport torch\r\n\r\nx = torch.rand(4, 4)\r\nm = torch.rand(4, 4) > 0.5\r\n\r\nprint(m,\
+    \ '\\n')\r\nprint(x.masked_fill(m , 0.), '\\n')\r\nprint(x.masked_fill(m.int() , 0.), '\\n')\r\nprint(x.masked_fill(m.float()\
+    \ , 0.), '\\n')\r\n```\r\n\r\nOutput:\r\n```\r\ntensor([[False, False,  True,  True],\r\n        [\
+    \ True, False, False, False],\r\n        [ True,  True, False, False],\r\n        [ True,  True, False,\
+    \ False]])\r\n\r\ntensor([[0.8455, 0.7714, 0.0000, 0.0000],\r\n        [0.0000, 0.1767, 0.9352, 0.1114],\r\
+    \n        [0.0000, 0.0000, 0.7616, 0.2102],\r\n        [0.0000, 0.0000, 0.4796, 0.1690]])\r\n\r\n\
+    tensor([[0.8455, 0.7714, 0.0000, 0.0000],\r\n        [0.0000, 0.1767, 0.9352, 0.1114],\r\n       \
+    \ [0.0000, 0.0000, 0.7616, 0.2102],\r\n        [0.0000, 0.0000, 0.4796, 0.1690]])\r\n\r\ntensor([[0.8455,\
+    \ 0.7714, 0.7397, 0.3867],\r\n        [0.8923, 0.1767, 0.9352, 0.1114],\r\n        [0.9112, 0.1297,\
+    \ 0.7616, 0.2102],\r\n        [0.9136, 0.0941, 0.4796, 0.1690]])\r\n```\r\n\r\nI feel this behaviour\
+    \ is inconsistent with python's behaviour: `bool(0.0) == False` and `bool(1.0) == True` and should\
+    \ return the same as the other two examples. In any case, it should at least fail when a `FloatTensor`\
+    \ is passed as a mask.\n\n### Versions\n\n```\r\n$ python collect_env.py\r\nCollecting environment\
+    \ information...\r\nPyTorch version: 1.13.0\r\nIs debug build: False\r\nCUDA used to build PyTorch:\
+    \ 11.8\r\nROCM used to build PyTorch: N/A\r\n\r\nOS: Arch Linux (x86_64)\r\nGCC version: (GCC) 12.2.0\r\
+    \nClang version: 14.0.6\r\nCMake version: version 3.24.3\r\nLibc version: glibc-2.36\r\n\r\nPython\
+    \ version: 3.10.8 (main, Nov  1 2022, 14:18:21) [GCC 12.2.0] (64-bit runtime)\r\nPython platform:\
+    \ Linux-6.0.8-arch1-1-x86_64-with-glibc2.36\r\nIs CUDA available: True\r\nCUDA runtime version: 11.8.89\r\
+    \nCUDA_MODULE_LOADING set to: LAZY\r\nGPU models and configuration: GPU 0: NVIDIA GeForce GTX 1080\
+    \ Ti\r\nNvidia driver version: 520.56.06\r\ncuDNN version: Probably one of the following:\r\n/usr/lib/libcudnn.so.8.6.0\r\
+    \n/usr/lib/libcudnn_adv_infer.so.8.6.0\r\n/usr/lib/libcudnn_adv_train.so.8.6.0\r\n/usr/lib/libcudnn_cnn_infer.so.8.6.0\r\
+    \n/usr/lib/libcudnn_cnn_train.so.8.6.0\r\n/usr/lib/libcudnn_ops_infer.so.8.6.0\r\n/usr/lib/libcudnn_ops_train.so.8.6.0\r\
+    \nHIP runtime version: N/A\r\nMIOpen runtime version: N/A\r\nIs XNNPACK available: True\r\n\r\nVersions\
+    \ of relevant libraries:\r\n[pip3] mypy==0.982\r\n[pip3] mypy-extensions==0.4.3\r\n[pip3] numpy==1.23.4\r\
+    \n[pip3] rotary-embedding-torch==0.1.5\r\n[pip3] torch==1.13.0\r\n[pip3] torchtext==0.10.0a0+0d670e0\r\
+    \n[conda] nomkl                     3.0                           0\r\n```\r\n\r\nI also reproduced\
+    \ this on a Ubuntu 20 internal node, but don't have access to the env right now."
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 49543
+  topic: null
+  title: Migrate `masked_fill` from TH to ATen (CUDA)
+  body: "Porting TH operators is essential for code simplicity and performance reasons.\r\n\r\nPorting\
+    \ guides and Q&A are available in umbrella issue: #24507\r\n\r\nFeel free to add @VitalyFedyunin as\
+    \ a reviewer to get a prioritized review."
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 24303
+  topic: null
+  title: Port `masked_fill` operator from the TH code to Aten
+  body: "`masked_fill` is the point-wise operator so porting if from the TH code to Aten (and TensorIterator)\
+    \ expected to be easy. Such migration will help to clean up the code, simplify dispatch as well as\
+    \ provide immediate 2-3x operator performance gain.\r\n\r\nPorting guide: https://github.com/pytorch/pytorch/wiki/TH-to-ATen-porting-guide\r\
+    \n\r\nExample PR with porting of the adaptive_avg_pool2d: https://github.com/pytorch/pytorch/pull/14714\r\
+    \n\r\nHow to use TensorIterator: https://github.com/pytorch/pytorch/wiki/How-to-use-TensorIterator"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 39639
+  topic: null
+  title: masked_fill_ (and possibly others) produces a different output than masked_fill on cpu
+  body: "## Issue description\r\n\r\n`masked_fill_` produces an output different from its out-of-place\
+    \ counterpart on cpu.\r\n\r\n## To Reproduce\r\n`masked_fill_` on cpu:\r\n```python\r\ntensor_cpu\
+    \ = torch.LongTensor([[0], [1]]).expand(2, 4)\r\nmask_cpu = torch.BoolTensor(\r\n    [[False,  True,\
+    \ False, False],\r\n     [False, False, False, False]]\r\n    )\r\ntensor_cpu.masked_fill_(mask_cpu,\
+    \ 3)\r\nprint(tensor_cpu)\r\n```\r\nOutput:\r\n```\r\ntensor([[3, 3, 3, 3],\r\n        [1, 1, 1, 1]])\r\
+    \n```\r\nNotice that the first row of the output tensor is filled with 3 instead of only the second\
+    \ item in this row as specified by `mask_cpu`.\r\n\r\n## Expected Behavior\r\nOne would expect `masked_fill_`\
+    \ and `masked_fill` to produce the same output on cpu and gpu.\r\n\r\n`masked_fill` on cpu:\r\n```python\r\
+    \ntensor_cpu = torch.LongTensor([[0], [1]]).expand(2, 4)\r\nmasked_tensor_cpu = tensor_cpu.masked_fill(mask_cpu,\
+    \ 3)\r\nprint(masked_tensor_cpu)\r\n```\r\nOutput:\r\n```\r\ntensor([[0, 3, 0, 0],\r\n        [1,\
+    \ 1, 1, 1]])\r\n```\r\n\r\nThe expected behavior is also produced by `masked_fill_` and `masked_fill`\
+    \ on gpu:\r\n```python\r\ntensor_cuda = torch.LongTensor([[0], [1]]).expand(2, 4).to('cuda')\r\nmask_cuda\
+    \ = torch.BoolTensor(\r\n    [[False,  True, False, False],\r\n     [False, False, False, False]]\r\
+    \n    ).to('cuda')\r\nmasked_tensor_cuda = tensor_cuda.masked_fill(mask_cuda, 3)\r\nprint(masked_tensor_cuda)\
+    \                   # out-of-place version\r\ntensor_cuda.masked_fill_(mask_cuda, 3)\r\nprint(tensor_cuda)\
+    \                          # in-place version\r\n```\r\nOutput:\r\n```\r\ntensor([[0, 3, 0, 0],\r\n\
+    \        [1, 1, 1, 1]], device='cuda:0')\r\ntensor([[0, 3, 0, 0],\r\n        [1, 1, 1, 1]], device='cuda:0')\r\
+    \n```\r\n\r\n## Possible Source\r\nI'm guessing this has something to do with `expand` while initializing\
+    \ `tensor_cpu`. If I do not use `expand`, I get the expected behavior from `masked_fill_` on cpu:\r\
+    \n```python\r\nother_cpu = torch.LongTensor(\r\n    [[0, 0, 0, 0],\r\n     [1, 1, 1, 1]]\r\n    )\r\
+    \nprint(other_cpu.masked_fill_(mask_cpu, 3))\r\n```\r\nOutput:\r\n```\r\ntensor([[0, 3, 0, 0],\r\n\
+    \        [1, 1, 1, 1]])\r\n```\r\n\r\n## System Info\r\nHere's the output of your `collect_env.py`\
+    \ script:\r\n```\r\nCollecting environment information...\r\nPyTorch version: 1.5.0\r\nIs debug build:\
+    \ No\r\nCUDA used to build PyTorch: 10.2\r\n\r\nOS: Ubuntu 18.04.4 LTS\r\nGCC version: (Ubuntu 7.5.0-3ubuntu1~18.04)\
+    \ 7.5.0\r\nCMake version: Could not collect\r\n\r\nPython version: 3.7\r\nIs CUDA available: Yes\r\
+    \nCUDA runtime version: Could not collect\r\nGPU models and configuration: GPU 0: GeForce 840M\r\n\
+    Nvidia driver version: 440.82\r\ncuDNN version: Could not collect\r\n\r\nVersions of relevant libraries:\r\
+    \n[pip] numpy==1.18.1\r\n[pip] numpydoc==0.9.2\r\n[pip] torch==1.5.0\r\n[pip] torchtext==0.6.0\r\n\
+    [pip] torchvision==0.6.0a0+82fd1c8\r\n[conda] blas                      1.0                      \
+    \   mkl  \r\n[conda] cudatoolkit               10.2.89              hfd86e86_1  \r\n[conda] mkl  \
+    \                     2020.1                      217  \r\n[conda] mkl-service               2.3.0\
+    \            py37he904b0f_0  \r\n[conda] mkl_fft                   1.0.15           py37ha843d7b_0\
+    \  \r\n[conda] mkl_random                1.1.1            py37h0573a6f_0  \r\n[conda] numpy      \
+    \               1.18.1           py37h4f9e942_0  \r\n[conda] numpy-base                1.18.1    \
+    \       py37hde5b4d6_1  \r\n[conda] numpydoc                  0.9.2                      py_0  \r\n\
+    [conda] pytorch                   1.5.0           py3.7_cuda10.2.89_cudnn7.6.5_0    pytorch\r\n[conda]\
+    \ torchtext                 0.6.0                      py_1    pytorch\r\n[conda] torchvision    \
+    \           0.6.0                py37_cu102    pytorch\r\n```\r\n\n\ncc @ezyang @gchanan @zou3519"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 36322
+  topic: null
+  title: masked_fill not implemented for complex
+  body: ">>> import torch\r\n>>> x=torch.zeros(2,3, dtype=torch.cfloat)\r\n>>> mask =torch.zeros(2,3,dtype=torch.long)\r\
+    \n>>> mask[0][1]=1\r\n>>> x.masked_fill(mask, 2+3j)\r\nTraceback (most recent call last):\r\n  File\
+    \ \"<stdin>\", line 1, in <module>\r\nRuntimeError: \"masked_fill\" not implemented for 'ComplexFloat'\n\
+    \ncc @ezyang @anjali411 @dylanbespalko"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 8511
+  topic: null
+  title: '[JIT] Unsupported op descriptor masked_fill'
+  body: "Don't support `masked_fill` in dispatch. Example failure:\r\n\r\n```\r\n======================================================================\r\
+    \nERROR: test_masked_fill (__main__.TestAutogradGenerated)\r\n----------------------------------------------------------------------\r\
+    \nTraceback (most recent call last):\r\n  File \"test/test_autograd.py\", line 3665, in do_test\r\n\
+    \    check(name)\r\n  File \"test/test_autograd.py\", line 3587, in check\r\n    check_against_reference(self,\
+    \ create_traced_fn(fn), fn, (self_variable,) + args_variable)\r\n  File \"test/test_autograd.py\"\
+    , line 3498, in check_against_reference\r\n    outputs_test = func(*nograd_inputs)\r\n  File \"test/test_autograd.py\"\
+    , line 3446, in traced_fn\r\n    return traced(*inputs_tensors)\r\nRuntimeError: Unsupported op descriptor:\
+    \ masked_fill-2-value_t. File a bug report.\r\n```\r\n\r\nAffected tests:\r\n- `test_masked_fill`\r\
+    \n- `test_masked_fill_broadcast_rhs`\r\n- `test_masked_fill_scalar`\r\n- `test_masked_fill_scalar_broadcast_rhs`\r\
+    \n- `test_masked_fill_scalar_variable`\r\n- `test_masked_fill_tensor`\r\n"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 1677
+  topic: null
+  title: std::bad_cast when differentiating masked_fill
+  body: "```\r\nimport torch\r\nfrom torch.autograd import Variable\r\n\r\n\r\nX = Variable(torch.rand(256),requires_grad=True)\r\
+    \nY = X.masked_fill(X > 0.5, 0).sum()\r\n\r\nY.backward()\r\n```\r\n\r\nresults in:\r\n```\r\n---------------------------------------------------------------------------\r\
+    \nRuntimeError                              Traceback (most recent call last)\r\n/home/phil/code/mwe/mwe.py\
+    \ in <module>()\r\n      6 Y = X.masked_fill(X > 0.5, 0).sum()\r\n      7 \r\n----> 8 Y.backward()\r\
+    \n\r\n/home/phil/anaconda2/envs/pytorch/lib/python2.7/site-packages/torch/autograd/variable.pyc in\
+    \ backward(self, gradient, retain_graph, create_graph, retain_variables)\r\n    149             Defaults\
+    \ to False, unless ``gradient`` is a volatile Variable.\r\n    150         \"\"\"\r\n--> 151     \
+    \    torch.autograd.backward(self, gradient, retain_graph, create_graph, retain_variables)\r\n   \
+    \ 152 \r\n    153     def register_hook(self, hook):\r\n\r\n/home/phil/anaconda2/envs/pytorch/lib/python2.7/site-packages/torch/autograd/__init__.pyc\
+    \ in backward(variables, grad_variables, retain_graph, create_graph, retain_variables)\r\n     96\
+    \ \r\n     97     Variable._execution_engine.run_backward(\r\n---> 98         variables, grad_variables,\
+    \ retain_graph)\r\n     99 \r\n    100 \r\n\r\nRuntimeError: std::bad_cast\r\n```\r\n\r\nUsing commit\
+    \ 4eb448. "
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 1415
+  topic: null
+  title: masked_fill() only takes Variable as input
+  body: The [docs](http://pytorch.org/docs/tensors.html?highlight=copy#torch.Tensor.masked_fill_) suggest
+    that `masked_fill()` takes a `ByteTensor` as a parameter, but it actually must be wrapped in a Variable
+    first.
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue masked_fill in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 194166
+  topic: null
+  title: Inductor backend exception (not a graph break planned by dynamo) on aten.nonzero.default from
+    boolean-mask assignment under torch.compile(dynamic=True)
+  body: "### \U0001F41B Describe the bug\n\nHuman rephrasing of Claude summary.\n\nCompiling a module\
+    \ that applies BatchNorm to a boolean-masked subset and writes it back (out[mask] = norm(h[mask]))\
+    \ fails in the inductor backend with Exception: aten.nonzero.default, then falls back via a graph\
+    \ break. Dynamo itself handles the data-dependent nonzero (unbacked symints); it is the backend that\
+    \ throws, and the error text itself says \"Hint: Report an issue to the backend compiler repo\". Should\
+    \ result in either a lowering for the masked pattern or a graph break planned by dynamo, not a backend\
+    \ exception on a documented-supported op.\n\nAblation: backend=\"inductor\" (default mode, dynamic=True)\
+    \ throws; eager is fine.\n\nMinimal reproduction:\n\n```\nimport torch\n\nclass MaskedBN(torch.nn.Module):\n\
+    \    def __init__(self):\n        super().__init__()\n        self.norm = torch.nn.BatchNorm1d(8)\n\
+    \n    def forward(self, h, mask_bool):\n        out = h.clone()\n        out[mask_bool] = self.norm(h[mask_bool])\n\
+    \        return out\n\nm = MaskedBN().cuda()\nf = torch.compile(m, dynamic=True)\nh = torch.randn(64,\
+    \ 8, device=\"cuda\", requires_grad=True)\nmask = torch.rand(64, device=\"cuda\") > 0.3\nf(h, mask).sum().backward()\n\
+    \n```\nObserved in a real training run (particle-physics GNN, per-step hot path) and reduced to the\
+    \ above. Severity: functional fallback since training proceeds through the break. A performance bug,\
+    \ but the break lands inside the per-step region and the exception path is undocumented.\n\n### Error\
+    \ logs\n\nW0818 21:05:28 torch/_dynamo/exc.py:518 [4/0] Backend compiler exception\n  Explanation:\
+    \ Backend compiler `inductor` failed with aten.nonzero.default. Adding a graph break.\n  Hint: Report\
+    \ an issue to the backend compiler repo.\n  Developer debug context: Backend: inductor\n    Exception:aten.nonzero.default\n\
+    \    Traceback:\n      File \".../plaingraphgps.py\", line 192, in torch_dynamo_resume_in_forward_at_191\n\
+    \        return out\n/usr/local/lib/python3.12/dist-packages/torch/autograd/graph.py:829: UserWarning:\n\
+    \  Error detected in IndexPutBackward0. Traceback of forward call that caused the error:\n  File \"\
+    .../plaingraphgps.py\", line 191, in torch_dynamo_resume_in_forward_at_191\n    out[mask_bool] = self.norm(h[mask_bool])\
+    \   # BatchNorm over the real nodes only\n\n### Versions\n\n2.8.0a0+34c6371d24.nv25.08\n\ncc @chauhang\
+    \ @penguinwu @ezyang @bobrenjc93 @aditvenk @laithsakka @voznesenskym @EikanWang @jgong5 @Guobing-Chen\
+    \ @XiaobingSuper @zhuhaozhe @blzheng @wenzhe-nrv @jiayisunx @ipiszy @kadeng @muchulee8 @amjames @aakhundov\
+    \ @coconutruben @jataylo"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 170400
+  topic: null
+  title: Clarify inverted boolean mask logic between nn.MultiHeadAttention and F.scaled_dot_product_attention
+  body: "### \U0001F4DA The doc issue\n\n### \U0001F680 Motivation\n\nI am opening this issue to suggest\
+    \ a documentation improvement regarding a common \"gotcha\" when migrating between `nn.MultiHeadAttention`\
+    \ (MHA) and `F.scaled_dot_product_attention` (SDPA).\n\nMany users (including myself) have noticed\
+    \ that the boolean mask semantics are inverted between these two APIs, which can lead to silent bugs\
+    \ during migration.\n\n### \U0001F50D The Inconsistency\n\n  * **`nn.MultiHeadAttention` (`key_padding_mask`)**:\
+    \ `True` means **PADDING** (Ignore/Mask out).\n  * **`F.scaled_dot_product_attention` (`attn_mask`)**:\
+    \ `True` means **KEEP** (Attend to).\n\nWhile this behavior is hinted at in the SDPA docstring's pseudo-code\
+    \ implementation:\n\n```python\nif attn_mask.dtype == torch.bool:\n    attn_bias.masked_fill_(attn_mask.logical_not(),\
+    \ float(\"-inf\"))\n```\n\nThe use of `.logical_not()` confirms that SDPA expects `True` to be kept,\
+    \ whereas MHA expects `True` to be masked. This implicit difference is easy to overlook if one relies\
+    \ solely on parameter names or prior MHA experience.\n\n### ✅ Verification\n\nI have verified this\
+    \ behavior with a minimal reproduction script on PyTorch 2.5.1, confirming that passing the identical\
+    \ boolean mask to both APIs results in opposite attention patterns (MHA ignores the `True` index,\
+    \ while SDPA attends to it).\n\nThanks for considering this clarification\\!\n\n### Suggest a potential\
+    \ alternative/fix\n\nTo improve Developer Experience (DX) and prevent confusion for users moving in\
+    \ either direction (MHA -\\> SDPA or SDPA -\\> MHA), I suggest adding a **Note** or **Warning** block\
+    \ in the documentation for `F.scaled_dot_product_attention`.\n\n**Example phrasing:**\n\n> **Note:**\
+    \ The boolean mask semantics for `attn_mask` here are the **inverse** of `nn.MultiHeadAttention.forward`'s\
+    \ `key_padding_mask`.\n>\n>   * In `F.scaled_dot_product_attention`, `True` indicates values to **participate**\
+    \ in attention.\n>   * In `nn.MultiHeadAttention`, `True` indicates values to be **masked out** (padding).\n\
+    >\n> If migrating from MHA, ensure you invert your boolean mask (e.g., using `~mask` or `mask.logical_not()`).\n\
+    \ncc @svekars @sekyondaMeta @AlannaBurke @albanD @mruberry @jbschlosser @walterddr @mikaylagawarecki"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 163640
+  topic: null
+  title: '[torch.compile] TransformerEncoder with boolean src_key_padding_mask fails under Dynamo fullgraph
+    mode'
+  body: "### \U0001F41B Describe the bug\n\n### Describe the bug\n\nCompiling a simple `nn.TransformerEncoder`\
+    \ model with `torch.compile(fullgraph=True)` fails when a boolean `src_key_padding_mask` is passed.\n\
+    \nEager mode works correctly, but `torch.compile` raises `torch._dynamo.exc.Unsupported` because of\
+    \ an internal call to `torch._nested_tensor_from_mask_left_aligned`, which returns a `bool` instead\
+    \ of a `Tensor`.\n\n### Minimal Reproducible Example\n```python\nimport torch\nimport torch.nn as\
+    \ nn\n\nclass TinyEnc(nn.Module):\n    def __init__(self, d_model=512, nhead=8, num_layers=1):\n \
+    \       super().__init__()\n        layer = nn.TransformerEncoderLayer(\n            d_model=d_model,\
+    \ nhead=nhead, batch_first=True, dropout=0.1\n        )\n        self.enc = nn.TransformerEncoder(layer,\
+    \ num_layers=num_layers)\n        self.proj = nn.Linear(d_model, 10)\n\n    def forward(self, x, pad_mask):\n\
+    \        # Passing src_key_padding_mask triggers torch._nested_tensor_from_mask_left_aligned\n   \
+    \     y = self.enc(x, mask=None, src_key_padding_mask=pad_mask)\n        return self.proj(y)\n\ndef\
+    \ main():\n    torch.manual_seed(0)\n    m = TinyEnc().eval()\n\n    B, T, C = 1, 41, 512\n    x =\
+    \ torch.randn(B, T, C, dtype=torch.float32)\n    pad_mask = (torch.rand(B, T) > 0.5)\n    pad_mask[...,\
+    \ 0] = True\n\n    # Eager is fine\n    with torch.inference_mode():\n        y = m(x, pad_mask)\n\
+    \    print(\"eager ok:\", tuple(y.shape))\n\n    # Compile (fullgraph=True required to reproduce)\n\
+    \    cm = torch.compile(m, backend=\"inductor\", fullgraph=True)\n    _ = cm(x, pad_mask)\n\nif __name__\
+    \ == \"__main__\":\n    main()\n```\n\n### Observed error\n```\neager ok: (1, 41, 10)\n\ntorch._dynamo.exc.Unsupported:\
+    \ torch.* op returned non-Tensor\n  Explanation: torch.* ops that return a non-Tensor cannot be traced\
+    \ into the Dynamo FX graph output\n\nDeveloper debug context: example_value type: bool; op: call_function;\
+    \ \ntarget: <built-in method _nested_tensor_from_mask_left_aligned of type object at 0x...>\n\nfrom\
+    \ user code:\n   File \"test.py\", line 16, in forward\n    y = self.enc(x, mask=None, src_key_padding_mask=pad_mask)\n\
+    \   File \"torch/nn/modules/transformer.py\", line 467, in forward\n    ) and not torch._nested_tensor_from_mask_left_aligned(\n\
+    ```\n\n### Versions\n\n```\nPyTorch version:  2.8.0a0+gitba56102 & 2.9.0a0+git31d5c67\nIs debug build:\
+    \ True\nCUDA used to build PyTorch: 12.6\nROCM used to build PyTorch: N/A\n\nOS: Ubuntu 22.04.4 LTS\
+    \ (x86_64)\nGCC version: (Ubuntu 12.3.0-1ubuntu1~22.04) 12.3.0\nClang version: Could not collect\n\
+    CMake version: version 3.22.1\nLibc version: glibc-2.35\n\nPython version: 3.10.16 (main, Dec 11 2024,\
+    \ 16:24:50) [GCC 11.2.0] (64-bit runtime)\nPython platform: Linux-6.8.0-59-generic-x86_64-with-glibc2.35\n\
+    Is CUDA available: True\n```\n\ncc @albanD @mruberry @jbschlosser @walterddr @mikaylagawarecki @malfet\
+    \ @chauhang @penguinwu"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 70347
+  topic: null
+  title: boolean mask + ellipsis lead to incorrect indexing
+  body: "### \U0001F41B Describe the bug\r\n\r\nIndexing pytorch tensors behaves not the same as indexing\
+    \ numpy arrays.\r\nMWE that raises an IndexError:\r\n```python\r\nprint('numpy arrays:')\r\nimport\
+    \ numpy\r\nt = numpy.arange(2).reshape(1,1,2)\r\nmask = numpy.array([[True]])\r\nprint(t[mask][...,0])\r\
+    \nprint(t[mask,...,0])\r\nprint('pytorch tensors:')\r\nimport torch\r\nt = torch.arange(2).view(1,1,2)\r\
+    \nmask = torch.BoolTensor([[True]])\r\nprint(t[mask][...,0])\r\nprint(t[mask,...,0]) # throws IndexError\r\
+    \n```\r\noutputs\r\n```\r\nnumpy arrays:\r\n[0]\r\n[0]\r\npytorch tensors:\r\ntensor([0])\r\n---------------------------------------------------------------------------\r\
+    \nIndexError                                Traceback (most recent call last)\r\n<ipython-input-19-96582348cb03>\
+    \ in <module>\r\n     10 mask = torch.BoolTensor([[True]])\r\n     11 print(t[mask][...,0])\r\n--->\
+    \ 12 print(t[mask,...,0]) # throws IndexError\r\n\r\nIndexError: The shape of the mask [1, 1] at index\
+    \ 1 does not match the shape of the indexed tensor [1, 2] at index 1\r\n```\r\nAnother example that\
+    \ fails silently:\r\n```python\r\nprint('pytorch tensors:')\r\nimport torch\r\nt = torch.arange(4).view(1,2,2)\r\
+    \nmask = torch.BoolTensor([[True, True]])\r\nprint(t[mask][...,0], t[mask,...,0])\r\nprint('numpy\
+    \ arrays:')\r\nimport numpy\r\nt = numpy.arange(4).reshape(1,2,2)\r\nmask = numpy.array([[True, True]])\r\
+    \nprint(t[mask][...,0], t[mask,...,0])\r\n```\r\noutputs\r\n```\r\npytorch tensors:\r\ntensor([0,\
+    \ 2]) tensor([0, 1])\r\nnumpy arrays:\r\n[0 2] [0 2]\r\n```\r\n\r\n### Versions\r\n\r\nCollecting\
+    \ environment information...\r\nPyTorch version: 1.10.1\r\nIs debug build: False\r\nCUDA used to build\
+    \ PyTorch: None\r\nROCM used to build PyTorch: N/A\r\n\r\nOS: Ubuntu 20.04.3 LTS (x86_64)\r\nGCC version:\
+    \ (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0\r\nClang version: Could not collect\r\nCMake version: version\
+    \ 3.16.3\r\nLibc version: glibc-2.31\r\n\r\nPython version: 3.9.7 (default, Sep 16 2021, 13:09:58)\
+    \  [GCC 7.5.0] (64-bit runtime)\r\nPython platform: Linux-5.11.0-43-generic-x86_64-with-glibc2.31\r\
+    \nIs CUDA available: False\r\nCUDA runtime version: No CUDA\r\nGPU models and configuration: No CUDA\r\
+    \nNvidia driver version: No CUDA\r\ncuDNN version: No CUDA\r\nHIP runtime version: N/A\r\nMIOpen runtime\
+    \ version: N/A\r\n\r\nVersions of relevant libraries:\r\n[pip3] numpy==1.21.2\r\n[pip3] torch==1.10.1\r\
+    \n[pip3] torchaudio==0.10.1\r\n[pip3] torchvision==0.11.2\r\n[conda] blas                      1.0\
+    \                         mkl  \r\n[conda] cpuonly                   2.0                         \
+    \  0    pytorch\r\n[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch\r\n\
+    [conda] mkl                       2021.4.0           h06a4308_640  \r\n[conda] mkl-service       \
+    \        2.4.0            py39h7f8727e_0  \r\n[conda] mkl_fft                   1.3.1            py39hd3c417c_0\
+    \  \r\n[conda] mkl_random                1.2.2            py39h51133e4_0  \r\n[conda] numpy      \
+    \               1.21.2           py39h20f2e39_0  \r\n[conda] numpy-base                1.21.2    \
+    \       py39h79a1101_0  \r\n[conda] pytorch                   1.10.1              py3.9_cpu_0    pytorch\r\
+    \n[conda] pytorch-mutex             1.0                         cpu    pytorch\r\n[conda] torchaudio\
+    \                0.10.1                 py39_cpu  [cpuonly]  pytorch\r\n[conda] torchvision      \
+    \         0.11.2                 py39_cpu  [cpuonly]  pytorch\r\n\r\ncc @mruberry @rgommers"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 158413
+  topic: null
+  title: index_put modifies incorrect dimension when boolean mask is followed by null index
+  body: "### \U0001F41B Describe the bug\n\nThis needs to be explained with an example:\n```python\n>>>\
+    \ import torch\n>>> x = torch.tensor([[1, 2], [3, 4]])\n>>> m = torch.tensor([True, False])\n>>> x\n\
+    tensor([[1, 2],\n        [3, 4]])\n>>> torch.ops.aten.index(x, [m])\ntensor([[1, 2]])  # correct\n\
+    >>> torch.ops.aten.index(x, [m, None])\ntensor([[1, 2]])  # correct\n>>> torch.ops.aten.index_put(x,\
+    \ [m], torch.tensor(0))\ntensor([[0, 0],   # correct\n        [3, 4]])\n>>> torch.ops.aten.index_put(x,\
+    \ [m, None], torch.tensor(0))\ntensor([[0, 2],   # incorrect, it should be [[0, 0], [3, 4]] like the\
+    \ last command\n        [0, 4]])\n```\n\nNotice that we don't have this problem if instead of using\
+    \ a boolean mask, we use an integer tensor.\n```python\n>>> ix = torch.tensor([0,])  # equivalent\
+    \ to boolean mask m when applied on dimension of size 2\n>>> torch.ops.aten.index_put(x, [ix], torch.tensor(0))\n\
+    tensor([[0, 0],\n        [3, 4]])\n>>> torch.ops.aten.index_put(x, [ix, None], torch.tensor(0))\n\
+    tensor([[0, 0],\n        [3, 4]])\n```\n\n### Versions\n\nnightly\n\ncc @ezyang @gchanan @zou3519\
+    \ @kadeng @msaroufim"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 158125
+  topic: null
+  title: index.Tensor doesn't properly account for boolean masks acting on multiple dimensions.
+  body: "### \U0001F41B Describe the bug\n\nThe following should fail, but it doesn't (x is 4-dim and\
+    \ y is 2-dim boolean tensor)\n```python\nx = np.arange(2*3*5*7).reshape(2, 3, 5, 7)\ny = torch.tensor([[True,\
+    \ False, True], [False, True, True]])\ntorch.ops.aten.index.Tensor(x, [y, None, None, None])\n```\n\
+    \n**Explanation:**\nAdvanced indexing makes a crucial distinction between Integer indices and Boolean\
+    \ masks. Integer indices of more than one dimension still act on a single dimension of the input tensor.\
+    \ However, Boolean masks of K dimensions act on K dimensions of the input tensor.\nPyTorch's ATen\
+    \ op (index.Tensor) doesn't account for this when checking if the number of dimensions being indexed\
+    \ exceeds the input's dimensionality.\n\n```python\n>>> import numpy as np\n>>> import torch\n>>>\
+    \ np_x = np.arange(2*3*5*7).reshape(2, 3, 5, 7)\n>>> py_x = torch.arange(2*3*5*7).reshape(2, 3, 5,\
+    \ 7)\n>>> y = torch.tensor([[True, False, True], [False, True, True]])\n```\n\nThe following two examples\
+    \ show the correct behavior by Numpy and PyTorch's [...] operator\n\nHere, the 2-dim boolean mask\
+    \ `y` acts on the first two dimensions, and the two `:` act on the last two dimensions. The 4 in the\
+    \ output shape comes from the number of True values in `y`.\n```python\n>>> np_x[y, :, :].shape\n\
+    (4, 5, 7)\n\n>>> py_x[y, :, :].shape\ntorch.Size([4, 5, 7])\n```\n\nBut if we exceed the number of\
+    \ dimensions of `py_x/np_x`, then we get an error. This is the correct behavior\n```python\n>>> np_x[y,\
+    \ :, :, :].shape\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\nIndexError:\
+    \ too many indices for array: array is 4-dimensional, but 5 were indexed\n\n>>> py_x[y, :, :, :].shape\n\
+    Traceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\nIndexError: too many\
+    \ indices for tensor of dimension 4\n```\n\nHowever, ATen's index.Tensor op doesn't properly account\
+    \ for this. It only errors out when the number of elements in the indices list exceeds the number\
+    \ of dimensions.\n```python\n>>> torch.ops.aten.index.Tensor(py_x, [y, None, None]).shape\ntorch.Size([4,\
+    \ 5, 7])\n\n>>> torch.ops.aten.index.Tensor(py_x, [y, None, None, None]).shape  # should fail but\
+    \ it doesn't\ntorch.Size([4, 4, 5, 7])\n\n>>> torch.ops.aten.index.Tensor(py_x, [y, None, None, None,\
+    \ None]).shape\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\n  File\
+    \ \"/Users/mcandales/miniconda3/envs/optimum-executorch/lib/python3.11/site-packages/torch/_ops.py\"\
+    , line 806, in __call__\n    return self._op(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    IndexError: too many indices for tensor of dimension 4 (got 5)\n```\n\n\n### Versions\n\nnightly\n\
+    \ncc @albanD"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 121632
+  topic: null
+  title: '[BUG] Given boolean tgt_mask, TransformerDecoder produces wrong results with MPS backend'
+  body: "### \U0001F41B Describe the bug\n\nTwo tokens are decoded in this example. Ideally, the output\
+    \ feature on the first token should be the same regardless of the sequence length as a square subsequent\
+    \ mask is applied. Here are two ways to generate the tgt mask. One is from the official example where\
+    \ a float mask is generated first but converted into a boolean mask later. Another way is to generate\
+    \ the boolean mask directly.\r\n\r\n:heavy_check_mark: If running with `cpu` backend, the three printed\
+    \ values should be the same:\r\n```\r\nToken_1 (Ground Truth): [[[ 1.1367519  -0.7223548   0.81752294\
+    \ -1.2319201 ]]]\r\nGround Truth: [ 1.136752  -0.7223549  0.8175233 -1.2319204]\r\nBuggy Results:\
+    \ [ 1.136752  -0.7223549  0.8175233 -1.2319204]\r\n``` \r\n\r\n❌  However, if we run it on `mps` backend,\
+    \ the directly generated boolean mask would result in the wrong decoded feature for the first token.\
+    \ The result looked like this:\r\n```\r\nToken_1 (Ground Truth): [[[ 1.4028326  -1.0564857  -0.8273474\
+    \   0.48100036]]]\r\nGround Truth: [ 1.4028326  -1.0564857  -0.8273474   0.48100036]\r\nBuggy Results:\
+    \ [ 1.3671896  -1.1002903  -0.79846895  0.5315697 ]\r\n```\r\n\r\nThe bug can be reproduced by this\
+    \ minimal script:\r\n```python\r\nimport torch\r\nimport torch.nn as nn\r\n\r\n# Define the parameters\r\
+    \ndropout = 0.  # Dropout rate\r\nd_model = 4\r\ndevice = \"mps\"\r\n# device = \"cpu\"\r\ntorch.manual_seed(0)\r\
+    \ndecoder_layer = nn.TransformerDecoderLayer(batch_first=True, d_model=d_model, nhead=1, dim_feedforward=32,\r\
+    \n                                           dropout=dropout)\r\ntransformer_decoder = nn.TransformerDecoder(decoder_layer=decoder_layer,\
+    \ num_layers=1)\r\ntransformer_decoder = transformer_decoder.to(device)\r\nfor p in transformer_decoder.parameters():\r\
+    \n    if p.dim() > 1:\r\n        nn.init.xavier_uniform_(p)\r\n\r\n# Dummy inputs\r\ntgt = torch.rand(1,\
+    \ 2, d_model, device=device)  # [target sequence length, batch size, embedding size]\r\nmemory = torch.rand(1,\
+    \ 20, d_model, device=device)  # [source sequence length, batch size, embedding size]\r\n\r\n# generate\
+    \ mask\r\ndef _mask_to_float(mask):\r\n    return mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask\
+    \ == 1, float(0.0))\r\n\r\n\r\ndef generate_square_subsequent_mask(sz):\r\n    mask = (torch.triu(torch.ones((sz,\
+    \ sz))) == 1).transpose(0, 1)\r\n    return _mask_to_float(mask).bool()\r\n\r\n\r\ndef _generate_square_subsequent_mask_bug(sz):\r\
+    \n    mask = (torch.triu(torch.ones((sz, sz))) == 1).transpose(0, 1)\r\n    return ~mask\r\n\r\n\r\
+    \ntoken_1_mask = generate_square_subsequent_mask(1).to(device)\r\ncorrect_mask = generate_square_subsequent_mask(2).to(device)\r\
+    \nbug_mask = _generate_square_subsequent_mask_bug(2).to(device)\r\n\r\n# The masks are all boolean\
+    \ type and are exactly same\r\nassert correct_mask.dtype == bug_mask.dtype\r\nassert torch.all(correct_mask\
+    \ == bug_mask)\r\n\r\n# Forward pass through the decoder\r\ntoken_1 = transformer_decoder(tgt=tgt[:,\
+    \ :1, :], memory=memory, tgt_mask=token_1_mask)\r\noutput_bug = transformer_decoder(tgt=tgt, memory=memory,\
+    \ tgt_mask=bug_mask)\r\noutput = transformer_decoder(tgt=tgt, memory=memory, tgt_mask=correct_mask)\r\
+    \n\r\nprint(\"Token_1 (Ground Truth):\", token_1.detach().cpu().numpy())\r\nprint(\"Ground Truth:\"\
+    , output[0, 0].detach().cpu().numpy())\r\nprint(\"Buggy Results:\", output_bug[0, 0].detach().cpu().numpy())\r\
+    \n\r\n```\n\n### Versions\n\nPyTorch version: 2.2.1\r\nIs debug build: False\r\nCUDA used to build\
+    \ PyTorch: None\r\nROCM used to build PyTorch: N/A\r\n\r\nOS: macOS 14.1 (arm64)\r\nGCC version: Could\
+    \ not collect\r\nClang version: 15.0.0 (clang-1500.1.0.2.5)\r\nCMake version: version 3.28.3\r\nLibc\
+    \ version: N/A\r\n\r\nPython version: 3.11.7 (main, Dec 15 2023, 12:09:56) [Clang 14.0.6 ] (64-bit\
+    \ runtime)\r\nPython platform: macOS-14.1-arm64-arm-64bit\r\nIs CUDA available: False\r\nCUDA runtime\
+    \ version: No CUDA\r\nCUDA_MODULE_LOADING set to: N/A\r\nGPU models and configuration: No CUDA\r\n\
+    Nvidia driver version: No CUDA\r\ncuDNN version: No CUDA\r\nHIP runtime version: N/A\r\nMIOpen runtime\
+    \ version: N/A\r\nIs XNNPACK available: True\r\n\r\nCPU:\r\nApple M3 Max\r\n\r\nVersions of relevant\
+    \ libraries:\r\n[pip3] numpy==1.26"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 134241
+  topic: null
+  title: 'torch._dynamo.exc.Unsupported: boolean masking setitem backwards'
+  body: "### \U0001F41B Describe the bug\n\nI don't know if this is a bug or a feature request, but when\
+    \ I use a boolean tensor to get and set values `torch._dynamo` throws an error. Minimal code to reproduce\
+    \ this:\r\n\r\n```\r\nimport torch\r\nimport torch._dynamo\r\n\r\ntorch._dynamo.config.capture_dynamic_output_shape_ops\
+    \ = True\r\n\r\n\r\ndef test(y: torch.Tensor, z: torch.Tensor) -> torch.Tensor:\r\n    x = torch.zeros_like(y,\
+    \ dtype=z.dtype)\r\n    x[y] = z[y]\r\n    x = x*2\r\n    return x\r\n\r\nz = torch.randn(10, 10,\
+    \ requires_grad=True).cuda()\r\ny = (torch.randint(0, 1, (10, 10)) == 1).cuda()\r\n\r\ntest_comp =\
+    \ torch.compile(test, mode='reduce-overhead', fullgraph=True)\r\nx_comp = test_comp(y, z)\r\nloss_comp\
+    \ = x_comp.sum()\r\nloss_comp.backward()\r\n```\r\n\r\nI am using `torch.__version__==2.5.0.dev20240821+cu118`\r\
+    \n\r\nHowever, the interesting part is that I can avoid this error by first converting the boolean\
+    \ tensor `y` with `.nonzero()` into `int64` indices. This causes a cudagraph break due to 'incompatible_ops'\
+    \ when I compile with 'reduce-overhead', but doesn't throw any error with 'default' mode.\n\n### Error\
+    \ logs\n\n```\r\ntorch._dynamo.exc.Unsupported: boolean masking setitem backwards, see https://github.com/pytorch/pytorch/issues/114123\r\
+    \n\r\nfrom user code:\r\n   File \"/home/richeek/GitHub/prolev/test.py\", line 9, in test\r\n    x[y]\
+    \ = z[y]\r\n\r\nSet TORCH_LOGS=\"+dynamo\" and TORCHDYNAMO_VERBOSE=1 for more information\r\n\r\n\r\
+    \nYou can suppress this exception and fall back to eager by setting:\r\n    import torch._dynamo\r\
+    \n    torch._dynamo.config.suppress_errors = True\r\n```\n\n### Minified repro\n\n_No response_\n\n\
+    ### Versions\n\n```\r\nCollecting environment information...\r\nPyTorch version: 2.5.0.dev20240821+cu118\r\
+    \nIs debug build: False\r\nCUDA used to build PyTorch: 11.8\r\nROCM used to build PyTorch: N/A\r\n\
+    \r\nOS: Ubuntu 22.04.1 LTS (x86_64)\r\nGCC version: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0\r\nClang\
+    \ version: Could not collect\r\nCMake version: version 3.22.1\r\nLibc version: glibc-2.35\r\n\r\n\
+    Python version: 3.11.9 (main, Apr 19 2024, 16:48:06) [GCC 11.2.0] (64-bit runtime)\r\nPython platform:\
+    \ Linux-6.5.0-44-generic-x86_64-with-glibc2.35\r\nIs CUDA available: True\r\nCUDA runtime version:\
+    \ 11.8.89\r\nCUDA_MODULE_LOADING set to: LAZY\r\nGPU models and configuration: \r\nGPU 0: NVIDIA GeForce\
+    \ RTX 4090\r\nGPU 1: NVIDIA GeForce RTX 4090\r\n\r\nNvidia driver version: 535.183.01\r\ncuDNN version:\
+    \ Could not collect\r\nHIP runtime version: N/A\r\nMIOpen runtime version: N/A\r\nIs XNNPACK available:\
+    \ True\r\n\r\nCPU:\r\nArchitecture:                       x86_64\r\nCPU op-mode(s):              \
+    \       32-bit, 64-bit\r\nAddress sizes:                      48 bits physical, 48 bits virtual\r\n\
+    Byte Order:                         Little Endian\r\nCPU(s):                             32\r\nOn-line\
+    \ CPU(s) list:                0-31\r\nVendor ID:                          AuthenticAMD\r\nModel name:\
+    \                         AMD Ryzen 9 7950X 16-Core Processor\r\nCPU family:                     \
+    \    25\r\nModel:                              97\r\nThread(s) per core:                 2\r\nCore(s)\
+    \ per socket:                 16\r\nSocket(s):                          1\r\nStepping:           \
+    \                2\r\nCPU max MHz:                        5881.0000\r\nCPU min MHz:              \
+    \          400.0000\r\nBogoMIPS:                           8983.19\r\nFlags:                     \
+    \         fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr\
+    \ sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good amd_lbr_v2 nopl nonstop_tsc\
+    \ cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe\
+    \ popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse\
+    \ 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb\
+    \ cat_l3 cdp_l3 hw_pstate ssbd mba perfmon_v2 ibrs ibpb stibp ibrs_enhanced vmmcall fsgsbase bmi1\
+    \ avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb\
+    \ avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec x"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 114123
+  topic: null
+  title: Cannot fullgraph differentiate through boolean masking
+  body: "### \U0001F41B Describe the bug\n\nWhen you turn on capture_dynamic_output_ops this preexisting\
+    \ test starts failing\r\n\r\n```\r\n    def test_setitem_boolean_mask_diff(self):\r\n        def fn(x,\
+    \ b, y):\r\n            x = x.clone()\r\n            x[b] = y\r\n            return x\r\n        \r\
+    \n        opt_fn = torch._dynamo.optimize(\"aot_eager\")(fn)\r\n        x = torch.randn(4, requires_grad=True)\r\
+    \n        b = torch.tensor([True, False, True, False])\r\n        y = torch.randn(2, requires_grad=True)\r\
+    \n        opt_fn(x, b, y)\r\n```\r\n\r\nThe failure is\r\n\r\n```\r\ntorch._dynamo.exc.BackendCompilerFailed:\
+    \ backend='compiler_fn' raised:\r\nGuardOnDataDependentSymNode: It appears that you're trying to get\
+    \ a value out of symbolic int/float whose value is data-dependent (and thus we do not know the true\
+    \ value.)  The expression we were trying to evaluate is Eq(i0, 2) (unhinted: Eq(i0, 2)).  Scroll up\
+    \ to see where each of these data-dependent accesses originally occurred.\r\n```\r\n\r\nRelevant C++\
+    \ stacktrace:\r\n\r\n```\r\n[2023-11-20 06:29:53,710] [0/0] torch.fx.experimental.symbolic_shapes:\
+    \ [DEBUG]   File \"??\", line 0, in torch::autograd::validate_outputs(std::vector<torch::autograd::Edge,\
+    \ std::allocator<torch::autograd::Edge> > const&, std::vector<at::Tensor, std::allocator<at::Tensor>\
+    \ >&, std::function<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>\
+    \ > (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)> const&)\r\
+    \n[2023-11-20 06:29:53,710] [0/0] torch.fx.experimental.symbolic_s[2023-11-20 06:29:53,710] [0/0]\
+    \ torch.fx.experimental.symbolic_shapes: [DEBUG]   File \"??\", line 0, in torch::autograd::validate_outputs(std::vector<torch::autograd::Edge,\
+    \ std::allocator<torch::autograd::Edge> > const&, std::vector<at::Tensor, std::allocator<at::Tensor>\
+    \ >&, std::function<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>\
+    \ > (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)> const&)\r\
+    \nhapes: [DEBUG]   File \"??\", line 0, in torch::autograd::InputMetadata::is_same_shape(at::Tensor\
+    \ const&) const\r\n[2023-11-20 06:29:53,710] [0/0] torch.fx.experimental.symbolic_shapes: [DEBUG]\
+    \   File \"??\", line 0, in c10::SymBool::guard_bool(char const*, long) const\r\n[2023-11-20 06:29:53,710]\
+    \ [0/0] torch.fx.experimental.symbolic_shapes: [DEBUG]   File \"??\", line 0, in torch::autograd::InputMetadata::is_same_shape(at::Tensor\
+    \ const&) const\r\n[2023-11-20 06:29:53,710] [0/0] torch.fx.experimental.symbolic_shapes: [DEBUG]\
+    \   File \"??\", line 0, in c10::SymBool::guard_bool(char const*, long) const\r\n```\r\n\r\nThe relevant\
+    \ formula is `Error detected in IndexPutBackward0`\n\n### Versions\n\nmain\n\ncc @msaroufim @wconstab\
+    \ @bdhirsh @anijain2305 @zou3519"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 114220
+  topic: null
+  title: boolean masking creates a graph break due to aten.nonzero
+  body: "### \U0001F41B Describe the bug\n\n```python\r\n@torch.compile(fullgraph=True)\r\ndef f(t):\r\
+    \n    return t[t > 0.5]\r\n\r\n\r\nf(torch.rand(3, 16, 16))\r\n```\r\n\r\n```\r\ntorch._dynamo.exc.Unsupported:\
+    \ dynamic shape operator: aten.nonzero.default\r\n```\r\n\r\n<details><summary>Full traceback</summary>\r\
+    \n<p>\r\n\r\n```\r\nTraceback (most recent call last):\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_dynamo/utils.py\"\
+    , line 1570, in run_node\r\n    return node.target(*args, **kwargs)\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/utils/_stats.py\"\
+    , line 20, in wrapper\r\n    return fn(*args, **kwargs)\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_subclasses/fake_tensor.py\"\
+    , line 1385, in __torch_dispatch__\r\n    return self.dispatch(func, types, args, kwargs)\r\n  File\
+    \ \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_subclasses/fake_tensor.py\"\
+    , line 1642, in dispatch\r\n    op_impl_out = op_impl(self, func, *args, **kwargs)\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_subclasses/fake_tensor.py\"\
+    , line 670, in index_tensor\r\n    out = meta_index_Tensor(*args, **kwargs)\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_meta_registrations.py\"\
+    , line 2819, in meta_index_Tensor\r\n    nonzero = index.nonzero()\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/utils/_stats.py\"\
+    , line 20, in wrapper\r\n    return fn(*args, **kwargs)\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_subclasses/fake_tensor.py\"\
+    , line 1385, in __torch_dispatch__\r\n    return self.dispatch(func, types, args, kwargs)\r\n  File\
+    \ \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_subclasses/fake_tensor.py\"\
+    , line 1642, in dispatch\r\n    op_impl_out = op_impl(self, func, *args, **kwargs)\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_subclasses/fake_tensor.py\"\
+    , line 560, in nonzero\r\n    raise DynamicOutputShapeException(func)\r\ntorch._subclasses.fake_tensor.DynamicOutputShapeException:\
+    \ aten.nonzero.default\r\n\r\nThe above exception was the direct cause of the following exception:\r\
+    \n\r\nTraceback (most recent call last):\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_dynamo/utils.py\"\
+    , line 1485, in get_fake_value\r\n    ret_val = wrap_fake_exception(\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_dynamo/utils.py\"\
+    , line 1026, in wrap_fake_exception\r\n    return fn()\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_dynamo/utils.py\"\
+    , line 1486, in <lambda>\r\n    lambda: run_node(tx.output, node, args, kwargs, nnmodule)\r\n  File\
+    \ \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_dynamo/utils.py\"\
+    , line 1591, in run_node\r\n    raise RuntimeError(fn_str + str(e)).with_traceback(e.__traceback__)\
+    \ from e\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_dynamo/utils.py\"\
+    , line 1570, in run_node\r\n    return node.target(*args, **kwargs)\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/utils/_stats.py\"\
+    , line 20, in wrapper\r\n    return fn(*args, **kwargs)\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_subclasses/fake_tensor.py\"\
+    , line 1385, in __torch_dispatch__\r\n    return self.dispatch(func, types, args, kwargs)\r\n  File\
+    \ \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_subclasses/fake_tensor.py\"\
+    , line 1642, in dispatch\r\n    op_impl_out = op_impl(self, func, *args, **kwargs)\r\n  File \"/home/philip/.conda/envs/pytorch-vision-dev/lib/python3.8/site-packages/torch/_subclasses/fake_tensor.py\"\
+    , line 670, in index_tensor\r\n    out = meta_index_Tensor(*args, **kwargs)\r\n  File \"/home/philip/.cond"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 109072
+  topic: null
+  title: attn_bias not populated in case of boolean mask in scaled_dot_product_attention
+  body: "### \U0001F41B Describe the bug\r\n\r\nSeems like the variable `attn_bias` is never populated\
+    \ in case of a `bool` attention mask.\r\n\r\nhttps://github.com/pytorch/pytorch/blob/main/torch/nn/functional.py#L4923C1-L4927C39\r\
+    \n\r\n```\r\nif attn_mask is not None:\r\n    if attn_mask.dtype == torch.bool:\r\n        attn_mask.masked_fill_(attn_mask.logical_not(),\
+    \ float(\"-inf\"))\r\n    else:\r\n        attn_bias += attn_mask\r\n```\r\n\r\nMaybe I'm missing\
+    \ something here.\r\n\r\nI'm guessing that the code is mimicking the docs, so posted here. If the\
+    \ C++ implementation is different, please could you point me to it?\r\n\r\n### Versions\r\n\r\nmaster\
+    \ branch.\r\n\n\ncc @albanD @mruberry @jbschlosser @walterddr @mikaylagawarecki"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 103963
+  topic: null
+  title: '`scaled_dot_product_attention` produces `nan`s with boolean `attn_mask` with zero rows.'
+  body: "### \U0001F41B Describe the bug\r\n\r\nAs per title. The repro is:\r\n\r\n```python\r\nimport\
+    \ torch\r\nimport torch.nn.functional as F\r\n\r\ntorch.manual_seed(13)\r\n\r\nq = torch.rand(1, 1,\
+    \ 8, 8, device='cuda')\r\nk = torch.rand(1, 1, 8, 8, device='cuda')\r\nv = torch.rand(1, 1, 8, 8,\
+    \ device='cuda')\r\n\r\nattn_mask = torch.rand(1, 1, 8, 8, device='cuda')\r\n# make only attn_mask[...,\
+    \ :4, :4] nonzero\r\nattn_mask[..., 4:, :] = 0\r\nattn_mask[..., :, 4:] = 0\r\nattn_mask[..., 4:,\
+    \ 4:] = 0\r\n\r\ndef run(attn_mask):\r\n    return F.scaled_dot_product_attention(q, k, v, attn_mask)\r\
+    \n\r\nprint(run(attn_mask))\r\nprint()\r\nprint(run(attn_mask.to(torch.bool).to(torch.float)))\r\n\
+    print()\r\nprint(run(attn_mask.to(torch.bool)))\r\n\r\n```\r\n\r\nResult:\r\n```\r\ntensor([[[[0.3294,\
+    \ 0.5102, 0.5570, 0.3931, 0.5681, 0.4310, 0.4364, 0.5873],\r\n          [0.3122, 0.5634, 0.5390, 0.4812,\
+    \ 0.5480, 0.5196, 0.3442, 0.5177],\r\n          [0.3113, 0.5429, 0.5753, 0.4279, 0.5462, 0.4614, 0.4262,\
+    \ 0.5070],\r\n          [0.3308, 0.5409, 0.5552, 0.4361, 0.5701, 0.4857, 0.3748, 0.5113],\r\n    \
+    \      [0.3355, 0.4949, 0.5479, 0.4647, 0.5509, 0.4838, 0.3739, 0.5645],\r\n          [0.3417, 0.4965,\
+    \ 0.5595, 0.4552, 0.5323, 0.4618, 0.3968, 0.5559],\r\n          [0.3436, 0.5026, 0.5588, 0.4464, 0.5421,\
+    \ 0.4609, 0.3855, 0.5657],\r\n          [0.3363, 0.4980, 0.5521, 0.4547, 0.5463, 0.4718, 0.3850, 0.5666]]]],\r\
+    \n       device='cuda:0')\r\n\r\ntensor([[[[0.3269, 0.5471, 0.5455, 0.4189, 0.5830, 0.4809, 0.3835,\
+    \ 0.5237],\r\n          [0.3242, 0.5440, 0.5454, 0.4198, 0.5904, 0.4857, 0.3798, 0.5267],\r\n    \
+    \      [0.3234, 0.5435, 0.5605, 0.4166, 0.5690, 0.4675, 0.4054, 0.5148],\r\n          [0.3260, 0.5490,\
+    \ 0.5539, 0.4136, 0.5779, 0.4720, 0.3908, 0.5235],\r\n          [0.3355, 0.4949, 0.5479, 0.4647, 0.5509,\
+    \ 0.4838, 0.3739, 0.5645],\r\n          [0.3417, 0.4965, 0.5595, 0.4552, 0.5323, 0.4618, 0.3968, 0.5559],\r\
+    \n          [0.3436, 0.5026, 0.5588, 0.4464, 0.5421, 0.4609, 0.3855, 0.5657],\r\n          [0.3363,\
+    \ 0.4980, 0.5521, 0.4547, 0.5463, 0.4718, 0.3850, 0.5666]]]],\r\n       device='cuda:0')\r\n\r\ntensor([[[[0.3101,\
+    \ 0.6073, 0.5391, 0.3732, 0.6267, 0.4901, 0.3819, 0.4780],\r\n          [0.3111, 0.6065, 0.5381, 0.3717,\
+    \ 0.6280, 0.4894, 0.3814, 0.4802],\r\n          [0.2993, 0.6003, 0.5579, 0.3733, 0.6151, 0.4797, 0.4109,\
+    \ 0.4651],\r\n          [0.3040, 0.6067, 0.5467, 0.3717, 0.6201, 0.4837, 0.3963, 0.4759],\r\n    \
+    \      [   nan,    nan,    nan,    nan,    nan,    nan,    nan,    nan],\r\n          [   nan,   \
+    \ nan,    nan,    nan,    nan,    nan,    nan,    nan],\r\n          [   nan,    nan,    nan,    nan,\
+    \    nan,    nan,    nan,    nan],\r\n          [   nan,    nan,    nan,    nan,    nan,    nan, \
+    \   nan,    nan]]]],\r\n       device='cuda:0')\r\n\r\n```\r\n\r\n### Versions\r\n\r\nCurrent master.\r\
+    \n\r\ncc @albanD @mruberry @jbschlosser @walterddr @mikaylagawarecki"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 102841
+  topic: null
+  title: Boolean mask setitem with differentiable tensors fails in dynamo
+  body: "### \U0001F41B Describe the bug\n\n```\r\n    def test_setitem_boolean_mask_diff(self):\r\n \
+    \       def fn(x, b, y):\r\n            x = x.clone()\r\n            x[b] = y\r\n            return\
+    \ x\r\n\r\n        opt_fn = torch._dynamo.optimize(\"aot_eager\")(fn)\r\n        x = torch.randn(4,\
+    \ requires_grad=True)\r\n        b = torch.tensor([True, False, True, False])\r\n        y = torch.randn(2,\
+    \ requires_grad=True)\r\n        opt_fn(x, b, y)\r\n```\r\n\r\nThis test fails with\r\n\r\n```\r\n\
+    \  File \"/data/users/ezyang/b/pytorch/torch/_meta_registrations.py\", line 1548, in meta_index_Tensor\r\
+    \n    nonzero = index.nonzero()\r\n  File \"/data/users/ezyang/b/pytorch/torch/utils/_stats.py\",\
+    \ line 20, in wrapper\r\n    return fn(*args, **kwargs)\r\n  File \"/data/users/ezyang/b/pytorch/torch/_subclasses/fake_tensor.py\"\
+    , line 1153, in __torch_dispatch__       \r\n    return self.dispatch(func, types, args, kwargs)\r\
+    \n  File \"/data/users/ezyang/b/pytorch/torch/_subclasses/fake_tensor.py\", line 1373, in dispatch\r\
+    \n    op_impl_out = op_impl(self, func, *args, **kwargs)\r\n  File \"/data/users/ezyang/b/pytorch/torch/_subclasses/fake_tensor.py\"\
+    , line 488, in nonzero\r\n    raise DynamicOutputShapeException(func)\r\ntorch._dynamo.exc.BackendCompilerFailed:\
+    \ backend='compiler_fn' raised:\r\nDynamicOutputShapeException: aten.nonzero.default\r\n```\n\n###\
+    \ Versions\n\nmain\n\ncc @msaroufim @wconstab @bdhirsh @anijain2305 @voznesenskym @penguinwu @EikanWang\
+    \ @jgong5 @Guobing-Chen @XiaobingSuper @zhuhaozhe @blzheng @Xia-Weiwen @wenzhe-nrv @jiayisunx @ipiszy"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 96111
+  topic: null
+  title: Static size boolean masking
+  body: "### \U0001F41B Describe the bug\n\nA long standing request is https://github.com/pytorch/pytorch/issues/62320\
+    \ ; Executorch team has agreed to implement it.\r\n\r\nOnce this is implemented, we can also get static\
+    \ size boolean masking to work too. The easiest way is to convert the boolean mask into an index tensor.\
+    \ You can use the meta implementation for indexing to do this:\r\n\r\n```\r\n@register_meta(aten.index.Tensor)\r\
+    \ndef meta_index_Tensor(self, indices):\r\n    result: List[Optional[Tensor]] = []\r\n    for i, index\
+    \ in enumerate(indices):\r\n        if index is not None:\r\n            check(\r\n              \
+    \  index.dtype in [torch.long, torch.int, torch.int8, torch.bool],\r\n                lambda: \"tensors\
+    \ used as indices must be long, int, byte or bool tensors\",\r\n            )\r\n            if index.dtype\
+    \ in [torch.int8, torch.bool]:\r\n                nonzero = index.nonzero()\r\n                k =\
+    \ len(result)\r\n                check(\r\n                    k + index.ndim <= self.ndim,\r\n  \
+    \                  lambda: f\"too many indices for tensor of dimension {self.ndim}\",\r\n        \
+    \            IndexError,\r\n                )\r\n                for j in range(index.ndim):\r\n \
+    \                   check(\r\n                        index.shape[j] == self.shape[k + j],\r\n   \
+    \                     lambda: f\"The shape of the mask {index.shape} at index {i} \"\r\n         \
+    \               f\"does not match the shape of the indexed tensor {self.shape} at index {k + j}\"\
+    ,\r\n                        IndexError,\r\n                    )\r\n                    result.append(nonzero.select(1,\
+    \ j))\r\n            else:\r\n                result.append(index)\r\n        else:\r\n          \
+    \  result.append(index)\r\n    return result\r\n\r\n```\r\n\r\nThe main annoyance is that if there\
+    \ are not enough elements to fill the nonzero, it will be zero padded. For a boolean mask, a zero\
+    \ pad is inappropriate; instead you want an invalid index, and then to fill the indexing op with some\
+    \ placeholder element like 0.\n\n### Versions\n\nmaster"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 45125
+  topic: null
+  title: 'Boolean indexing of an ndarray with a torch.tensor mask breaks for size=1 '
+  body: "## \U0001F41B Bug\r\n\r\nNumpy allows to index arrays with boolean pytorch tensors and usually\
+    \ behaves just like pytorch. However, for a dimension of size 1 a pytorch boolean mask is interpreted\
+    \ as an integer index. As a result, indexing of `np.ones(1)` with a `torch.ones(1, dtype=torch.bool)`\
+    \ returns an error as it tries to access the second element. Expected behaviour is achieved by casting\
+    \ the tensor to numpy.\r\n\r\n## To Reproduce\r\n\r\nIf the mask is False, indexing with a tensor\
+    \ returns the first element:\r\n```\r\nimport torch\r\nimport numpy as np\r\nx = torch.zeros(1, dtype=torch.bool)\r\
+    \ny = np.ones(1)\r\nprint(y[x.numpy()])\r\nprint(y[x])\r\n```\r\noutputs:\r\n```\r\n[]\r\n1.0\r\n\
+    ```\r\nIf the mask is True, the second print raises an error:\r\n```\r\nimport torch\r\nimport numpy\
+    \ as np\r\nx = torch.ones(1, dtype=torch.bool)\r\ny = np.ones(1)\r\nprint(y[x.numpy()])\r\nprint(y[x])\r\
+    \n```\r\noutputs:\r\n```\r\n[1.]\r\n---------------------------------------------------------------------------\r\
+    \n\r\nIndexError                                Traceback (most recent call last)\r\n\r\n<ipython-input-58-c59be12007b5>\
+    \ in <module>()\r\n      2 y = np.ones(1)\r\n      3 print(y[x.numpy()])\r\n----> 4 print(y[x])\r\n\
+    \r\nIndexError: index 1 is out of bounds for axis 0 with size 1\r\n```\r\n\r\n## Expected behavior\r\
+    \n\r\nFor more than one element, the behaviour is as expected:\r\n```\r\nimport torch\r\nimport numpy\
+    \ as np\r\nx = torch.ones(2, dtype=torch.bool)\r\ny = np.ones(2)\r\nprint(y[x.numpy()])\r\nprint(y[x])\r\
+    \n```\r\noutputs:\r\n```\r\n[1. 1.]\r\n[1. 1.]\r\n```\r\n\r\n## Environment\r\nPython 3.6.9, NumPy\
+    \ 1.19.2, PyTorch 1.6.0\r\n\r\n## Additional context\r\n\r\nI initially raised an issue in the numpy\
+    \ repository (https://github.com/numpy/numpy/issues/17348), but was advised to open one here as it\
+    \ appears to be a pytorch problem (probably explained in https://github.com/pytorch/pytorch/pull/4732#issuecomment-696435710).\r\
+    \n\n\ncc @mruberry @rgommers @heitorschueroff"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 66764
+  topic: null
+  title: 'Incorrect result when conditionally updating tensor with boolean mask. '
+  body: "## \U0001F41B Bug\r\n\r\nThe tensor remains unchanged for conditional update with second indexing\
+    \ as follows: ```logits[mask][..., 1:] = float('inf')``` doesn't change ```logits```\r\n\r\n## To\
+    \ Reproduce\r\n\r\nSteps to reproduce the behavior: Following code reproduces this:\r\n\r\n```\r\n\
+    import torch\r\n\r\nT, B, C = 128, 8, 32\r\n\r\n# dummy input length beyond  which to mask\r\nL =\
+    \ 100\r\n\r\n# create random logits\r\nlogits = torch.rand((T, B, C))\r\nlogits_cloned = logits.clone()\r\
+    \n\r\n# create dummy padding mask\r\npadding_mask = torch.zeros((B, T))\r\npadding_mask[:, L:] = 1\r\
+    \npadding_mask = padding_mask.bool()\r\n\r\nlogits[padding_mask.T][..., 1:] = float(\"-inf\")\r\n\r\
+    \nprint(\"Masked logits and cloned logits differ at these many places: {}\".format(\r\n    (logits\
+    \ != logits_cloned).sum().item()\r\n))\r\nprint(\"Total timesteps to be masked: {}\".format(padding_mask.sum().item()))\r\
+    \nassert(torch.any(torch.isinf(logits))), \"No inf found\"\r\n```\r\n\r\n## Expected behavior\r\n\r\
+    \n```logits``` should be updated to desired values in appropriate masked values.\r\n\r\n## Environment\r\
+    \n\r\n - PyTorch Version (e.g., 1.0): 1.9.1\r\n - OS (e.g., Linux): Ubuntu 20.04.1 LTS (x86_64)\r\n\
+    \ - How you installed PyTorch (`conda`, `pip`, source): pip\r\n - Build command you used (if compiling\
+    \ from source):\r\n - Python version: 3.7.11\r\n - CUDA/cuDNN version: 11.1\r\n - GPU models and configuration:\
+    \ Tesla V100-SXM2-32GB\r\n - Any other relevant information: Also fails for 1.8.2, 1.9.0"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 25176
+  topic: null
+  title: Tensor slicing with boolean numpy mask wrong
+  body: "## \U0001F41B Bug\r\nNumpy arrays of dtype `np.bool` should be interpreted as masks when slicing\
+    \ torch arrays, just like tensors of dtype `torch.bool` are. Insead, such arrays are interpreted as\
+    \ indices.\r\n\r\n## To Reproduce\r\nSteps to reproduce the behavior:\r\n\r\n```python\r\nt = torch.tensor(range(5))\r\
+    \nmask = np.array([False, True, True, False, True])\r\n\r\nprint(t[mask.astype(np.bool)])\r\nprint(t[mask.astype(np.uint8)])\r\
+    \n```\r\nOutput\r\n```bash\r\ntensor([0, 1, 1, 0, 1])\r\ntensor([1, 2, 4])\r\n```\r\n## Expected behavior\r\
+    \nThe expected behaviour is that the result is the same as for slicing with torch tensors with the\
+    \ same dtype, where for the input\r\n```python\r\nt = torch.tensor(range(5))\r\nmask = torch.tensor([False,\
+    \ True, True, False, True])\r\n\r\nprint(t[mask.to(torch.bool)])\r\nprint(t[mask.to(torch.uint8)])\r\
+    \n```\r\nwe get the expected output\r\n```bash\r\ntensor([1, 2, 4])\r\ntensor([1, 2, 4])\r\n```\r\n\
+    \r\n## Environment\r\n - PyTorch Version: 1.2.0a0+0885dd2\r\n - OS: Ubuntu 16.04.6 LTS\r\n - How you\
+    \ installed PyTorch: Nvidia docker image (`FROM nvcr.io/nvidia/pytorch:19.06-py3`)\r\n - Python version:\
+    \ 3.6\r\n - CUDA/cuDNN version: Nvidia driver version: 384.183, ` /usr/lib/x86_64-linux-gnu/libcudnn.so.7.6.0`\r\
+    \n - GPU models and configuration: Tesla V100\r\n"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 20201
+  topic: null
+  title: In-place modification with double slicing (using boolean mask)
+  body: "## \U0001F41B Bug\r\n\r\nCannot do in-place modification of a tensor with a double slicing using\
+    \ `torch.uint8` (boolean mask) tensor.\r\n\r\n## To Reproduce\r\n\r\nSteps to reproduce the behavior:\r\
+    \n\r\n```\r\nimport torch\r\n\r\na = torch.tensor([[1., 2.], [13., 4.], [8., 14.]])\r\n\r\n# Creating\
+    \ a mask for those elements of a that are greater than 10\r\nb = a > 10\r\nprint(\"b is: \", b)\r\n\
+    print(\"a[b] is: \", a[b])\r\n\r\n# Creating a mask for those elements of a[b] (i.e. [13., 14.]) that\
+    \ are greater than 13.5\r\nc = a[b] > 13.5\r\nprint(\"c is: \", c)\r\nprint(\"a[b][c] is: \", a[b][c])\r\
+    \n\r\n# HERE IS THE BUG\r\na[b][c] = torch.tensor([17.], dtype=a.dtype)\r\n# a[b][c] = torch.tensor([17.])\r\
+    \n# a[b][c] = 17.\r\n\r\nprint(\"a is: \", a)\r\nprint(\"a[b] is: \", a[b])\r\n\r\n```\r\n\r\nNo error\
+    \ is reported when running this code.\r\n\r\n## Expected behavior\r\n\r\nI think that it is expected\
+    \ that, no matter which of the three ways I described to do the in-place modification of the tensor,\
+    \ `a` should have been modified while it is not. If I use a single mask, then everything works just\
+    \ fine.\r\nIf I try something else such as `a[0][0] = 17.` or `a[0, :][0] = 17.` then everything is\
+    \ working (but notice that the slicing is not done with a mask (or `torch.unit8` tensor) in these\
+    \ two cases.\r\n\r\nOne way to work around this issue is using another tensor:\r\n\r\n```\r\nk = a[b]\r\
+    \nprint(\"k is: \", k)\r\nk[c] = 42\r\n\r\n# k as been modified\r\nprint(\"k is: \", k)\r\n\r\na[b]\
+    \ = k\r\n\r\n# a has been modified\r\nprint(\"a is: \", a)\r\nprint(\"a[b] is: \",  a[b])\r\n```\r\
+    \n\r\n## Environment\r\n\r\n - PyTorch Version: 1.0.1\r\n - OS: Ubuntu 18.04\r\n - How I installed\
+    \ PyTorch: `conda install pytorch cudatoolkit=9.0 -c pytorch`\r\n - Python version: 3.7\r\n"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 16635
+  topic: null
+  title: Floating point exception when computing gradient from empty boolean-mask slicing
+  body: "## \U0001F41B Bug\r\n\r\nA floating point exception is thrown when one mask-slices a two-dimensional\
+    \ tensor with a one-dimensional all-false boolean tensor.\r\n\r\n## To Reproduce\r\n\r\n```\r\nIn\
+    \ [1]: import torch                                                                              \
+    \                                                                                                \
+    \                                                                                \r\n\r\nIn [2]: x\
+    \ = torch.randn(10, 8).requires_grad_()                                                          \
+    \                                                                                                \
+    \                                                                         \r\n\r\nIn [3]: y = x[(x.sum(1)\
+    \ > 0) & (x.sum(1) < 0)]    # guaranteed to be all false                                         \
+    \                                                                                                \
+    \                                                           \r\n\r\nIn [4]: z = y.sum()          \
+    \                                                                                                \
+    \                                                                                                \
+    \                                                     \r\n\r\nIn [5]: z.backward()               \
+    \                                                                                                \
+    \                                                                                                \
+    \                                               \r\nFloating point exception (core dumped)\r\n```\r\
+    \n\r\n## Expected behavior\r\n\r\nPyTorch shouldn't crash, and preferably the gradient of x should\
+    \ be zero.\r\n\r\n## Environment\r\n\r\nPyTorch version: 1.0.0\r\nIs debug build: No\r\nCUDA used\
+    \ to build PyTorch: 9.0.176\r\n\r\nOS: Fedora release 29 (Twenty Nine)\r\nGCC version: (GCC) 8.2.1\
+    \ 20181215 (Red Hat 8.2.1-6)\r\nCMake version: version 3.12.1\r\n\r\nPython version: 3.6\r\nIs CUDA\
+    \ available: No\r\nCUDA runtime version: 10.0.130\r\nGPU models and configuration: Could not collect\r\
+    \nNvidia driver version: Could not collect\r\ncuDNN version: Probably one of the following:\r\n/usr/local/cuda-9.0/targets/x86_64-linux/lib/libcudnn.so\r\
+    \n/usr/local/cuda-9.0/targets/x86_64-linux/lib/libcudnn.so.7\r\n/usr/local/cuda-9.0/targets/x86_64-linux/lib/libcudnn.so.7.0.5\r\
+    \n/usr/local/cuda-9.0/targets/x86_64-linux/lib/libcudnn_static.a\r\n\r\nVersions of relevant libraries:\r\
+    \n[pip] Could not collect\r\n[conda] _tflow_select             2.3.0                       mkl  \r\
+    \n[conda] blas                      1.0                         mkl  \r\n[conda] mkl             \
+    \          2018.0.3                      1  \r\n[conda] mkl-service               1.1.2          \
+    \  py36h90e4bf4_5  \r\n[conda] mkl_fft                   1.0.6            py36h7dd41cf_0  \r\n[conda]\
+    \ mkl_random                1.0.1            py36h4414c95_1  \r\n[conda] pytorch                 \
+    \  1.0.0           py3.6_cuda9.0.176_cudnn7.4.1_1    pytorch\r\n\r\n## Additional context\r\n\r\n\
+    `masked_select` with an all-false tensor works fine."
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 10000
+  topic: null
+  title: Torch handles assignment to all-False boolean masks incorrectly
+  body: "## Issue description\r\n\r\ntorch yields a RuntimeError when assigning a vector to an empty set\
+    \ of indices in an array.\r\n\r\n## Code example\r\n\r\n```\r\nimport torch\r\nx = torch.zeros((2,\
+    \ 2))\r\n\r\nmask = torch.tensor([True, True])\r\nprint(x[mask])\r\nx[mask] = torch.tensor([1., 2.])\r\
+    \n\r\nmask = torch.tensor([True, False])\r\nprint(x[mask])\r\nx[mask] = torch.tensor([1., 2.])\r\n\
+    \r\nmask = torch.tensor([False, True])\r\nprint(x[mask])\r\nx[mask] = torch.tensor([1., 2.])\r\n\r\
+    \nmask = torch.tensor([False, False])\r\nprint(x[mask])\r\nx[mask] = torch.tensor([1., 2.])\r\n```\r\
+    \n\r\noutputs\r\n```\r\ntensor([[0., 0.],\r\n        [0., 0.]])\r\ntensor([[1., 2.]])\r\ntensor([[1.,\
+    \ 2.]])\r\ntensor([])\r\nTraceback (most recent call last):\r\n  File \"bug.py\", line 18, in <module>\r\
+    \n    x[mask] = torch.tensor([1., 2.])\r\nRuntimeError: The expanded size of the tensor (0) must match\
+    \ the existing size (2) at non-singleton dimension 0\r\n```\r\n\r\n## System Info\r\n```\r\n$ python\
+    \ collect_env.py\r\nCollecting environment information...\r\nPyTorch version: 0.4.1\r\nIs debug build:\
+    \ No\r\nCUDA used to build PyTorch: None\r\n\r\nOS: Mac OSX 10.13.6\r\nGCC version: Could not collect\r\
+    \nCMake version: version 3.11.4\r\n\r\nPython version: 3.6\r\nIs CUDA available: No\r\nCUDA runtime\
+    \ version: No CUDA\r\nGPU models and configuration: No CUDA\r\nNvidia driver version: No CUDA\r\n\
+    cuDNN version: No CUDA\r\n\r\nVersions of relevant libraries:\r\n[pip] Could not collect\r\n[conda]\
+    \ torch                     0.4.1                     <pip>\r\n$ gcc --version\r\nConfigured with:\
+    \ --prefix=/Library/Developer/CommandLineTools/usr --with-gxx-include-dir=/usr/include/c++/4.2.1\r\
+    \nApple LLVM version 9.1.0 (clang-902.0.39.2)\r\nTarget: x86_64-apple-darwin17.7.0\r\nThread model:\
+    \ posix\r\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\r\n$ pip --version\r\npip 18.0\
+    \ from /anaconda3/lib/python3.6/site-packages/pip (python 3.6)\r\n```\r\n\r\n## Current workaround\r\
+    \nCurrent workaround involves using an if-statement conditioned on mask.any(), i.e.:\r\n```\r\nif\
+    \ mask.any(): x[mask] = torch.tensor([1., 2.])\r\n```"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue "boolean mask" in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 164286
+  topic: null
+  title: GradTrackingTensor does not copy layout (issue with torch.sparse)
+  body: "### \U0001F41B Describe the bug\n\n`GradTrackingTensor` wrapped around a sparse tensor breaks\
+    \ with `torch.sparse.mm` due to a failing layout check. Specifically, here is a minimal example:\n\
+    \n```\nimport torch\n\n\ndef f(a, x):\n    print(a.layout, x.layout)\n\n    return torch.sparse.mm(a,\
+    \ x)\n\n\na = torch.sparse_coo_tensor(torch.tensor([[0, 1, 2], [1, 2, 0]]), [1.0, 1.0, 1.0])\nx =\
+    \ torch.tensor([1.0, 3.0, 2.0])[:, None]\nprint(f(a, x))  # works fine\n\nvjp = torch.func.vjp(f,\
+    \ a, x)[1]  # fails\n```\n\nThis produces the following output (note that the `print(a.layout, x.layout)`\
+    \ call produces different outputs depending on whether it is called inside or outside of the vjp):\n\
+    ```\ntorch.sparse_coo torch.strided\ntensor([[3.],\n        [2.],\n        [1.]])\ntorch.strided torch.strided\n\
+    Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n\
+    \  File \"<frozen runpy>\", line 88, in _run_code\n  File \".../main.py\", line 13, in <module>\n\
+    \    vjp = torch.func.vjp(f, a, x)[1]\n          ^^^^^^^^^^^^^^^^^^^^^^^\n  File \".../lib/python3.12/site-packages/torch/_functorch/eager_transforms.py\"\
+    , line 300, in vjp\n    return _vjp_with_argnums(func, *primals, has_aux=has_aux)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\
+    \  File \".../lib/python3.12/site-packages/torch/_functorch/vmap.py\", line 48, in fn\n    return\
+    \ f(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^\n  File \".../lib/python3.12/site-packages/torch/_functorch/eager_transforms.py\"\
+    , line 358, in _vjp_with_argnums\n    primals_out = func(*primals)\n                  ^^^^^^^^^^^^^^\n\
+    \  File \".../main.py\", line 6, in f\n    return torch.sparse.mm(a, x)\n           ^^^^^^^^^^^^^^^^^^^^^\n\
+    RuntimeError: addmm_sparse_dense: expected either 'mat1' to have sparse layout and 'mat2' to have\
+    \ strided layout, got 'mat1' with layout Strided and 'mat2' with layout Sparse\n```\n\n### Versions\n\
+    \nCollecting environment information...\nPyTorch version: 2.8.0\nIs debug build: False\nCUDA used\
+    \ to build PyTorch: None\nROCM used to build PyTorch: N/A\n\nOS: macOS 15.6.1 (arm64)\nGCC version:\
+    \ Could not collect\nClang version: 20.1.7\nCMake version: version 3.24.2\nLibc version: N/A\n\nPython\
+    \ version: 3.12.0 | packaged by conda-forge | (main, Oct  3 2023, 08:36:57) [Clang 15.0.7 ] (64-bit\
+    \ runtime)\nPython platform: macOS-15.6.1-arm64-arm-64bit\nIs CUDA available: False\nCUDA runtime\
+    \ version: No CUDA\nCUDA_MODULE_LOADING set to: N/A\nGPU models and configuration: No CUDA\nNvidia\
+    \ driver version: No CUDA\ncuDNN version: No CUDA\nIs XPU available: False\nHIP runtime version: N/A\n\
+    MIOpen runtime version: N/A\nIs XNNPACK available: True\n\nCPU:\nApple M2\n\nVersions of relevant\
+    \ libraries:\n[pip3] numpy==2.3.2\n[pip3] nvtx==0.2.13\n[pip3] torch==2.8.0\n[conda] libopenvino-pytorch-frontend\
+    \ 2025.2.0             hec049ff_1    conda-forge\n[conda] numpy                     2.3.2        \
+    \            pypi_0    pypi\n[conda] nvtx                      0.2.13                   pypi_0   \
+    \ pypi\n[conda] tbb                       2022.2.0             h5b2e6d4_1    conda-forge\n[conda]\
+    \ torch                     2.8.0                    pypi_0    pypi\n\ncc @alexsamardzic @nikitaved\
+    \ @pearu @cpuhrsch @amjames @bhosmer @jcaip @ezyang @EikanWang @jgong5 @wenzhe-nrv"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue torch.sparse in:title
+  is_pull_request: false
+- repo: pytorch/pytorch
+  number: 130687
+  topic: null
+  title: Compilation Fails with torch.sparse and "fullgraph=True"
+  body: "### \U0001F41B Describe the bug\n\nWhen you have a function that uses torch.sparse, torch.compile\
+    \ can compile it, but not with \"fullgraph=True\" \n\n### Error logs\n\n(e3nn_env) aglover@login36:~/e3nn_benchmarking>\
+    \ python minimal_sparse_compilation_error.py \r\n/global/u1/a/aglover/e3nn_benchmarking/minimal_sparse_compilation_error.py:21:\
+    \ UserWarning: Sparse CSR tensor support is in beta state. If you miss a functionality in the sparse\
+    \ tensor support, please submit a feature request to https://github.com/pytorch/pytorch/issues. (Triggered\
+    \ internally at /home/conda/feedstock_root/build_artifacts/libtorch_1718580740865/work/aten/src/ATen/SparseCsrTensorImpl.cpp:53.)\r\
+    \n  z = torch.randn(size=(3,9), dtype=torch.float32, device=device).to_sparse_csr()\r\n0.000072\r\n\
+    I0713 17:21:46.222000 140632849619840 torch/_dynamo/logging.py:55] [0/0] Step 1: torchdynamo start\
+    \ tracing inner /global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/site-packages/torch/_dynamo/external_utils.py:34\r\
+    \nI0713 17:21:46.233000 140632849619840 torch/_dynamo/convert_frame.py:538] [0/0] Restarting analysis\
+    \ due to _dynamo/symbolic_convert.py:142 in fail_and_restart_analysis\r\nI0713 17:21:46.234000 140632849619840\
+    \ torch/_dynamo/logging.py:55] [0/0_1] Step 1: torchdynamo start tracing inner /global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/site-packages/torch/_dynamo/external_utils.py:34\r\
+    \nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822] WON'T CONVERT inner /global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/site-packages/torch/_dynamo/external_utils.py\
+    \ line 34\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822] ==========\
+    \ TorchDynamo Stack Trace ==========\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \ Traceback (most recent call last):\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \   File \"/global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py\"\
+    , line 786, in _convert_frame\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \     result = inner_convert(\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \   File \"/global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py\"\
+    , line 400, in _convert_frame_assert\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \     return _compile(\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \   File \"/global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/contextlib.py\", line 79, in\
+    \ inner\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]     return func(*args,\
+    \ **kwds)\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]   File \"/global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py\"\
+    , line 676, in _compile\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \     guarded_code = compile_inner(code, one_graph, hooks, transform)\r\nI0713 17:21:46.240000 140632849619840\
+    \ torch/_dynamo/convert_frame.py:822]   File \"/global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/site-packages/torch/_dynamo/utils.py\"\
+    , line 262, in time_wrapper\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \     r = func(*args, **kwargs)\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \   File \"/global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py\"\
+    , line 535, in compile_inner\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \     out_code = transform_code_object(code, transform)\r\nI0713 17:21:46.240000 140632849619840 torch/_dynamo/convert_frame.py:822]\
+    \   File \"/global/homes/a/aglover/.conda/envs/e3nn_env/lib/python3.10/site-packages/torch/_dynamo/bytecode_transformation.py\"\
+    , line 1036, in transform_code_object\r\nI0713 17:21:46.2400"
+  bucket: adjacent_unassigned
+  query: repo:pytorch/pytorch is:issue torch.sparse in:title
+  is_pull_request: false

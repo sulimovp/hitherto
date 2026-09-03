@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}New assessment — Casefile{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="text-center mb-4">
+      <h1 class="h2 fw-bold">Should you invest in this OSS change?</h1>
+      <p class="lead text-muted mb-0">
+        Retrieve cited evidence from issues, PRs, docs, and adjacent projects — then an optional synthesis you can verify.
+      </p>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-white">
+        <span class="fw-semibold">Try a sample case</span>
+        <span class="text-muted small ms-2">not sure what to ask? pick one we test against</span>
+      </div>
+      <div class="card-body">
+        <div class="row g-2">
+          {% for pid, p in presets.items() %}
+          <div class="col-md-6">
+            <a href="{{ url_for('index', preset=pid) }}"
+               class="card h-100 text-decoration-none sample-case-card {% if preset_id == pid %}border-primary{% else %}border-light{% endif %}">
+              <div class="card-body py-3">
+                <div class="fw-semibold text-body">{{ p.label }}</div>
+                <div class="small text-muted mt-1">{{ p.blurb }}</div>
+                <div class="small text-muted mt-2">
+                  <span class="badge text-bg-light border">{{ p.repo }}</span>
+                  {% if p.path %}<span class="badge text-bg-light border">{{ p.path }}</span>{% endif %}
+                  <span class="badge text-bg-light border">tier {{ p.tier }}</span>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {% if preset_blurb %}
+    <div class="alert alert-info py-2 small mb-3" role="status">
+      <strong>Loaded preset.</strong> {{ preset_blurb }}
+    </div>
+    {% endif %}
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post" action="{{ url_for('assess_submit') }}" id="assess-form">
+          <div class="mb-3">
+            <label for="question" class="form-label fw-semibold">Your question</label>
+            <textarea class="form-control" id="question" name="question" rows="3" required
+                      placeholder="Is reviving feature X worth an upstream contribution?">{{ form.question }}</textarea>
+            <div class="form-text">Phrase it as a decision question, not “tell me about X”.</div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="repo" class="form-label fw-semibold">Repository</label>
+              <input type="text" class="form-control" id="repo" name="repo" required
+                     placeholder="owner/name" value="{{ form.repo }}">
+            </div>
+            <div class="col-md-6">
+              <label for="path" class="form-label fw-semibold">Path <span class="text-muted fw-normal">(optional)</span></label>
+              <input type="text" class="form-control" id="path" name="path"
+                     placeholder="torch/masked" value="{{ form.path }}">
+            </div>
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-md-6">
+              <label for="ecosystem" class="form-label fw-semibold">Ecosystem profile</label>
+              <select class="form-select" id="ecosystem" name="ecosystem">
+                <option value="">— none (generic search) —</option>
+                {% for name in profiles %}
+                  <option value="{{ name }}" {% if form.ecosystem == name %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+              </select>
+              <div class="form-text">Adds synonyms, pinned issues, adjacent projects, dev-discuss.</div>
+            </div>
+            <div class="col-md-3">
+              <label for="tier" class="form-label fw-semibold">Evidence tier</label>
+              <select class="form-select" id="tier" name="tier">
+                <option value="1" {% if form.tier == 1 %}selected{% endif %}>1 — issues + files</option>
+                <option value="2" {% if form.tier == 2 %}selected{% endif %}>2 — + PRs, discourse</option>
+                <option value="3" {% if form.tier == 3 %}selected{% endif %}>3 — all</option>
+              </select>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="synthesize" name="synthesize"
+                       {% if form.synthesize %}checked{% endif %}>
+                <label class="form-check-label" for="synthesize">LLM synthesis</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="allow_stale_profile" name="allow_stale_profile"
+                   {% if form.allow_stale_profile %}checked{% endif %}>
+            <label class="form-check-label" for="allow_stale_profile">Allow stale ecosystem profile</label>
+          </div>
+
+          <div class="d-grid gap-2 mt-4">
+            <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+              Run assessment
+            </button>
+          </div>
+          <p class="text-muted small text-center mt-2 mb-0">
+            You will be redirected to a progress page, then the report (typically 30–90 seconds).
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.getElementById('assess-form').addEventListener('submit', function () {
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Retrieving evidence…';
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,72 @@
+{
+  "n_overlap": 20,
+  "n_valid_rows": 16,
+  "primary_versions": [
+    "block6-v2|bfc6010c4871|openai/gpt-oss-120b:groq@b5c939de8f754692c1647ca79fbf85e8c1e70f8a"
+  ],
+  "secondary_versions": [
+    "block6-v2|bfc6010c4871|Qwen/Qwen3-14B:nscale@40c069824f4251a91eefaf281ebe4c544efd3e18"
+  ],
+  "fields": {
+    "intent": {
+      "metric": "cohen_kappa",
+      "n": 5,
+      "agreement": 0.8,
+      "value": 0.6666666666666667
+    },
+    "proposed_solution_present": {
+      "metric": "cohen_kappa",
+      "n": 2,
+      "agreement": 1.0,
+      "value": 1.0
+    },
+    "patch_offered": {
+      "metric": "cohen_kappa",
+      "n": 0,
+      "agreement": null,
+      "value": null
+    },
+    "maintainer_stance": {
+      "metric": "cohen_kappa",
+      "n": 0,
+      "agreement": null,
+      "value": null
+    },
+    "scope": {
+      "metric": "cohen_kappa",
+      "n": 1,
+      "agreement": 0.0,
+      "value": 0.0
+    },
+    "names_alternative": {
+      "metric": "cohen_kappa",
+      "n": 0,
+      "agreement": null,
+      "value": null
+    },
+    "names_alternative_text": {
+      "metric": "cohen_kappa",
+      "n": 0,
+      "agreement": null,
+      "value": null
+    },
+    "specificity": {
+      "metric": "krippendorff_alpha_ordinal",
+      "n": 0,
+      "agreement": null,
+      "value": null
+    },
+    "blocking_severity": {
+      "metric": "krippendorff_alpha_ordinal",
+      "n": 0,
+      "agreement": null,
+      "value": null
+    },
+    "affect": {
+      "metric": "krippendorff_alpha_ordinal",
+      "n": 0,
+      "agreement": null,
+      "value": null
+    }
+  }
+}

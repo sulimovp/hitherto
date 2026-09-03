@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Running assessment — Casefile{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+  <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
+    <span class="visually-hidden">Loading</span>
+  </div>
+  <h1 class="h4 fw-bold">Retrieving evidence</h1>
+  <p class="text-muted col-lg-8 mx-auto">
+    Querying GitHub, validating links, and optionally synthesizing a summary.
+    This page refreshes automatically every few seconds.
+  </p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  setTimeout(function () { window.location.reload(); }, 3000);
+</script>
+{% endblock %}

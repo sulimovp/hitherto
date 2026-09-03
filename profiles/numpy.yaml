@@ -1,0 +1,60 @@
+# NumPy ecosystem — masked arrays, NEPs, and core MA maintenance (data-science staple).
+# Curator: update last_verified after checking links.
+# Re-verified 2026-08-30: adjacent/NEP URLs 200; pins 22338/18675/15858 200;
+# labels `component: numpy.ma` and `01 - Enhancement` still exist.
+
+id: numpy
+display_name: NumPy
+version: 1
+
+last_verified: 2026-08-30
+max_age_days: 90
+
+default_repos:
+  - numpy/numpy
+
+synonyms:
+  masked array: [numpy.ma, np.ma, MaskedArray, masked arrays]
+  missing data: [NA, NEP-12, missing values]
+  array api: [NEP 18, Python Array API]
+
+label_boosts:
+  "component: numpy.ma": 0.2
+  "01 - Enhancement": 0.05
+
+adjacent_projects:
+  - name: pandas
+    url: https://pandas.pydata.org/docs/user_guide/missing_data.html
+    relevance: Primary missing-data UX for many data scientists; often preferred over np.ma for new code.
+  - name: xarray
+    url: https://docs.xarray.dev/
+    relevance: Labeled N-D arrays with NA semantics; common in geoscience / climate stacks.
+  - name: JAX
+    url: https://jax.readthedocs.io/
+    relevance: Alternative array stack with different autograd and masking patterns.
+
+scope_files:
+  - doc/neps/nep-0012-missing-data.rst
+  - numpy/ma/README.rst
+
+rfc:
+  - label: NEP 12 — missing data (historical)
+    url: https://github.com/numpy/numpy/blob/main/doc/neps/nep-0012-missing-data.rst
+  - label: NEP 50 — scalar promotion
+    url: https://numpy.org/neps/nep-0050-scalar-promotion.html
+
+sibling_repos:
+  - pandas-dev/pandas
+  - pydata/xarray
+
+path_hints:
+  ma: numpy/ma
+
+pinned_issue_numbers:
+  - 22338
+  - 18675
+  - 15858
+
+issue_search_queries:
+  - "component: numpy.ma"
+  - MaskedArray in:title

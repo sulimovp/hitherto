@@ -1,0 +1,74 @@
+# Apertus / Swiss AI — second case study for Swiss Python Summit.
+# Discussion lives on Hugging Face Hub model repos more than GitHub issues.
+# Question to run: does swiss-ai/apertus-format still earn its place now that
+# 1.5 ships native tool use and a thinking mode?
+
+id: apertus
+display_name: Apertus (Swiss AI)
+version: 1
+
+last_verified: 2026-08-23
+max_age_days: 90
+
+default_repos:
+  - swiss-ai/apertus-format
+
+synonyms:
+  apertus format: [apertus-format, chat template, tool call parser]
+  thinking mode: [enable_thinking, reasoning-parser apertus]
+  tool use: [tool-call-parser apertus, native tool use]
+  apertus 1.5: [Apertus-v1.5-8B, Apertus-v1.5-70B, Apertus 1.5]
+
+label_boosts: {}
+
+adjacent_projects:
+  - name: Apertus-v1.5-8B
+    url: https://huggingface.co/swiss-ai/Apertus-v1.5-8B
+    relevance: Primary 1.5 weights; documents native tool use and optional thinking mode.
+  - name: Apertus-v1.5-70B
+    url: https://huggingface.co/swiss-ai/Apertus-v1.5-70B
+    relevance: Larger 1.5 sibling with the same post-training recipe.
+  - name: apertus-format (GitHub)
+    url: https://github.com/swiss-ai/apertus-format
+    relevance: Custom chat-format library — candidate for redundancy vs native 1.5 templates.
+  - name: Apertus 1.5 announcement
+    url: https://www.apertus-ai.org/articles/2026-07-apertus-1-5/
+    relevance: Official release notes for multimodal input, thinking mode, and tool use.
+
+scope_files:
+  - README.md
+
+huggingface:
+  hub_repos:
+    - repo_id: swiss-ai/Apertus-v1.5-8B
+      repo_type: model
+    - repo_id: swiss-ai/Apertus-8B-Instruct-2509
+      repo_type: model
+  max_discussions_per_repo: 30
+
+rfc:
+  - label: Swiss AI GitHub org
+    url: https://github.com/swiss-ai
+
+sibling_repos:
+  - swiss-ai/apertus-format
+
+path_hints: {}
+
+pinned_issue_numbers: []
+issue_search_queries:
+  - apertus-format in:title
+  - chat template in:title
+  - tool in:title
+
+path_pinned_issue_numbers: {}
+path_issue_search_queries: {}
+
+# Item→topic assignment for synonym cluster `apertus format`. Frozen rule:
+# profile synonyms in title/lead plus an `apertus` anchor (or swiss-ai/apertus-format).
+# Not fit on these labels. Wilson 95% on precision is wide (few predicted positives).
+assignment_precision:
+  measured_at: 2026-08-28
+  n: 81
+  precision: 0.88
+  recall: 0.64
