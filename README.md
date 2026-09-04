@@ -3,12 +3,13 @@
 Evidence-first briefs for OSS contribution decisions. Given a question and a target repository, Casefile retrieves cited evidence (issues, commits, docs, adjacent projects) and optionally synthesizes a short summary. Humans keep the final call.
 
 ```bash
-# After PyPI publish (Track B W3):
-uvx casefile assess -q "…" -r pytorch/pytorch -p torch/masked --no-synthesis
+pip install whether
+uvx whether assess -q "…" -r pytorch/pytorch -p torch/masked --no-synthesis
 ```
 
-**Architecture:** [ARCHITECTURE.md](ARCHITECTURE.md)  
-**Public split steps:** [docs/SPLIT.md](docs/SPLIT.md)
+The PyPI name and CLI are `whether`. Python import stays `import casefile`.
+
+**Architecture:** [ARCHITECTURE.md](ARCHITECTURE.md)
 
 Product backlog and delivery dates live in the private Arraxis planning workspace, not in this tree.
 
@@ -16,7 +17,7 @@ Product backlog and delivery dates live in the private Arraxis planning workspac
 
 ```bash
 pip install -e ".[dev]"      # CLI + tests
-pip install -e ".[dev,web]"  # + Flask UI (casefile-web)
+pip install -e ".[dev,web]"  # + Flask UI (whether-web)
 ```
 
 ## Configure
@@ -38,7 +39,7 @@ cp .env.example .env
 
 ```bash
 pip install -e ".[web]"
-casefile-web
+whether-web
 # http://127.0.0.1:5050 — form, sample cases, cited report (Bootstrap)
 ```
 
@@ -49,10 +50,10 @@ See [docs/WEB_UI.md](docs/WEB_UI.md) and [docs/STATUS.md](docs/STATUS.md).
 ## Commands
 
 ```bash
-casefile ping
-casefile list-profiles
+whether ping
+whether list-profiles
 
-casefile assess \
+whether assess \
   --question "Is reviving torch.masked worth an upstream contribution?" \
   --repo pytorch/pytorch \
   --path torch/masked \
@@ -74,7 +75,7 @@ See [docs/VERIFICATION.md](docs/VERIFICATION.md).
 ```bash
 pytest -v
 CASEFILE_RUN_LIVE=1 pytest tests/test_live.py -v
-casefile ping
+whether ping
 ```
 
 ## Ecosystem profiles
@@ -86,7 +87,7 @@ casefile ping
 | `sklearn` | `scikit-learn/scikit-learn` | SLEPs, metadata routing, estimator API |
 
 ```bash
-casefile list-profiles
+whether list-profiles
 ./scripts/run_sample_assessments.sh   # needs .env
 python scripts/validate_reports.py
 ```

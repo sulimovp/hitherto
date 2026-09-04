@@ -1,9 +1,10 @@
 name: Publish to PyPI
 
 # Trusted publishing — no API token on the laptop.
+# PyPI project name: whether
 # One-time setup on https://pypi.org/manage/account/publishing/:
 #   Owner: sulimovp   Repo: casefile   Workflow: publish.yml   Environment: pypi
-# Then: git tag v0.1.0 && git push origin v0.1.0
+# Then create a GitHub Release tagged v0.1.0.
 
 on:
   release:

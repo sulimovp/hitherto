@@ -7,9 +7,9 @@ Architecture: `ARCHITECTURE.md`. Current implementation snapshot: `docs/STATUS.m
 ```bash
 pip install -e ".[dev,web]"
 ./scripts/verify.sh
-casefile ping
-casefile list-profiles
-casefile-web
+whether ping
+whether list-profiles
+whether-web
 ```
 
 ## Verification

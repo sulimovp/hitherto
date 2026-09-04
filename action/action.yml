@@ -40,7 +40,7 @@ runs:
 
     - name: Install Casefile
       shell: bash
-      run: pip install casefile
+      run: pip install whether
 
     - name: Run Casefile
       id: assess
@@ -59,7 +59,7 @@ runs:
         fi
         if [ -n "${{ inputs.path }}" ]; then ARGS+=(-p "${{ inputs.path }}"); fi
         if [ -n "${{ inputs.ecosystem }}" ]; then ARGS+=(-e "${{ inputs.ecosystem }}"); fi
-        casefile assess "${ARGS[@]}"
+        whether assess "${ARGS[@]}"
         {
           echo "body<<CASEFILE_EOF"
           echo "<!-- casefile-sticky -->"

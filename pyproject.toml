@@ -1,5 +1,5 @@
 [project]
-name = "casefile"
+name = "whether"
 version = "0.1.0"
 description = "Evidence-first OSS contribution assessment CLI"
 readme = "README.md"
@@ -24,7 +24,13 @@ web = [
     "markdown>=3",
 ]
 
+[project.urls]
+Homepage = "https://github.com/sulimovp/casefile"
+Repository = "https://github.com/sulimovp/casefile"
+
 [project.scripts]
+whether = "casefile.cli:app"
+whether-web = "casefile.web.app:main"
 casefile = "casefile.cli:app"
 casefile-web = "casefile.web.app:main"
 
