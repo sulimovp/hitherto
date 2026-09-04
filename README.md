@@ -1,13 +1,13 @@
-# Casefile
+﻿# Casefile
 
 Evidence-first briefs for OSS contribution decisions. Given a question and a target repository, Casefile retrieves cited evidence (issues, commits, docs, adjacent projects) and optionally synthesizes a short summary. Humans keep the final call.
 
 ```bash
-pip install whether
-uvx whether assess -q "…" -r pytorch/pytorch -p torch/masked --no-synthesis
+pip install hitherto
+uvx hitherto assess -q "…" -r pytorch/pytorch -p torch/masked --no-synthesis
 ```
 
-The PyPI name and CLI are `whether`. Python import stays `import casefile`.
+The PyPI name and CLI are `hitherto`. Python import stays `import casefile`.
 
 **Architecture:** [ARCHITECTURE.md](ARCHITECTURE.md)
 
@@ -17,7 +17,7 @@ Product backlog and delivery dates live in the private Arraxis planning workspac
 
 ```bash
 pip install -e ".[dev]"      # CLI + tests
-pip install -e ".[dev,web]"  # + Flask UI (whether-web)
+pip install -e ".[dev,web]"  # + Flask UI (hitherto-web)
 ```
 
 ## Configure
@@ -39,21 +39,21 @@ cp .env.example .env
 
 ```bash
 pip install -e ".[web]"
-whether-web
-# http://127.0.0.1:5050 — form, sample cases, cited report (Bootstrap)
+hitherto-web
+# http://127.0.0.1:5050 â€” form, sample cases, cited report (Bootstrap)
 ```
 
-**Not sure what to try?** Pick a card on the home page — six scenarios across `pytorch`, `numpy`, and `sklearn` ([`eval/sample_cases.yaml`](eval/sample_cases.yaml)).
+**Not sure what to try?** Pick a card on the home page â€” six scenarios across `pytorch`, `numpy`, and `sklearn` ([`eval/sample_cases.yaml`](eval/sample_cases.yaml)).
 
 See [docs/WEB_UI.md](docs/WEB_UI.md) and [docs/STATUS.md](docs/STATUS.md).
 
 ## Commands
 
 ```bash
-whether ping
-whether list-profiles
+hitherto ping
+hitherto list-profiles
 
-whether assess \
+hitherto assess \
   --question "Is reviving torch.masked worth an upstream contribution?" \
   --repo pytorch/pytorch \
   --path torch/masked \
@@ -75,19 +75,19 @@ See [docs/VERIFICATION.md](docs/VERIFICATION.md).
 ```bash
 pytest -v
 CASEFILE_RUN_LIVE=1 pytest tests/test_live.py -v
-whether ping
+hitherto ping
 ```
 
 ## Ecosystem profiles
 
 | Profile | Repo | Use case |
 |---------|------|----------|
-| `pytorch` | `pytorch/pytorch` | `torch.masked`, `torch.nested`, … |
+| `pytorch` | `pytorch/pytorch` | `torch.masked`, `torch.nested`, â€¦ |
 | `numpy` | `numpy/numpy` | `numpy.ma`, NEPs, missing-data semantics |
 | `sklearn` | `scikit-learn/scikit-learn` | SLEPs, metadata routing, estimator API |
 
 ```bash
-whether list-profiles
+hitherto list-profiles
 ./scripts/run_sample_assessments.sh   # needs .env
 python scripts/validate_reports.py
 ```
@@ -95,3 +95,4 @@ python scripts/validate_reports.py
 ## License
 
 Apache-2.0. No CLA.
+

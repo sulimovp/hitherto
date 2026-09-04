@@ -1,5 +1,5 @@
 [project]
-name = "whether"
+name = "hitherto"
 version = "0.1.0"
 description = "Evidence-first OSS contribution assessment CLI"
 readme = "README.md"
@@ -25,12 +25,12 @@ web = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/sulimovp/whether"
-Repository = "https://github.com/sulimovp/whether"
+Homepage = "https://github.com/sulimovp/hitherto"
+Repository = "https://github.com/sulimovp/hitherto"
 
 [project.scripts]
-whether = "casefile.cli:app"
-whether-web = "casefile.web.app:main"
+hitherto = "casefile.cli:app"
+hitherto-web = "casefile.web.app:main"
 casefile = "casefile.cli:app"
 casefile-web = "casefile.web.app:main"
 

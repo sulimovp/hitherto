@@ -1,9 +1,9 @@
 name: Publish to PyPI
 
 # Trusted publishing — no API token on the laptop.
-# PyPI project name: whether
+# PyPI project name: hitherto
 # One-time setup on https://pypi.org/manage/account/publishing/:
-#   Owner: sulimovp   Repo: whether   Workflow: publish.yml   Environment: pypi
+#   Owner: sulimovp   Repo: hitherto   Workflow: publish.yml   Environment: pypi
 # Then create a GitHub Release tagged v0.1.0.
 
 on:

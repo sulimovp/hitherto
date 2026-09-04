@@ -1,4 +1,4 @@
-﻿# Casefile — contributor notes
+﻿# Hitherto — contributor notes
 
 Architecture: `ARCHITECTURE.md`. Current implementation snapshot: `docs/STATUS.md`.
 
@@ -7,9 +7,9 @@ Architecture: `ARCHITECTURE.md`. Current implementation snapshot: `docs/STATUS.m
 ```bash
 pip install -e ".[dev,web]"
 ./scripts/verify.sh
-whether ping
-whether list-profiles
-whether-web
+hitherto ping
+hitherto list-profiles
+hitherto-web
 ```
 
 ## Verification
